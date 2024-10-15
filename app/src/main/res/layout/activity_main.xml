@@ -75,7 +75,7 @@
         android:id="@+id/etPassword"
         android:layout_width="280dp"
         android:layout_height="48dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="16dp"
         android:autofillHints="password"
         android:background="@drawable/custom_input"
         android:fontFamily="@font/metropolis_regular"
@@ -84,8 +84,8 @@
         android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.45"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/txtviewPassword"
         app:layout_constraintTop_toBottomOf="@+id/txtviewPassword"
         tools:ignore="ContentDescription,LabelFor,SpeakableTextPresentCheck" />
 
