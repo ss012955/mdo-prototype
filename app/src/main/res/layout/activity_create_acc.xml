@@ -21,10 +21,22 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/textmdo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Medical and Dental Office"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/umakLogo"
+        tools:ignore="HardcodedText"/>
+
+    <TextView
         android:id="@+id/txtviewEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="50dp"
         android:fontFamily="@font/metropolis_regular"
         android:text="UMAK Email:"
         android:textColor="@color/white"
@@ -192,11 +204,24 @@
         app:layout_constraintTop_toBottomOf="@+id/confirmPass"
         tools:ignore="ContentDescription,LabelFor,SpeakableTextPresentCheck" />
 
+
+    <TextView
+        android:id="@+id/createAccValidationText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/green"
+        android:text="Sample Text Sample Text"
+        app:layout_constraintBottom_toTopOf="@+id/btnSignUp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etconfirmPass"
+        tools:ignore="HardcodedText"/>
+
     <Button
         android:id="@+id/btnSignUp"
         android:layout_width="100dp"
         android:layout_height="50dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="50dp"
         android:background="@drawable/button"
         android:fontFamily="@font/metropolis_regular"
         android:text="SIGN UP"
@@ -204,7 +229,7 @@
         android:textSize="12sp"
         app:backgroundTint="@null"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.508"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etconfirmPass"
         tools:ignore="HardcodedText" />
@@ -213,7 +238,7 @@
         android:id="@+id/txtviewLogIn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="15dp"
         android:fontFamily="@font/metropolis_regular"
         android:text="Log In instead"
         android:textColor="@color/white"

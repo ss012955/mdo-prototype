@@ -19,7 +19,7 @@ import androidx.core.view.WindowInsetsCompat;
 public class createAcc extends AppCompatActivity {
     ImageView umakLogo;
     TextView txtviewEmail, txtviewUsername, txtviewFirstName, txtviewLastName,
-            txtviewEntPass, confirmPass, txtviewLogIn;
+            txtviewEntPass, confirmPass, txtviewLogIn, createAccValidation, textmdo;
     EditText etEmail, etUsername, etFirstName, etLastName, etPassword, etconfirmPass;
     Button signUp;
     Toast toast;
@@ -49,6 +49,8 @@ public class createAcc extends AppCompatActivity {
         etconfirmPass = findViewById(R.id.etconfirmPass);
         signUp = findViewById(R.id.btnSignUp);
         txtviewLogIn = findViewById(R.id.txtviewLogIn);
+        createAccValidation = findViewById(R.id.createAccValidationText);
+        textmdo = findViewById(R.id.textmdo);
 
        txtviewLogIn.setOnClickListener(new View.OnClickListener() {
             @Override

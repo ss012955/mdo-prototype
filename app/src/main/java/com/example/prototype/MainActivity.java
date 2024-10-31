@@ -18,7 +18,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 public class MainActivity extends AppCompatActivity {
 
-TextView txtUN, txtPass, createAcc, forgotPass;
+TextView txtUN, txtPass, createAcc, forgotPass, incorrect, textmdo;
 EditText username, password;
 Button logIn;
 Toast toast;
@@ -42,6 +42,8 @@ Toast toast;
        username = findViewById(R.id.etUsername);
        password = findViewById(R.id.etPassword);
        logIn = findViewById(R.id.btnLogIn);
+       incorrect = findViewById(R.id.incorrectUNPass);
+       textmdo = findViewById(R.id.textmdo);
 
        createAcc.setOnClickListener(new View.OnClickListener() {
            @Override
@@ -63,7 +65,6 @@ Toast toast;
            @Override
            public void onClick(View view) {
                home();
-
            }
        });
     }

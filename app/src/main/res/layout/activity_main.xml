@@ -22,6 +22,20 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/textmdo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:layout_marginTop="10dp"
+        android:textSize="17sp"
+        android:text="Medical and Dental Office"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/umakLogo"
+        tools:ignore="HardcodedText" />
+
+    <TextView
         android:id="@+id/txtviewName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -89,11 +103,24 @@
         app:layout_constraintTop_toBottomOf="@+id/txtviewPassword"
         tools:ignore="ContentDescription,LabelFor,SpeakableTextPresentCheck" />
 
+    <TextView
+        android:id="@+id/incorrectUNPass"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Incorrect Username or Password"
+        android:textColor="@color/red"
+        tools:ignore="HardcodedText"
+        android:textSize="17sp"
+        app:layout_constraintBottom_toTopOf="@+id/btnLogIn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etPassword" />
+
     <Button
         android:id="@+id/btnLogIn"
         android:layout_width="100dp"
         android:layout_height="50dp"
-        android:layout_marginTop="52dp"
+        android:layout_marginTop="50dp"
         android:background="@drawable/button"
         android:fontFamily="@font/metropolis_regular"
         android:text="LOG IN"
@@ -110,7 +137,7 @@
         android:id="@+id/createAccount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="30dp"
         android:fontFamily="@font/metropolis_regular"
         android:text="Create Account"
         android:textColor="@color/white"
@@ -123,8 +150,8 @@
         android:id="@+id/forgotPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="20dp"
         android:fontFamily="@font/metropolis_regular"
         android:text="Forgot Password"
         android:textColor="@color/white"
