@@ -25,7 +25,6 @@ public class home extends AppCompatActivity {
     ViewPager2 viewpager;
     viewPagerAdapter myAdapter;
     TabLayout tabLayout;
-    TextView title;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +36,6 @@ public class home extends AppCompatActivity {
             return insets;
         });
         tabLayout = findViewById(R.id.tablayout);
-        title = findViewById(R.id.txtviewHomeTitle);
         myAdapter = new viewPagerAdapter(
                 getSupportFragmentManager(),
                 getLifecycle()
@@ -73,23 +71,6 @@ public class home extends AppCompatActivity {
                 }
         ).attach();
 
-        viewpager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-            @Override
-            public void onPageSelected(int position) {
-                super.onPageSelected(position);
-                switch (position) {
-                    case 0:
-                        title.setText("Dashboard");
-                        break;
-                    case 1:
-                        title.setText("User Journal");
-                        break;
-                    case 2:
-                        title.setText("Profile");
-                        break;
-                }
-            }
-        });
 
 
     }

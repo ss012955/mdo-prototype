@@ -8,19 +8,26 @@
     tools:context=".home"
     android:background="@color/UMAKBLUE">
 
-    <TextView
-        android:id="@+id/txtviewHomeTitle"
-        android:layout_width="match_parent"
+    <ImageView
+        android:id="@+id/logoumak"
+        android:layout_width="50dp"
         android:layout_height="50dp"
-        android:fontFamily="@font/metropolis_bold"
-        android:padding="7dp"
-        android:text="Profile"
-        android:textAlignment="center"
-        android:textSize="30sp"
-        android:textColor="@color/white"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:src="@drawable/umaklogo"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"/>
+
+    <ImageView
+        android:id="@+id/chat"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/chat"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"/>
+
 
 
 

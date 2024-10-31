@@ -20,7 +20,7 @@ public class fJournal extends Fragment {
     private RecyclerView recyclerView;
     private customAdapter adapter1;
     private List<content> contentList;
-
+    private TextView txtviewHomeTitle;
     public fJournal() {
         // Required empty public constructor
     }
@@ -30,7 +30,8 @@ public class fJournal extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_f_dashboard, container, false);
-
+        txtviewHomeTitle = view.findViewById(R.id.txtviewHomeTitle);
+        txtviewHomeTitle.setText("Journal");
         // Initialize RecyclerView
         recyclerView = view.findViewById(R.id.recyclerView);
 
