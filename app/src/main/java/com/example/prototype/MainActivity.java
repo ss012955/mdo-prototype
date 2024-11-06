@@ -93,7 +93,6 @@ private String usernameInput, passwordInput;
             }
         });
 
-
     }
 
     public void createAccount(){
