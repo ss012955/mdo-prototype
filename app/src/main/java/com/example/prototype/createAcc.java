@@ -3,6 +3,8 @@ package com.example.prototype;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,6 +18,11 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import Database.NetworkUtils;
+
 public class createAcc extends AppCompatActivity {
     ImageView umakLogo;
     TextView txtviewEmail, txtviewUsername, txtviewFirstName, txtviewLastName,
@@ -23,6 +30,8 @@ public class createAcc extends AppCompatActivity {
     EditText etEmail, etUsername, etFirstName, etLastName, etPassword, etconfirmPass;
     Button signUp;
     Toast toast;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,18 +68,30 @@ public class createAcc extends AppCompatActivity {
                 LogIn();
             }
         });
-       signUp.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View view) {
-               toast = Toast.makeText(getApplicationContext(),
-                       "Sign Up",Toast.LENGTH_SHORT);
-               toast.show();
-
-           }
-       });
+        signUp.setOnClickListener(v-> {
+            String studentId = etUsername.getText().toString();
+            String email = etEmail.getText().toString();
+            String firstName = etFirstName.getText().toString();
+            String lastName = etLastName.getText().toString();
+            String password = etPassword.getText().toString();
+            signup(studentId, email, firstName, lastName, password);
+        });
     }
+
     public void LogIn(){
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
+    private void signup(String studentId, String email, String firstName, String lastName, String password) {
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        Handler handler = new Handler(Looper.getMainLooper());
+
+        executorService.execute(() -> {
+            String result = NetworkUtils.performSignup(studentId, email, firstName, lastName, password);
+            handler.post(() -> {
+                Toast.makeText(createAcc.this, result, Toast.LENGTH_SHORT).show();
+            });
+        });
+    }
+
 }
