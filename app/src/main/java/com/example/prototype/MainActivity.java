@@ -3,6 +3,8 @@ package com.example.prototype;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,6 +17,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import Database.NetworkUtils;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -60,12 +67,8 @@ Toast toast;
                forgotPass();
            }
        });
+       logIn.setOnClickListener(v->{
 
-       logIn.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View view) {
-               home();
-           }
        });
     }
 
@@ -82,5 +85,16 @@ Toast toast;
     public void home(){
         Intent intent = new Intent(this, home.class);
         startActivity(intent);
+    }
+    private void login(String studentId, String password) {
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        Handler handler = new Handler(Looper.getMainLooper());
+
+        executorService.execute(() -> {
+            String result = NetworkUtils.performLogin(studentId, password);
+            handler.post(() -> {
+                Toast.makeText(MainActivity.this, result, Toast.LENGTH_SHORT).show();
+            });
+        });
     }
 }

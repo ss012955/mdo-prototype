@@ -1,0 +1,33 @@
+CREATE DATABASE MDOdb;
+
+USE MDOdb;
+
+CREATE TABLE IF NOT EXISTS Users (
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
+    student_id VARCHAR(20) NOT NULL UNIQUE,
+    umak_email VARCHAR(100) NOT NULL UNIQUE,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS Admins (
+    admin_id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+USE MDOdb;
+
+INSERT INTO Users (student_id, umak_email, first_name, last_name, password) VALUES
+('S12345', 's12345@umak.edu.ph', 'John', 'Doe', 'hashed_password_1'),
+('S12346', 's12346@umak.edu.ph', 'Jane', 'Smith', 'hashed_password_2'),
+('S12347', 's12347@umak.edu.ph', 'Alice', 'Johnson', 'hashed_password_3'),
+('S12348', 's12348@umak.edu.ph', 'Bob', 'Brown', 'hashed_password_4'),
+('S12349', 's12349@umak.edu.ph', 'Charlie', 'Davis', 'hashed_password_5');
+
+INSERT INTO Admins (username, email, password) VALUES
+('admin1', 'admin1@example.com', 'admin_password_1');
