@@ -44,7 +44,7 @@ public class NetworkUtils {
     public static String performLogin(String studentId, String password) {
         StringBuilder response = new StringBuilder();
         try {
-            URL url = new URL("http://127.0.0.1/MDOapp/login.php");
+            URL url = new URL("http://192.168.254.104/MDOapp/login.php");
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("POST");
             connection.setDoOutput(true);

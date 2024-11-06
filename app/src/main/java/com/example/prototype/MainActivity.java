@@ -22,13 +22,16 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import Database.NetworkUtils;
+import HelperClasses.LoginManager;
 
 public class MainActivity extends AppCompatActivity {
-
-TextView txtUN, txtPass, createAcc, forgotPass, incorrect, textmdo;
+    private LoginManager loginManager;
+TextView txtUN, txtPass, createAcc, forgotPass, incorrect;
 EditText username, password;
 Button logIn;
 Toast toast;
+
+private String usernameInput, passwordInput;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,36 +43,57 @@ Toast toast;
             return insets;
         });
 
-       ImageView logo = findViewById(R.id.umakLogo);
-       logo.setImageResource(R.drawable.umaklogo);
-       txtUN = findViewById(R.id.txtviewName);
-       txtPass = findViewById(R.id.txtviewPassword);
        createAcc = findViewById(R.id.createAccount);
        forgotPass = findViewById(R.id.forgotPassword);
        username = findViewById(R.id.etUsername);
        password = findViewById(R.id.etPassword);
        logIn = findViewById(R.id.btnLogIn);
        incorrect = findViewById(R.id.incorrectUNPass);
-       textmdo = findViewById(R.id.textmdo);
+        incorrect.setVisibility(View.GONE);
+        loginManager = new LoginManager(this);
+        getLifecycle().addObserver(loginManager);
 
-       createAcc.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View view) {
-               createAcc.setPaintFlags(createAcc.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-               createAccount();
-           }
+
+       createAcc.setOnClickListener(v -> {
+           createAcc.setPaintFlags(createAcc.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+           createAccount();
        });
 
-       forgotPass.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View view) {
-               forgotPass.setPaintFlags(forgotPass.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-               forgotPass();
-           }
+       forgotPass.setOnClickListener(v->{
+           forgotPass.setPaintFlags(forgotPass.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+           forgotPass();
        });
-       logIn.setOnClickListener(v->{
 
-       });
+
+        logIn.setOnClickListener(v -> {
+            usernameInput = username.getText().toString().trim();
+            passwordInput = password.getText().toString().trim();
+
+            if (usernameInput.isEmpty() || passwordInput.isEmpty()) {
+                Toast.makeText(this, "Please enter both username and password", Toast.LENGTH_SHORT).show();
+            } else {
+                // Pass the callback to handle the result of login
+                loginManager.performLogin(usernameInput, passwordInput, new LoginManager.LoginCallback() {
+                    @Override
+                    public void onLoginSuccess() {
+                        Toast.makeText(MainActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
+                        home();
+                    }
+
+                    @Override
+                    public void onLoginFailed() {
+                        // If login fails, show the incorrect TextView
+                        incorrect.setVisibility(View.VISIBLE);
+                        incorrect.setText("Incorrect username or password.");
+                        Toast.makeText(MainActivity.this, "Login Failed", Toast.LENGTH_SHORT).show();
+                        home();
+
+                    }
+                });
+            }
+        });
+
+
     }
 
     public void createAccount(){
@@ -86,15 +110,5 @@ Toast toast;
         Intent intent = new Intent(this, home.class);
         startActivity(intent);
     }
-    private void login(String studentId, String password) {
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        Handler handler = new Handler(Looper.getMainLooper());
 
-        executorService.execute(() -> {
-            String result = NetworkUtils.performLogin(studentId, password);
-            handler.post(() -> {
-                Toast.makeText(MainActivity.this, result, Toast.LENGTH_SHORT).show();
-            });
-        });
-    }
 }
