@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLEncoder;
 
@@ -46,8 +47,13 @@ public class NetworkUtils {
         try {
             URL url = new URL("http://192.168.254.104/MDOapp/login.php");
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+            // Set timeouts for connecting and reading
+            connection.setConnectTimeout(2000); // 5 seconds
+            connection.setReadTimeout(2000); // 5 seconds
             connection.setRequestMethod("POST");
             connection.setDoOutput(true);
+
             String postData = "student_id=" + URLEncoder.encode(studentId, "UTF-8") +
                     "&password=" + URLEncoder.encode(password, "UTF-8");
 
@@ -63,10 +69,14 @@ public class NetworkUtils {
                 response.append(line);
             }
             reader.close();
+        } catch (SocketTimeoutException e) {
+            // Handle timeout
+            return "Error: Server timeout. Please check your connection and try again.";
         } catch (Exception e) {
             e.printStackTrace();
             return "Error: " + e.getMessage();
         }
         return response.toString();
     }
+
 }
