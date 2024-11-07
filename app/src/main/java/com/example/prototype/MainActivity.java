@@ -1,114 +1,148 @@
 package com.example.prototype;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.drawable.ColorDrawable;
+import android.net.TrafficStats;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-import Database.NetworkUtils;
+import HelperClasses.NetworkChangeReceiver;
 import HelperClasses.LoginManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NetworkChangeReceiver.NetworkChangeListener {
     private LoginManager loginManager;
-TextView txtUN, txtPass, createAcc, forgotPass, incorrect;
-EditText username, password;
-Button logIn;
-Toast toast;
-
-private String usernameInput, passwordInput;
+    private TextView createAcc, forgotPass, incorrect;
+    private EditText username, password;
+    private Button logIn;
+    private NetworkChangeReceiver networkChangeReceiver;
+    private Handler handler = new Handler();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            v.setPadding(insets.getInsets(WindowInsetsCompat.Type.systemBars()).left,
+                    insets.getInsets(WindowInsetsCompat.Type.systemBars()).top,
+                    insets.getInsets(WindowInsetsCompat.Type.systemBars()).right,
+                    insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom);
             return insets;
         });
 
-       createAcc = findViewById(R.id.createAccount);
-       forgotPass = findViewById(R.id.forgotPassword);
-       username = findViewById(R.id.etUsername);
-       password = findViewById(R.id.etPassword);
-       logIn = findViewById(R.id.btnLogIn);
-       incorrect = findViewById(R.id.incorrectUNPass);
+        // Initialize views
+        createAcc = findViewById(R.id.createAccount);
+        forgotPass = findViewById(R.id.forgotPassword);
+        username = findViewById(R.id.etUsername);
+        password = findViewById(R.id.etPassword);
+        logIn = findViewById(R.id.btnLogIn);
+        incorrect = findViewById(R.id.incorrectUNPass);
         incorrect.setVisibility(View.GONE);
+
         loginManager = new LoginManager(this);
         getLifecycle().addObserver(loginManager);
 
+        createAcc.setOnClickListener(v -> startActivity(new Intent(this, createAcc.class).putExtra("isCreate", true)));
+        forgotPass.setOnClickListener(v -> startActivity(new Intent(this, forgotPass.class)));
 
-       createAcc.setOnClickListener(v -> {
-           createAcc.setPaintFlags(createAcc.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-           createAccount();
-       });
+        logIn.setOnClickListener(v -> attemptLogin());
 
-       forgotPass.setOnClickListener(v->{
-           forgotPass.setPaintFlags(forgotPass.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-           forgotPass();
-       });
+        networkChangeReceiver = new NetworkChangeReceiver(this);
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerReceiver(networkChangeReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+    }
 
-        logIn.setOnClickListener(v -> {
-            usernameInput = username.getText().toString().trim();
-            passwordInput = password.getText().toString().trim();
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(networkChangeReceiver);
+    }
 
-            if (usernameInput.isEmpty() || passwordInput.isEmpty()) {
-                Toast.makeText(this, "Please enter both username and password", Toast.LENGTH_SHORT).show();
-            } else {
-                // Pass the callback to handle the result of login
-                loginManager.performLogin(usernameInput, passwordInput, new LoginManager.LoginCallback() {
-                    @Override
-                    public void onLoginSuccess() {
-                        Toast.makeText(MainActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
-                        home();
-                    }
+    @Override
+    public void onNetworkChange(boolean isConnected) {
+        if (!isConnected) showNoConnectionDialog();
+    }
 
-                    @Override
-                    public void onLoginFailed() {
-                        // If login fails, show the incorrect TextView
-                        incorrect.setVisibility(View.VISIBLE);
-                        incorrect.setText("Incorrect username or password.");
-                        Toast.makeText(MainActivity.this, "Login Failed", Toast.LENGTH_SHORT).show();
-                        home();
-
-                    }
-                });
-            }
+    private void showNoConnectionDialog() {
+        Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.dialog_custom);
+        dialog.setCancelable(false);
+        dialog.findViewById(R.id.retry_button).setOnClickListener(v -> {
+            startActivity(new Intent(this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
+            finish();
+            dialog.dismiss();
         });
-
-
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.show();
     }
 
-    public void createAccount(){
-        Intent intent = new Intent(this, createAcc.class);
-        startActivity(intent);
+    private void attemptLogin() {
+        String usernameInput = username.getText().toString().trim();
+        String passwordInput = password.getText().toString().trim();
+
+        if (usernameInput.isEmpty() || passwordInput.isEmpty()) {
+            showToast("Please enter both username and password");
+        } else if (!isNetworkAvailable()) {
+            showError("No internet connection.");
+        } else {
+            loginManager.performLogin(usernameInput, passwordInput, new LoginManager.LoginCallback() {
+                @Override
+                public void onLoginSuccess() {
+                    showToast("Login Successful");
+                    startActivity(new Intent(MainActivity.this, home.class));
+                }
+
+                @Override
+                public void onLoginFailed() {
+                    showError(isMobileDataAvailable() ? "No internet connection." : "Incorrect username or password.");
+                    startActivity(new Intent(MainActivity.this, home.class));
+
+                }
+            });
+        }
     }
 
-    public void forgotPass(){
-        Intent intent = new Intent(this, forgotPass.class);
-        startActivity(intent);
+    private void showToast(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
-    public void home(){
-        Intent intent = new Intent(this, home.class);
-        startActivity(intent);
+    private void showError(String message) {
+        incorrect.setText(message);
+        incorrect.setVisibility(View.VISIBLE);
     }
 
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected() &&
+                (activeNetworkInfo.getType() == ConnectivityManager.TYPE_WIFI ||
+                        activeNetworkInfo.getType() == ConnectivityManager.TYPE_MOBILE && TrafficStats.getMobileRxBytes() + TrafficStats.getMobileTxBytes() > 0);
+    }
+
+    private boolean isMobileDataAvailable() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected() &&
+                (activeNetworkInfo.getType() == ConnectivityManager.TYPE_MOBILE);
+    }
 }

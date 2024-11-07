@@ -11,11 +11,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import HelperClasses.NetworkChangeReceiver;
+
 public class fDashboard extends Fragment {
 
     private RecyclerView recyclerView;
     private DashboardAdapter adapter;
     private List<DashboardContent> contentList;
+
+    private NetworkChangeReceiver networkChangeReceiver;
 
     public fDashboard() {
         // Required empty public constructor
