@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "462211123780",
+    "project_id": "umak-medical-and-dental",
+    "storage_bucket": "umak-medical-and-dental.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:462211123780:android:5f72ca2e3a4c729960ca11",
+        "android_client_info": {
+          "package_name": "com.example.prototype"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCd_qKcjyXcz8Tf01h33rtoJB9jNVdLLkI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

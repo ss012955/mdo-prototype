@@ -118,7 +118,7 @@ public class createAcc extends AppCompatActivity implements NetworkChangeReceive
         } else if (!isValidUmakEmail(email)) {
             showError("Use a valid UMAK email.", Color.RED);
         } else {
-            signupManager.performSignup(studentId, email, firstName, lastName, password, new SignupManager.SignUpCallBack() {
+            SignupManager.performSignupWithFirebase(this, studentId, email, firstName, lastName, password, new SignupManager.SignUpCallBack() {
                 @Override
                 public void onSignupSuccess() {
                     showError("Registration Successful! Please check your email.", Color.GREEN);
