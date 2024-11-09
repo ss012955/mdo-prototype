@@ -40,7 +40,7 @@ public class createAcc extends AppCompatActivity implements NetworkChangeReceive
     Toast toast;
     private NetworkChangeReceiver networkChangeReceiver;
     public SignupManager signupManager;
-    private NetworkUtils networkUtils = new NetworkUtils();
+    private NetworkUtils networkUtils;
 
 
     @Override
@@ -66,12 +66,12 @@ public class createAcc extends AppCompatActivity implements NetworkChangeReceive
 
        txtviewLogIn.setOnClickListener(v->{LogIn();});
 
-        signUp.setOnClickListener(v-> { attempSignup();});
+        signUp.setOnClickListener(v-> { attemptSignup();});
 
         signupManager = new SignupManager(this);
         networkChangeReceiver = new NetworkChangeReceiver(this);
         getLifecycle().addObserver(signupManager);
-
+        networkUtils = new NetworkUtils();
     }
 
     protected void onResume() {
@@ -96,7 +96,7 @@ public class createAcc extends AppCompatActivity implements NetworkChangeReceive
         startActivity(intent);
     }
 
-    private void attempSignup(){
+    private void attemptSignup(){
         String studentId = etStudentId.getText().toString().trim();
         String email = etEmail.getText().toString().trim();
         String firstName = etFirstName.getText().toString().trim();
@@ -104,33 +104,38 @@ public class createAcc extends AppCompatActivity implements NetworkChangeReceive
         String password = etPassword.getText().toString().trim();
         String confirmPass = etconfirmPass.getText().toString().trim();
 
-        if(studentId.isEmpty()|| email.isEmpty() || firstName.isEmpty() || lastName.isEmpty() || password.isEmpty()){
-            showError("Please input the required field.",Color.RED);
-        }else if(!NetworkUtils.isNetworkAvailable(createAcc.this)){
-            showError("No internet connection.",Color.RED);
-        }else if(!password.equals(confirmPass)) {
-            showError("Password do not match",Color.RED);
-        }else if (!isValidUmakEmail(email)) {
-            showError("Use valid UMAK email.", Color.RED);
-        }else {
-            signupManager.performSignup(studentId, email, firstName, lastName, password, new SignupManager.SignUpCallBack(){
-
+        if (studentId.isEmpty() || email.isEmpty() || firstName.isEmpty() || lastName.isEmpty() || password.isEmpty()) {
+            showError("Please input the required field.", Color.RED);
+        } else if (!NetworkUtils.isNetworkAvailable(createAcc.this)) {
+            // Check if mobile data is available but not connected
+            if (NetworkUtils.isMobileDataAvailable(createAcc.this)) {
+                showError("No connection. Please check your mobile data network.", Color.RED);
+            } else {
+                showError("No internet connection.", Color.RED);
+            }
+        } else if (!password.equals(confirmPass)) {
+            showError("Passwords do not match.", Color.RED);
+        } else if (!isValidUmakEmail(email)) {
+            showError("Use a valid UMAK email.", Color.RED);
+        } else {
+            signupManager.performSignup(studentId, email, firstName, lastName, password, new SignupManager.SignUpCallBack() {
                 @Override
                 public void onSignupSuccess() {
-                    showError("Registration Successful!\nPlease check your email", Color.GREEN);
-
+                    showError("Registration Successful! Please check your email.", Color.GREEN);
                 }
 
                 @Override
-                public void onSignupFailed() {
-                    showError(NetworkUtils.isMobileDataAvailable(createAcc.this) ? "No internet connection." : "Registration Failed.", Color.RED);
-                    startActivity(new Intent(createAcc.this, home.class));
-
+                public void onSignupFailed(String message) {
+                        if(NetworkUtils.isMobileDataAvailable(createAcc.this)){
+                            showError("No connection. Please check your mobile data network.", Color.RED);
+                        }else{
+                            showError(message, Color.RED);
+                        }
                 }
             });
         }
-
     }
+
     private boolean isValidUmakEmail(String email) {
         return email.matches("[a-zA-Z0-9._%+-]+@umak\\.edu\\.ph");
     }

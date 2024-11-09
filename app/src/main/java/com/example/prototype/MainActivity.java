@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
     private Button logIn;
     private NetworkChangeReceiver networkChangeReceiver;
     private Handler handler = new Handler();
-    private NetworkUtils networkUtils = new NetworkUtils();
+    private NetworkUtils networkUtils;
 
 
     @Override
@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
         logIn.setOnClickListener(v -> attemptLogin());
 
         networkChangeReceiver = new NetworkChangeReceiver(this);
+        networkUtils = new NetworkUtils();
     }
 
     @Override

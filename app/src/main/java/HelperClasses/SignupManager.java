@@ -21,14 +21,19 @@ public class SignupManager implements DefaultLifecycleObserver {
         this.executorService = Executors.newSingleThreadExecutor();
     }
 
-    public void performSignup(String studentId, String email, String firstname, String lastname, String password, SignUpCallBack callback) {
+    public void performSignup(String studentId, String email, String firstName, String lastName, String password, SignUpCallBack callback) {
         executorService.execute(() -> {
-            String result = NetworkUtils.performSignup(studentId, email, firstname, lastname, password);
+            String result = NetworkUtils.performSignup(studentId, email, firstName, lastName, password);
             ((createAcc) context).runOnUiThread(() -> {
                 if ("Signup successful!".equals(result)) {
                     callback.onSignupSuccess();
+                } else if ("Email already registered".equals(result)) {
+                    callback.onSignupFailed("Email already registered");
+                }else if("Student ID already registered".equals(result)){
+                    callback.onSignupFailed("Student ID already registered");
                 } else {
-                    callback.onSignupFailed();
+                    callback.onSignupFailed("Registration Failed. Hosting problem.");
+                    Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
                 }
             });
         });
@@ -37,6 +42,6 @@ public class SignupManager implements DefaultLifecycleObserver {
     // Callback interface
     public interface SignUpCallBack {
         void onSignupSuccess();
-        void onSignupFailed();
+        void onSignupFailed(String message);
     }
 }
