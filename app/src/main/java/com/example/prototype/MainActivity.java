@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
                     }else{
                         showError(message);
                     }
-                    startActivity(new Intent(MainActivity.this, home.class));
+                    //startActivity(new Intent(MainActivity.this, home.class));
 
                 }
             });
