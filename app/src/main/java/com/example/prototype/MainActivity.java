@@ -21,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import Database.NetworkUtils;
 import HelperClasses.NetworkChangeReceiver;
 import HelperClasses.LoginManager;
 import android.net.ConnectivityManager;
@@ -33,6 +34,9 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
     private Button logIn;
     private NetworkChangeReceiver networkChangeReceiver;
     private Handler handler = new Handler();
+    private NetworkUtils networkUtils = new NetworkUtils();
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,20 +84,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
 
     @Override
     public void onNetworkChange(boolean isConnected) {
-        if (!isConnected) showNoConnectionDialog();
-    }
-
-    private void showNoConnectionDialog() {
-        Dialog dialog = new Dialog(this);
-        dialog.setContentView(R.layout.dialog_custom);
-        dialog.setCancelable(false);
-        dialog.findViewById(R.id.retry_button).setOnClickListener(v -> {
-            startActivity(new Intent(this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
-            finish();
-            dialog.dismiss();
-        });
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.show();
+        if (!isConnected) networkUtils.showNoConnectionDialog(MainActivity.this, MainActivity.this);
     }
 
     private void attemptLogin() {
@@ -102,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
 
         if (usernameInput.isEmpty() || passwordInput.isEmpty()) {
             showToast("Please enter both username and password");
-        } else if (!isNetworkAvailable()) {
+        } else if (!NetworkUtils.isNetworkAvailable(MainActivity.this)) {
             showError("No internet connection.");
         } else {
             loginManager.performLogin(usernameInput, passwordInput, new LoginManager.LoginCallback() {
@@ -114,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
 
                 @Override
                 public void onLoginFailed() {
-                    showError(isMobileDataAvailable() ? "No internet connection." : "Incorrect username or password.");
+                    showError(NetworkUtils.isMobileDataAvailable(MainActivity.this) ? "No internet connection." : "Incorrect username or password.");
                     startActivity(new Intent(MainActivity.this, home.class));
 
                 }
@@ -131,18 +122,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
         incorrect.setVisibility(View.VISIBLE);
     }
 
-    private boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected() &&
-                (activeNetworkInfo.getType() == ConnectivityManager.TYPE_WIFI ||
-                        activeNetworkInfo.getType() == ConnectivityManager.TYPE_MOBILE && TrafficStats.getMobileRxBytes() + TrafficStats.getMobileTxBytes() > 0);
-    }
 
-    private boolean isMobileDataAvailable() {
-        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected() &&
-                (activeNetworkInfo.getType() == ConnectivityManager.TYPE_MOBILE);
-    }
+
+
 }

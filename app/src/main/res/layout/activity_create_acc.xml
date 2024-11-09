@@ -78,7 +78,7 @@
         tools:ignore="HardCodedText" />
 
     <EditText
-        android:id="@+id/etUsername"
+        android:id="@+id/etStudentId"
         android:layout_width="280dp"
         android:layout_height="30dp"
         android:layout_marginTop="5dp"
@@ -104,8 +104,8 @@
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/etUsername"
-        app:layout_constraintTop_toBottomOf="@+id/etUsername"
+        app:layout_constraintStart_toStartOf="@+id/etStudentId"
+        app:layout_constraintTop_toBottomOf="@+id/etStudentId"
         tools:ignore="HardCodedText"/>
 
     <EditText
