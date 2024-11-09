@@ -1,5 +1,18 @@
 package Database;
 
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.TrafficStats;
+
+import com.example.prototype.MainActivity;
+import com.example.prototype.R;
+
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -8,6 +21,11 @@ import java.net.HttpURLConnection;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLEncoder;
+import Database.NetworkUtils;
+import HelperClasses.NetworkChangeReceiver;
+import HelperClasses.LoginManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 
 public class NetworkUtils {
     public static String performSignup(String studentId, String email, String firstName, String lastName, String password) {
@@ -78,5 +96,37 @@ public class NetworkUtils {
         }
         return response.toString();
     }
+    public void showNoConnectionDialog(Context context, final Activity activity) {
+        Dialog dialog = new Dialog(context);
+        dialog.setContentView(R.layout.dialog_custom);
+        dialog.setCancelable(false);
+
+        dialog.findViewById(R.id.retry_button).setOnClickListener(v -> {
+            Intent intent = new Intent(context, activity.getClass());
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
+
+            activity.finish();
+
+            dialog.dismiss();
+        });
+
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.show();
+    }
+    public static boolean isNetworkAvailable(Context context) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    // Check if mobile data is available
+    public static boolean isMobileDataAvailable(Context context) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected() &&
+                activeNetworkInfo.getType() == ConnectivityManager.TYPE_MOBILE;
+    }
+
 
 }
