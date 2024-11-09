@@ -30,7 +30,7 @@ import android.net.NetworkInfo;
 public class MainActivity extends AppCompatActivity implements NetworkChangeReceiver.NetworkChangeListener {
     private LoginManager loginManager;
     private TextView createAcc, forgotPass, incorrect;
-    private EditText username, password;
+    private EditText umakEmail, password;
     private Button logIn;
     private NetworkChangeReceiver networkChangeReceiver;
     private Handler handler = new Handler();
@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
         // Initialize views
         createAcc = findViewById(R.id.createAccount);
         forgotPass = findViewById(R.id.forgotPassword);
-        username = findViewById(R.id.etUsername);
+        umakEmail = findViewById(R.id.etEmail);
         password = findViewById(R.id.etPassword);
         logIn = findViewById(R.id.btnLogIn);
         incorrect = findViewById(R.id.incorrectUNPass);
@@ -89,15 +89,15 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
     }
 
     private void attemptLogin() {
-        String usernameInput = username.getText().toString().trim();
+        String emailInput = umakEmail.getText().toString().trim();
         String passwordInput = password.getText().toString().trim();
 
-        if (usernameInput.isEmpty() || passwordInput.isEmpty()) {
+        if (emailInput.isEmpty() || passwordInput.isEmpty()) {
             showToast("Please enter both username and password");
         } else if (!NetworkUtils.isNetworkAvailable(MainActivity.this)) {
             showError("No internet connection.");
         } else {
-            loginManager.performLogin(usernameInput, passwordInput, new LoginManager.LoginCallback() {
+            loginManager.performLogin(emailInput, passwordInput, new LoginManager.LoginCallback() {
                 @Override
                 public void onLoginSuccess() {
                     showToast("Login Successful");
@@ -105,8 +105,12 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
                 }
 
                 @Override
-                public void onLoginFailed() {
-                    showError(NetworkUtils.isMobileDataAvailable(MainActivity.this) ? "No internet connection." : "Incorrect username or password.");
+                public void onLoginFailed(String message) {
+                    if(NetworkUtils.isMobileDataAvailable(MainActivity.this)){
+                        showError("No internet connection.");
+                    }else{
+                        showError(message);
+                    }
                     startActivity(new Intent(MainActivity.this, home.class));
 
                 }

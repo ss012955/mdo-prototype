@@ -26,8 +26,15 @@ import HelperClasses.NetworkChangeReceiver;
 import HelperClasses.LoginManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class NetworkUtils {
+    private static FirebaseAuth mAuth;
+    static {
+        mAuth = FirebaseAuth.getInstance();
+    }
+
     public static String performSignup(String studentId, String email, String firstName, String lastName, String password) {
         StringBuilder response = new StringBuilder();
         try {
@@ -60,7 +67,7 @@ public class NetworkUtils {
         return response.toString();
     }
 
-    public static String performLogin(String studentId, String password) {
+    public static String performLogin(String umakEmail, String password) {
         StringBuilder response = new StringBuilder();
         try {
             URL url = new URL("http://192.168.254.104/MDOapp/login.php");
@@ -72,7 +79,7 @@ public class NetworkUtils {
             connection.setRequestMethod("POST");
             connection.setDoOutput(true);
 
-            String postData = "student_id=" + URLEncoder.encode(studentId, "UTF-8") +
+            String postData = "umak_email=" + URLEncoder.encode(umakEmail, "UTF-8") +
                     "&password=" + URLEncoder.encode(password, "UTF-8");
 
             OutputStream os = connection.getOutputStream();
