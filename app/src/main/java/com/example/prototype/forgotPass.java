@@ -20,6 +20,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.io.IOException;
 
+import HelperClasses.NetworkChangeReceiver;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -28,13 +29,14 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class forgotPass extends AppCompatActivity {
+public class forgotPass extends BaseActivity{
     ImageView umakLogo;
-    TextView enterEmail, recoverEmail, createAcc, logIn;
+    TextView enterEmail, recoverEmail, createAcc, logIn, emailConfirmationValidator;
     EditText umakEmail;
     Toast toast;
     private String email;
     private FirebaseAuth mAuth;
+    private NetworkChangeReceiver networkChangeReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,14 +50,13 @@ public class forgotPass extends AppCompatActivity {
         });
 
         mAuth = FirebaseAuth.getInstance();
-
-
         umakEmail = findViewById(R.id.etEmail);
-        umakLogo = findViewById(R.id.umakLogo);
-        enterEmail = findViewById(R.id.txtviewForPass);
         recoverEmail = findViewById(R.id.txtviewRecoverPass);
         createAcc = findViewById(R.id.txtviewCreateAcc);
         logIn = findViewById(R.id.txtviewLogIn);
+        emailConfirmationValidator = findViewById(R.id.createAccValidationText);
+
+
 
         logIn.setOnClickListener(v->{
             logIn.setPaintFlags(logIn.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
@@ -68,24 +69,21 @@ public class forgotPass extends AppCompatActivity {
             createAccount();
         });
 
-        recoverEmail.setOnClickListener(v->{
-            sendPasswordResetEmail();
-
-        });
+        recoverEmail.setOnClickListener(v->{sendPasswordResetEmail(); });
 
     }
     private void sendPasswordResetEmail() {
         String email = umakEmail.getText().toString().trim();
 
         if (email.isEmpty()) {
-            Toast.makeText(this, "Please enter your registered email", Toast.LENGTH_SHORT).show();
+            showConfirmation("Please enter your registered email");
             return;
         }
 
         mAuth.sendPasswordResetEmail(email)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        Toast.makeText(forgotPass.this, "Password reset email sent!", Toast.LENGTH_SHORT).show();
+                        showConfirmation("Check your email.");
                     } else {
                         Toast.makeText(forgotPass.this, "Error: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
                     }
@@ -138,7 +136,10 @@ public class forgotPass extends AppCompatActivity {
     }
 
 
-
+    private void showConfirmation(String message) {
+        emailConfirmationValidator.setText(message);
+        emailConfirmationValidator.setVisibility(View.VISIBLE);
+    }
     public void createAccount(){
         Intent intent = new Intent(this, createAcc.class);
         startActivity(intent);

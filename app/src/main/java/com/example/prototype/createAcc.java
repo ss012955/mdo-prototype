@@ -33,12 +33,11 @@ import Database.NetworkUtils;
 import HelperClasses.NetworkChangeReceiver;
 import HelperClasses.SignupManager;
 
-public class createAcc extends AppCompatActivity implements NetworkChangeReceiver.NetworkChangeListener {
+public class createAcc extends BaseActivity {
     TextView txtviewLogIn, createAccValidation;
     EditText etEmail, etStudentId, etFirstName, etLastName, etPassword, etconfirmPass;
     Button signUp;
     Toast toast;
-    private NetworkChangeReceiver networkChangeReceiver;
     public SignupManager signupManager;
     private NetworkUtils networkUtils;
 
@@ -69,27 +68,9 @@ public class createAcc extends AppCompatActivity implements NetworkChangeReceive
         signUp.setOnClickListener(v-> { attemptSignup();});
 
         signupManager = new SignupManager(this);
-        networkChangeReceiver = new NetworkChangeReceiver(this);
         getLifecycle().addObserver(signupManager);
         networkUtils = new NetworkUtils();
     }
-
-    protected void onResume() {
-        super.onResume();
-        registerReceiver(networkChangeReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (networkChangeReceiver != null) {
-            unregisterReceiver(networkChangeReceiver);
-        }    }
-
-    public void onNetworkChange(boolean isConnected) {
-        if (!isConnected) networkUtils.showNoConnectionDialog(this, createAcc.this);
-    }
-
 
     public void LogIn(){
         Intent intent = new Intent(this, MainActivity.class);
