@@ -27,7 +27,7 @@ import HelperClasses.LoginManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-public class MainActivity extends AppCompatActivity implements NetworkChangeReceiver.NetworkChangeListener {
+public class MainActivity extends BaseActivity {
     private LoginManager loginManager;
     private TextView createAcc, forgotPass, incorrect;
     private EditText umakEmail, password;
@@ -67,25 +67,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
 
         logIn.setOnClickListener(v -> attemptLogin());
 
-        networkChangeReceiver = new NetworkChangeReceiver(this);
         networkUtils = new NetworkUtils();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        registerReceiver(networkChangeReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        unregisterReceiver(networkChangeReceiver);
-    }
-
-    @Override
-    public void onNetworkChange(boolean isConnected) {
-        if (!isConnected) networkUtils.showNoConnectionDialog(MainActivity.this, MainActivity.this);
     }
 
     private void attemptLogin() {
@@ -111,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
                     }else{
                         showError(message);
                     }
-                    //startActivity(new Intent(MainActivity.this, home.class));
+                    startActivity(new Intent(MainActivity.this, home.class));
 
                 }
             });
