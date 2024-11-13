@@ -22,6 +22,7 @@ import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLEncoder;
 import Database.NetworkUtils;
+import HelperClasses.BaseClass;
 import HelperClasses.NetworkChangeReceiver;
 import HelperClasses.LoginManager;
 import android.net.ConnectivityManager;
@@ -34,6 +35,7 @@ public class NetworkUtils {
     static {
         mAuth = FirebaseAuth.getInstance();
     }
+    private BaseClass baseClass = new BaseClass();
 
     public static String performSignup(String studentId, String email, String firstName, String lastName, String password) {
         StringBuilder response = new StringBuilder();
@@ -104,22 +106,14 @@ public class NetworkUtils {
         return response.toString();
     }
     public void showNoConnectionDialog(Context context, final Activity activity) {
-        Dialog dialog = new Dialog(context);
-        dialog.setContentView(R.layout.dialog_custom);
-        dialog.setCancelable(false);
-
-        dialog.findViewById(R.id.retry_button).setOnClickListener(v -> {
+        baseClass.showOneButtonDialog(context, "No Internet Connection", "Please check your internet connection.", "Retry", v-> {
             Intent intent = new Intent(context, activity.getClass());
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
 
             activity.finish();
-
-            dialog.dismiss();
         });
 
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.show();
     }
     public static boolean isNetworkAvailable(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
