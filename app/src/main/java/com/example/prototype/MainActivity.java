@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.ColorDrawable;
@@ -68,6 +69,15 @@ public class MainActivity extends BaseActivity {
         logIn.setOnClickListener(v -> attemptLogin());
 
         networkUtils = new NetworkUtils();
+
+        //Authentication
+        SharedPreferences prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
+        boolean isLoggedIn = prefs.getBoolean("is_logged_in", false);
+        if (isLoggedIn) {
+            startActivity(new Intent(MainActivity.this, home.class));
+            finish();  // Close MainActivity to prevent going back
+            return;
+        }
     }
 
     private void attemptLogin() {
@@ -83,17 +93,23 @@ public class MainActivity extends BaseActivity {
                 @Override
                 public void onLoginSuccess() {
                     showToast("Login Successful");
+                    SharedPreferences.Editor editor = getSharedPreferences("user_prefs", MODE_PRIVATE).edit();
+                    editor.putBoolean("is_logged_in", true);
+                    editor.putString("user_email", emailInput);  // Store user email or other data
+                    editor.apply();
+
                     startActivity(new Intent(MainActivity.this, home.class));
+                    finish();
                 }
 
                 @Override
                 public void onLoginFailed(String message) {
-                    if(NetworkUtils.isMobileDataAvailable(MainActivity.this)){
+                    if (NetworkUtils.isMobileDataAvailable(MainActivity.this)) {
                         showError("No internet connection.");
-                    }else{
+                    } else {
                         showError(message);
                     }
-                    startActivity(new Intent(MainActivity.this, home.class));
+
 
                 }
             });
