@@ -27,7 +27,7 @@ public class DashboardManager {
 
     public void showLogoutValidator(Context context, final Activity activity) {
 
-        baseClass.showTwoButtonDialog(context, "Logout", "Are you s0ure you want to log out?", "LOGOUT", "Cancel",v->{            SharedPreferences prefs = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
+        baseClass.showTwoButtonDialog(context, "Logout", "Are you sure you want to log out?", "LOGOUT", "Cancel",v->{            SharedPreferences prefs = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
             prefs.edit().putBoolean("is_logged_in", false).apply();
 
             // Start MainActivity

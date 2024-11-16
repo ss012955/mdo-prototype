@@ -22,13 +22,18 @@ CREATE TABLE IF NOT EXISTS Admins (
 );
 
 USE MDOdb;
+CREATE TABLE UserProfile (
+    profile_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    contact_number VARCHAR(15),
+    address VARCHAR(255),
+    guardian_contact_number VARCHAR(15),
+    guardian_address VARCHAR(255),
+    profile_image VARCHAR(255), -- URL or path to the profile image
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES Users(user_id)
+);
 
-INSERT INTO Users (student_id, umak_email, first_name, last_name, password) VALUES
-('S12345', 's12345@umak.edu.ph', 'John', 'Doe', 'hashed_password_1'),
-('S12346', 's12346@umak.edu.ph', 'Jane', 'Smith', 'hashed_password_2'),
-('S12347', 's12347@umak.edu.ph', 'Alice', 'Johnson', 'hashed_password_3'),
-('S12348', 's12348@umak.edu.ph', 'Bob', 'Brown', 'hashed_password_4'),
-('S12349', 's12349@umak.edu.ph', 'Charlie', 'Davis', 'hashed_password_5');
 
 INSERT INTO Admins (username, email, password) VALUES
 ('admin1', 'admin1@example.com', 'admin_password_1');

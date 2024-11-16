@@ -59,9 +59,14 @@ public class home extends BaseActivity {
 
         viewpager.setAdapter(myAdapter);
 
+        fProfile profileFragment = new fProfile();
+        Bundle args = new Bundle();
+        args.putString("user_email", prefs.getString("user_email", "No email found"));
+        profileFragment.setArguments(args);  // Set the arguments with user email
+
         myAdapter.addFragment(new fDashboard());
         myAdapter.addFragment(new fJournal());
-        myAdapter.addFragment(new fProfile());
+        myAdapter.addFragment(profileFragment);
 
 
         new TabLayoutMediator(
@@ -75,7 +80,8 @@ public class home extends BaseActivity {
                                 tab.setIcon(R.drawable.home);  // Set icon for the first tab
                                 break;
                             case 1:
-                                tab.setIcon(R.drawable.user_journal);    // Set icon for the second tab
+                                tab.setIcon(R.drawable.user_journal);
+                                // Set icon for the second tab
                                 break;
                             case 2:
                                 tab.setIcon(R.drawable.profile);    // Set icon for the third tab
@@ -100,7 +106,7 @@ public class home extends BaseActivity {
         checkLoginStatus();  // Re-check login status when activity is resumed
     }
 
-    private void checkLoginStatus() {
+    public void checkLoginStatus() {
         boolean isLoggedIn = prefs.getBoolean("is_logged_in", false);
         if (isLoggedIn) {
             String userEmail = prefs.getString("user_email", "No email found");
