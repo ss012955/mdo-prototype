@@ -1,6 +1,7 @@
 package com.example.prototype;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,14 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import HelperClasses.DashboardManager;
 import HelperClasses.ProfileClass;
 import HelperClasses.ProfileDatabaseHelper;
@@ -31,6 +29,8 @@ public class fProfile extends Fragment implements Profile_CustomAdapter.OnEditBu
     public home dashboard;
     public TextView emergency_details, settings, send_feedback, logout;
     public DashboardManager dashboardManager;
+    public Intent intent;
+
 
     public fProfile() {
         // Required empty public constructor
@@ -104,8 +104,20 @@ public class fProfile extends Fragment implements Profile_CustomAdapter.OnEditBu
     @Override
     public void onEditButtonClick(int position) {
         ProfileClass profile = profileList.get(position);
-        Toast.makeText(getContext(), "Edit button clicked for: " + profile.getName(), Toast.LENGTH_SHORT).show();
-        // Add logic here to edit profile
+
+        // Fetch the email from SharedPreferences
+        SharedPreferences prefs = getActivity().getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
+        String userEmail = prefs.getString("user_email", "No email found");
+
+        // Create an Intent to start UpdateProfile Activity
+        Intent intent = new Intent(getContext(), UpdateProfile.class);
+        intent.putExtra("user_email", userEmail); // Send the email as extra data
+        startActivity(intent);
+
+        // Close the fragment
+        getParentFragmentManager().popBackStack();
+
+
     }
 
     @Override
