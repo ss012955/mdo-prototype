@@ -45,7 +45,7 @@ public class ProfileDatabaseHelper {
     private User fetchUserDetails(String userEmail) {
         try {
             // URL of your PHP API
-            String apiUrl = "https://umakmdo-9d08cdb4c431.herokuapp.com/getUserProfile.php?email=" + userEmail;
+            String apiUrl = "https://umakmdo-91b845374d5b.herokuapp.com/getUserProfile.php?email=" + userEmail;
             Log.d("API Request", "Fetching user details for email: " + userEmail);
 
             HttpURLConnection urlConnection = (HttpURLConnection) new URL(apiUrl).openConnection();
