@@ -63,6 +63,79 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profile_recyclerview">
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_height="3dp"
+            android:background="#618DC2" />
+
+        <TextView
+            android:id="@+id/tvEmergencyContactDetails"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="Emergency Contact Details"
+            android:textSize="15sp"
+            android:fontFamily="@font/metropolis_bold"
+            android:textColor="#000000" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_height="3dp"
+            android:background="#618DC2" />
+
+        <!-- Settings -->
+        <TextView
+            android:id="@+id/tvSettings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="Settings"
+            android:textSize="15sp"
+            android:fontFamily="@font/metropolis_bold"
+            android:textColor="#000000" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_height="3dp"
+            android:background="#618DC2" />
+
+        <!-- Send Feedback -->
+        <TextView
+            android:id="@+id/tvSendFeedback"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="Send Feedback"
+            android:textSize="15sp"
+            android:fontFamily="@font/metropolis_bold"
+            android:textColor="#000000" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_height="3dp"
+            android:background="#618DC2" />
+
+        <!-- Log Out -->
+        <TextView
+            android:id="@+id/tvLogOut"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="Log out"
+            android:textSize="15sp"
+            android:fontFamily="@font/metropolis_bold"
+            android:textColor="#000000" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_height="3dp"
+            android:background="#618DC2" />
 
     </LinearLayout>
 

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
+import HelperClasses.DashboardManager;
 import HelperClasses.ProfileClass;
 import HelperClasses.ProfileDatabaseHelper;
 
@@ -27,6 +29,8 @@ public class fProfile extends Fragment implements Profile_CustomAdapter.OnEditBu
     private String userEmail;
     private ProfileDatabaseHelper profileDatabaseHelper;
     public home dashboard;
+    public TextView emergency_details, settings, send_feedback, logout;
+    public DashboardManager dashboardManager;
 
     public fProfile() {
         // Required empty public constructor
@@ -40,7 +44,26 @@ public class fProfile extends Fragment implements Profile_CustomAdapter.OnEditBu
 
         // Initialize RecyclerView
         profile_recycler = view.findViewById(R.id.profile_recyclerview);
+        emergency_details = view.findViewById(R.id.tvEmergencyContactDetails);
+        settings = view.findViewById(R.id.tvSettings);
+        send_feedback = view.findViewById(R.id.tvSendFeedback);
+        logout = view.findViewById(R.id.tvLogOut);
+        dashboardManager = new DashboardManager();
+
+        logout.setOnClickListener(v->{
+            dashboardManager.showLogoutValidator(getActivity(), fProfile.this);
+        });
+
+
+
         profile_recycler.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        profileList = new ArrayList<>();
+        profileList.add(new ProfileClass(R.drawable.profile, "Loading...", "Loading...", "Loading..."));
+
+        // Set the adapter with the default data
+        profileCustomAdapter = new Profile_CustomAdapter(profileList, fProfile.this);
+        profile_recycler.setAdapter(profileCustomAdapter);
 
         // Retrieve the email from the fragment arguments
         if (getArguments() != null) {
@@ -60,12 +83,11 @@ public class fProfile extends Fragment implements Profile_CustomAdapter.OnEditBu
             public void onUserDetailsFetched(ProfileDatabaseHelper.User user) {
                 if (user != null) {
                     // Populate the profile list with fetched user details
-                    profileList = new ArrayList<>();
+                    profileList.clear();
                     profileList.add(new ProfileClass(R.drawable.profile, user.getStudentId(), user.getEmail(), user.getFirstName() + " " + user.getLastName()));
 
                     // Update the RecyclerView with the new data
-                    profileCustomAdapter = new Profile_CustomAdapter(profileList, fProfile.this);
-                    profile_recycler.setAdapter(profileCustomAdapter);
+                    profileCustomAdapter.notifyDataSetChanged();
                 } else {
                     Toast.makeText(getContext(), "User not found", Toast.LENGTH_SHORT).show();
                 }
@@ -73,6 +95,9 @@ public class fProfile extends Fragment implements Profile_CustomAdapter.OnEditBu
         });
 
         return view;
+
+
+
     }
 
     // Handle the click of the edit button

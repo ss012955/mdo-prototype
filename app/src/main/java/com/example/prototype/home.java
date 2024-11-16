@@ -91,13 +91,6 @@ public class home extends BaseActivity {
                 }
         ).attach();
 
-        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
-            @Override
-            public void handleOnBackPressed() {
-                // Show logout dialog when back button is pressed
-                dashboardManager.showLogoutValidator(home.this, home.this);
-            }
-        });
 
     }
     @Override

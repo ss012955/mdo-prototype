@@ -16,7 +16,7 @@ import Database.NetworkUtils;
 
 public class SignupManager implements DefaultLifecycleObserver {
     private static ExecutorService executorService = null;
-    private static Context context = null;
+    public static Context context = null;
     private static FirebaseAuth mAuth;
 
     public SignupManager(Context context) {

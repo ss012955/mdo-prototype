@@ -10,8 +10,11 @@ import android.graphics.drawable.ColorDrawable;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.fragment.app.FragmentActivity;
+
 import com.example.prototype.R;
 import com.example.prototype.MainActivity;
+import com.example.prototype.fProfile;
 
 public class DashboardManager {
     private BaseClass baseClass = new BaseClass();
@@ -27,7 +30,8 @@ public class DashboardManager {
 
     public void showLogoutValidator(Context context, final Activity activity) {
 
-        baseClass.showTwoButtonDialog(context, "Logout", "Are you sure you want to log out?", "LOGOUT", "Cancel",v->{            SharedPreferences prefs = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
+        baseClass.showTwoButtonDialog(context, "Logout", "Are you sure you want to log out?", "LOGOUT", "Cancel",v->{
+            SharedPreferences prefs = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
             prefs.edit().putBoolean("is_logged_in", false).apply();
 
             // Start MainActivity
@@ -38,5 +42,19 @@ public class DashboardManager {
 
             }, v->{});
 
+    }
+
+    public void showLogoutValidator(FragmentActivity activity, fProfile fProfile) {
+        baseClass.showTwoButtonDialog(activity, "Logout", "Are you sure you want to log out?", "LOGOUT", "Cancel",v->{
+            SharedPreferences prefs = activity.getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
+            prefs.edit().putBoolean("is_logged_in", false).apply();
+
+            // Start MainActivity
+            Intent intent = new Intent(activity, MainActivity.class);
+            activity.startActivity(intent);
+            activity.finish(); // Close current activity
+
+
+        }, v->{});
     }
 }
