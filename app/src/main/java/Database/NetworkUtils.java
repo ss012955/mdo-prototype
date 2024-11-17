@@ -40,7 +40,7 @@ public class NetworkUtils {
     public static String performSignup(String studentId, String email, String firstName, String lastName, String password) {
         StringBuilder response = new StringBuilder();
         try {
-            URL url = new URL("http://192.168.254.104/MDOapp/signup.php");
+            URL url = new URL("https://umakmdo-91b845374d5b.herokuapp.com/signup.php");
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("POST");
             connection.setDoOutput(true);
@@ -72,12 +72,12 @@ public class NetworkUtils {
     public static String performLogin(String umakEmail, String password) {
         StringBuilder response = new StringBuilder();
         try {
-            URL url = new URL("http://192.168.254.104/MDOapp/login.php");
+            URL url = new URL("https://umakmdo-91b845374d5b.herokuapp.com/login.php");
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
             // Set timeouts for connecting and reading
-            connection.setConnectTimeout(2000); // 5 seconds
-            connection.setReadTimeout(2000); // 5 seconds
+            connection.setConnectTimeout(5000); // 5 seconds
+            connection.setReadTimeout(5000); // 5 seconds
             connection.setRequestMethod("POST");
             connection.setDoOutput(true);
 

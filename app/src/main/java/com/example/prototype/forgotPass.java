@@ -91,7 +91,7 @@ public class forgotPass extends BaseActivity{
     }
     private void updatePasswordInDatabase(String email, String newPassword) {
         // The URL of your PHP endpoint that updates the password
-        String url = "http://192.168.254.104/MDOapp/update_password.php"; // Replace with your PHP endpoint
+        String url = "https://umakmdo-91b845374d5b.herokuapp.com/update_password.php"; // Replace with your PHP endpoint
 
         // Create OkHttpClient instance
         OkHttpClient client = new OkHttpClient();
