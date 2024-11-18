@@ -45,6 +45,7 @@ public class home extends BaseActivity {
             return insets;
         });
         prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
+
         checkLoginStatus();
         dashboardManager = new DashboardManager();
 
@@ -60,9 +61,6 @@ public class home extends BaseActivity {
         viewpager.setAdapter(myAdapter);
 
         fProfile profileFragment = new fProfile();
-        Bundle args = new Bundle();
-        args.putString("user_email", prefs.getString("user_email", "No email found"));
-        profileFragment.setArguments(args);  // Set the arguments with user email
 
         myAdapter.addFragment(new fDashboard());
         myAdapter.addFragment(new fJournal());

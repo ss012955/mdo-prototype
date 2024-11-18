@@ -9,6 +9,7 @@ activity = "1.9.2"
 constraintlayout = "2.1.4"
 viewpager2 = "1.1.0"
 picasso = "2.71828"
+volley = "1.2.1"
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
@@ -19,6 +20,7 @@ activity = { group = "androidx.activity", name = "activity", version.ref = "acti
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 viewpager2 = { module = "androidx.viewpager2:viewpager2", version.ref = "viewpager2" }
 picasso = { module = "com.squareup.picasso:picasso", version = "2.71828" }
+volley = { group = "com.android.volley", name = "volley", version.ref = "volley" }
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 

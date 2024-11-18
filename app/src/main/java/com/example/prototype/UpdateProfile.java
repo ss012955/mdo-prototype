@@ -3,8 +3,11 @@ package com.example.prototype;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Base64;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -17,11 +20,24 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import HelperClasses.ProfileClass;
 import HelperClasses.ProfileDatabaseHelper;
+import HelperClasses.UpdateProfileManager;
 
 public class UpdateProfile extends AppCompatActivity implements Profile_CustomAdapter.OnEditButtonClickListener {
     private SharedPreferences prefs;
@@ -33,6 +49,11 @@ public class UpdateProfile extends AppCompatActivity implements Profile_CustomAd
     String firstname, lastname;
     EditText etFirstname, etLastname, etPassword, etConfirmPassword;
     ImageView eyePassword, eyeConfirmPassword;
+    Button buttonSave;
+    UpdateProfileManager updateProfileManager;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,9 +119,19 @@ public class UpdateProfile extends AppCompatActivity implements Profile_CustomAd
                 }
             }
         });
+
+        updateProfileManager = new UpdateProfileManager();
+
+        buttonSave = findViewById(R.id.btnSave);
+        buttonSave.setOnClickListener(v->{
+            updateProfileManager.showSaveValidator(this, this, userEmail,
+                    etFirstname, etLastname,
+                    etPassword, etConfirmPassword);
+        });
+
+
     }
     public void onEditButtonClick(int position) {
-
 
     }
     private void togglePasswordVisibility(EditText editText, ImageView eyeIcon) {
@@ -113,5 +144,9 @@ public class UpdateProfile extends AppCompatActivity implements Profile_CustomAd
         }
     }
 
+
+
+
+    //Local uploading of il
 
 }
