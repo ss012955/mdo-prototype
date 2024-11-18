@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputType;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -22,6 +23,7 @@ import java.util.List;
 
 import HelperClasses.ProfileClass;
 import HelperClasses.ProfileDatabaseHelper;
+import HelperClasses.UpdateProfileManager;
 
 public class UpdateProfile extends AppCompatActivity implements Profile_CustomAdapter.OnEditButtonClickListener {
     private SharedPreferences prefs;
@@ -33,6 +35,8 @@ public class UpdateProfile extends AppCompatActivity implements Profile_CustomAd
     String firstname, lastname;
     EditText etFirstname, etLastname, etPassword, etConfirmPassword;
     ImageView eyePassword, eyeConfirmPassword;
+    Button buttonSave;
+    UpdateProfileManager updateProfileManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,6 +101,15 @@ public class UpdateProfile extends AppCompatActivity implements Profile_CustomAd
                     Toast.makeText(UpdateProfile.this, "User not found", Toast.LENGTH_SHORT).show();
                 }
             }
+        });
+
+        updateProfileManager = new UpdateProfileManager();
+
+        buttonSave = findViewById(R.id.btnSave);
+        buttonSave.setOnClickListener(v->{
+            updateProfileManager.showSaveValidator(this, this, userEmail,
+                    etFirstname, etLastname,
+                    etPassword, etConfirmPassword);
         });
     }
     public void onEditButtonClick(int position) {
