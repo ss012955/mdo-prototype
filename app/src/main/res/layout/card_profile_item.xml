@@ -42,7 +42,7 @@
             android:textColor="@color/black"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.146"
+            app:layout_constraintHorizontal_bias="0.097"
             app:layout_constraintStart_toEndOf="@+id/imageview_profilepicture"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -53,7 +53,7 @@
             android:fontFamily="@font/metropolis_regular"
             android:text="ebuscato.k12043456@umak.edu.ph"
             android:textColor="@color/black"
-            android:textSize="10sp"
+            android:textSize="12sp"
             app:layout_constraintEnd_toStartOf="@+id/editprofile_button"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/textview_studentid"
@@ -66,7 +66,7 @@
             android:fontFamily="@font/metropolis_regular"
             android:text="Dela Cruz, Juan"
             android:textColor="@color/black"
-            android:textSize="10sp"
+            android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/textview_email"
             app:layout_constraintTop_toBottomOf="@+id/textview_email"

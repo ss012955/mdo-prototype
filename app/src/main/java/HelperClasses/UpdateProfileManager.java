@@ -23,6 +23,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.prototype.R;
+import com.example.prototype.UpdateProfile;
+import com.example.prototype.fProfile;
+import com.example.prototype.home;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.EmailAuthProvider;
@@ -52,6 +55,7 @@ public class UpdateProfileManager {
                         updateFirebasePassword(context,userEmail, etPassword.getText().toString());
                     } else {
                         Toast.makeText(context, "Update Successful (No Password Change)", Toast.LENGTH_SHORT).show();
+                        navigateToHomeActivity(context);
                     }
                 },
                 error -> {
@@ -99,6 +103,7 @@ public class UpdateProfileManager {
                                         .addOnCompleteListener(updateTask -> {
                                             if (updateTask.isSuccessful()) {
                                                 Toast.makeText(context, "Password Updated in Firebase", Toast.LENGTH_SHORT).show();
+                                                navigateToHomeActivity(context);
                                             } else {
                                                 Toast.makeText(context, "Failed to Update Password in Firebase", Toast.LENGTH_SHORT).show();
                                             }
@@ -173,4 +178,11 @@ public class UpdateProfileManager {
         void onPasswordProvided(String currentPassword);
     }
 
+    private void navigateToHomeActivity(Context context) {
+        // Navigate to HomeActivity
+        Intent intent = new Intent(context, home.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Clear the activity stack
+        context.startActivity(intent);
+        ((Activity) context).finish(); // Finish the current activity (if necessary)
+    }
 }

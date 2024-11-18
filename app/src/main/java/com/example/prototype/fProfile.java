@@ -65,15 +65,9 @@ public class fProfile extends Fragment implements Profile_CustomAdapter.OnEditBu
         profileCustomAdapter = new Profile_CustomAdapter(profileList, fProfile.this);
         profile_recycler.setAdapter(profileCustomAdapter);
 
-        // Retrieve the email from the fragment arguments
-        if (getArguments() != null) {
-            userEmail = getArguments().getString("user_email");
+        prefs = getActivity().getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
+        userEmail = prefs.getString("user_email", null);
 
-            // Show a Toast with the user email
-            if (userEmail != null && !userEmail.isEmpty()) {
-                Toast.makeText(getContext(), "User Email: " + userEmail, Toast.LENGTH_SHORT).show();
-            }
-        }
 
         profileDatabaseHelper = new ProfileDatabaseHelper(getContext());
 
@@ -117,9 +111,7 @@ public class fProfile extends Fragment implements Profile_CustomAdapter.OnEditBu
         // Close the fragment
         getParentFragmentManager().popBackStack();
 
-
     }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
