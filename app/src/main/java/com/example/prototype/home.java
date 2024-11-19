@@ -45,6 +45,7 @@ public class home extends BaseActivity {
             return insets;
         });
         prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
+        int tabPosition = getIntent().getIntExtra("tab_position", 0);
 
         checkLoginStatus();
         dashboardManager = new DashboardManager();
@@ -89,6 +90,7 @@ public class home extends BaseActivity {
                 }
         ).attach();
 
+        viewpager.setCurrentItem(tabPosition);
 
     }
     @Override

@@ -3,13 +3,17 @@ package com.example.prototype;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CalendarView;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -98,28 +102,31 @@ public class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     static class AppointmentsViewHolder extends RecyclerView.ViewHolder {
         CalendarView calendarView;
         Button btnStartBooking;
-        TextView tvNoAppointments;
+        ListView lvAppointments;
 
         AppointmentsViewHolder(View itemView) {
             super(itemView);
             calendarView = itemView.findViewById(R.id.calendarView);
             btnStartBooking = itemView.findViewById(R.id.btnStartBooking);
-            tvNoAppointments = itemView.findViewById(R.id.tvNoAppointments);
+            lvAppointments = itemView.findViewById(R.id.lvAppointments);
         }
 
         void bind(DashboardContent content) {
             List<String> appointments = content.getAppointments();
-            if (appointments != null && !appointments.isEmpty()) {
-                // Join all appointments into a single string separated by new lines
-                StringBuilder appointmentsString = new StringBuilder();
-                for (String appointment : appointments) {
-                    appointmentsString.append(appointment).append("\n");
-                }
-                // Set the text to the TextView
-                tvNoAppointments.setText(appointmentsString.toString().trim()); // Remove the last newline
-            } else {
-                tvNoAppointments.setText("You have no appointments.");
-            }
+
+            // Initialize with the default message to show when no appointments are available
+            ArrayList<String> appointmentList = new ArrayList<>();
+            appointmentList.add("You have no appointments");
+
+            // Set the adapter with the appointment list (either default or fetched)
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(itemView.getContext(), android.R.layout.simple_list_item_1, appointmentList);
+            lvAppointments.setAdapter(adapter);
+
+            btnStartBooking.setOnClickListener(v -> {
+                // Start the BookingActivity
+                Intent intent = new Intent(itemView.getContext(), BookingActivityDate.class);
+                itemView.getContext().startActivity(intent);
+            });
 
         }
     }

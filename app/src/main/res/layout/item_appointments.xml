@@ -27,23 +27,28 @@
 
         <!-- Booking button -->
 
-        <TextView
-            android:id="@+id/tvNoAppointments"
+        <ListView
+            android:id="@+id/lvAppointments"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="You have no appointments."
-            android:textSize="16sp"
-            android:textColor="@android:color/black"
-            android:gravity="center"
-            android:layout_marginBottom="15dp"/>
+            android:layout_height="70dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/rounded_edge"
+            android:divider="@android:color/darker_gray"
+            android:dividerHeight="1dp"
+            android:paddingBottom="15dp" />
+
         <!-- Calendar -->
         <CalendarView
             android:id="@+id/calendarView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:background="@color/white"
-            />
+            android:accessibilityHeading="false"
+            android:background="@drawable/rounded_edge"
+            android:backgroundTint="@color/navy_blue"
+/>
+
+
+
         <Button
             android:id="@+id/btnStartBooking"
             android:layout_width="match_parent"
@@ -51,9 +56,9 @@
             android:text="Click to start booking"
             android:textSize="16sp"
             android:backgroundTint="@android:color/white"
-            android:textColor="@android:color/black"
-
+            android:theme="@style/CustomCalendarViewStyle"
             android:padding="8dp"/>
+
 
         <!-- No appointments text -->
     </LinearLayout>
