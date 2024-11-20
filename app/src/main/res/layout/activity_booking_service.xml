@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/navy_blue"
-    tools:context=".BookingActivity">
+    tools:context=".BookingActivityService">
     <ImageView
         android:id="@+id/logoumak"
         android:layout_width="40dp"
@@ -43,39 +43,49 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
+        android:layout_width="409dp"
         android:layout_height="679dp"
-        android:background="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        android:background="@color/white"
         app:layout_constraintStart_toStartOf="parent">
 
-        <TextView
-            android:id="@+id/stepTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
-            android:layout_marginTop="26dp"
-            android:fontFamily="@font/metropolis_bold"
-            android:text="Step 1 out of 3"
-            android:textColor="@color/black"
-            android:textSize="18sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:layout_width="344dp"
+            android:layout_height="564dp"
+            android:layout_marginBottom="40dp"
+            android:background="@drawable/rounded_layout"
+            android:backgroundTint="@color/gray"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toTopOf="@+id/tablayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.492"
+            app:layout_constraintStart_toStartOf="parent">
 
 
-        <ProgressBar
-            android:id="@+id/progressBar"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="320dp"
-            android:layout_height="15dp"
-            android:progressDrawable="@drawable/custom_progress"
-            android:progress="0"
-            app:circularflow_radiusInDP="15dp"
-            app:layout_constraintEnd_toEndOf="@+id/textView4"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/textView4"
-            app:layout_constraintTop_toBottomOf="@+id/stepTitle" />
+            <TextView
+                android:id="@+id/serviceTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="13dp"
+                android:text="TextView"
+                android:fontFamily="@font/metropolis_bold"
+                android:textSize="20sp"
+                android:textColor="@color/black"
+
+                />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/rounded_layout"
+                />
+
+
+        </LinearLayout>
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tablayout"
@@ -87,34 +97,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:tabIconTint="@color/tab_layout_selector"
             app:tabIndicatorColor="@color/UMAKYELLOW" />
-
-
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:fontFamily="@font/metropolis_bold"
-            android:text="Choose which service:"
-            android:textColor="@color/black"
-            android:textSize="25dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.279"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/progressBar" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
-            android:layout_width="335dp"
-            android:layout_height="402dp"
-            android:layout_marginTop="20dp"
-            android:background="@color/white"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.526"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView4" />
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

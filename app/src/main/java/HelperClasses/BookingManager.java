@@ -20,8 +20,6 @@ public class BookingManager {
 
     private String selectedTimeSlot;
     private Date selectedDate;
-    private static int targetProgress = 35;
-
     public void showTimeSlotDialog(Context context, OnTimeSlotSelectedListener listener) {
         // Inflate the dialog layout
         View dialogView = View.inflate(context, R.layout.dialog_time, null);
@@ -109,22 +107,30 @@ public class BookingManager {
         void onTimeSlotSelected(String timeSlot);
     }
 
-    public static void smoothProgressUpdate(ProgressBar progressBar) {
-        final int[] currentProgress = {0}; // Track the current progress
+    public static void smoothProgressUpdate(ProgressBar progressBar, int targetProgress) {
+        // Ensure the target progress is within valid bounds
+        final int finalTargetProgress = Math.max(0, Math.min(targetProgress, progressBar.getMax()));
 
-        new Handler().postDelayed(new Runnable() {
+        final int[] currentProgress = {progressBar.getProgress()}; // Start from current progress
+
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (currentProgress[0] < targetProgress) {
-                    currentProgress[0] += 35; // Increment the progress in steps
-                    animateProgressBar(progressBar, currentProgress[0]); // Smooth animation to the next step
-                    new Handler().postDelayed(this, 500); // Delay for the next update
+                if (currentProgress[0] < finalTargetProgress) {
+                    currentProgress[0] += 3; // Increment by 1 for smoother animation
+                    progressBar.setProgress(currentProgress[0]); // Update progress
+                    handler.postDelayed(this, 15); // Short delay for smooth effect
+                } else {
+                    // Ensure the progress stops exactly at target
+                    progressBar.setProgress(finalTargetProgress);
                 }
             }
-        }, 500);
+        }, 15);
     }
 
-    public static void animateProgressBar(ProgressBar progressBar, int progress) {
+
+    public void animateProgressBar(ProgressBar progressBar, int progress) {
         ObjectAnimator animation = ObjectAnimator.ofInt(progressBar, "progress", progressBar.getProgress(), progress);
         animation.setDuration(700); // Smooth animation duration
         animation.start();

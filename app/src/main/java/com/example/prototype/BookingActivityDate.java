@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CalendarView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,7 +34,8 @@ public class BookingActivityDate extends BaseActivity {
     Button buttomTime, buttonNext;
     Date chosenDate;
     String chosenTimeSlot;
-
+    String service, serviceType;
+    ProgressBar progressBar;
     CalendarView calendarView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,8 +53,40 @@ public class BookingActivityDate extends BaseActivity {
 
         Toast.makeText(BookingActivityDate.this, userEmail, Toast.LENGTH_SHORT).show();
 
+        Intent intent = getIntent();
+        service = intent.getStringExtra("Service");
+        serviceType = intent.getStringExtra("ServiceType");
+        if (service != null || serviceType != null) {
+            Toast.makeText(this, "Selected Service: " + service, Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "No service selected.", Toast.LENGTH_SHORT).show();
+        }
+
+        tabLayout = findViewById(R.id.tablayout);
+        int[] icons = {R.drawable.home, R.drawable.user_journal, R.drawable.profile};
+        for (int i = 0; i < icons.length; i++) {
+            tabLayout.addTab(tabLayout.newTab().setIcon(icons[i]));
+        }
+
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                startActivity(new Intent(BookingActivityDate.this, home.class)
+                        .putExtra("tab_position", tab.getPosition()));
+            }
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {}
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {}
+        });
 
         bookingManager = new BookingManager();
+        progressBar = findViewById(R.id.progressBar);
+        bookingManager.smoothProgressUpdate(progressBar, 55);
+
+
+
         calendarView = findViewById(R.id.calendarView);
 
         // Handle time slot selection
@@ -84,12 +118,12 @@ public class BookingActivityDate extends BaseActivity {
 
 
             // Pass the data to the next activity
-            Intent intent = new Intent(this, home.class);
-            intent.putExtra("CHOSEN_DATE", formattedDate);
-            intent.putExtra("CHOSEN_TIME", formattedTime);
-            startActivity(intent);
-
-
+            Intent intentTime = new Intent(this, home.class);
+            intentTime.putExtra("CHOSEN_DATE", formattedDate);
+            intentTime.putExtra("CHOSEN_TIME", formattedTime);
+            intentTime.putExtra("Service", service);
+            intentTime.putExtra("ServiceType", serviceType);
+            startActivity(intentTime);
         });
 
     }

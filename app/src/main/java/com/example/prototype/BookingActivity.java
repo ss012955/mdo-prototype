@@ -1,6 +1,7 @@
 package com.example.prototype;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -20,17 +21,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import Adapters.ServiceTypeAdapter;
+import HelperClasses.BaseClass;
 import HelperClasses.BookingManager;
 import HelperClasses.ItemClickListener;
 import HelperClasses.ServiceType;
 
-public class BookingActivity extends AppCompatActivity implements ItemClickListener {
+public class BookingActivity extends BaseActivity implements ItemClickListener {
     TabLayout tabLayout;
     ProgressBar progressBar;
     private RecyclerView recyclerView;
 
     private List<ServiceType> serviceType;
     ServiceTypeAdapter adapter = new ServiceTypeAdapter(serviceType);
+    BookingManager bookingManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +45,12 @@ public class BookingActivity extends AppCompatActivity implements ItemClickListe
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        SharedPreferences prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
+        String userEmail = prefs.getString("user_email", "No email found");
+        Toast.makeText(BookingActivity.this, userEmail, Toast.LENGTH_SHORT).show();
+
+
         tabLayout = findViewById(R.id.tablayout);
         int[] icons = {R.drawable.home, R.drawable.user_journal, R.drawable.profile};
         for (int i = 0; i < icons.length; i++) {
@@ -60,10 +69,9 @@ public class BookingActivity extends AppCompatActivity implements ItemClickListe
             @Override
             public void onTabReselected(TabLayout.Tab tab) {}
         });
-
+        bookingManager = new BookingManager();
         progressBar = findViewById(R.id.progressBar);
-        progressBar.setProgress(0);
-        BookingManager.smoothProgressUpdate(progressBar);
+        bookingManager.smoothProgressUpdate(progressBar, 35);
 
         recyclerView = findViewById(R.id.recyclerView);
 
@@ -80,15 +88,26 @@ public class BookingActivity extends AppCompatActivity implements ItemClickListe
 
         recyclerView.setAdapter(adapter);
         adapter.setClickListener(this);
-
     }
 
 
     @Override
     public void onClick(View v, int position) {
-            Toast.makeText(
-                    this,
-                    "You Chose " + serviceType.get(position).getServiceTitle(),
-                    Toast.LENGTH_SHORT).show();
+
+        if (position >= 0 && position < serviceType.size()) { // Validate the position
+
+            String service = "";
+            if (serviceType.get(position).getServiceTitle().equals("Medical Services")) {
+                service = "Medical";
+            } else if (serviceType.get(position).getServiceTitle().equals("Dental Services")) {
+                service = "Dental";
+            }
+
+            Intent intent = new Intent(this, BookingActivityService.class);
+            intent.putExtra("Service", service);
+            startActivity(intent);
+        }else{
+            Toast.makeText(this, "Invalid service selection.", Toast.LENGTH_SHORT).show();
+        }
     }
 }
