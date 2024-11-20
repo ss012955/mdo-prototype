@@ -124,7 +124,7 @@ public class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
             btnStartBooking.setOnClickListener(v -> {
                 // Start the BookingActivity
-                Intent intent = new Intent(itemView.getContext(), BookingActivityDate.class);
+                Intent intent = new Intent(itemView.getContext(), BookingActivity.class);
                 itemView.getContext().startActivity(intent);
             });
 

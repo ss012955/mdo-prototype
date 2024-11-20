@@ -1,10 +1,13 @@
 package HelperClasses;
 
+import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CalendarView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,6 +20,7 @@ public class BookingManager {
 
     private String selectedTimeSlot;
     private Date selectedDate;
+    private static int targetProgress = 35;
 
     public void showTimeSlotDialog(Context context, OnTimeSlotSelectedListener listener) {
         // Inflate the dialog layout
@@ -103,5 +107,26 @@ public class BookingManager {
 
     public interface OnTimeSlotSelectedListener {
         void onTimeSlotSelected(String timeSlot);
+    }
+
+    public static void smoothProgressUpdate(ProgressBar progressBar) {
+        final int[] currentProgress = {0}; // Track the current progress
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (currentProgress[0] < targetProgress) {
+                    currentProgress[0] += 35; // Increment the progress in steps
+                    animateProgressBar(progressBar, currentProgress[0]); // Smooth animation to the next step
+                    new Handler().postDelayed(this, 500); // Delay for the next update
+                }
+            }
+        }, 500);
+    }
+
+    public static void animateProgressBar(ProgressBar progressBar, int progress) {
+        ObjectAnimator animation = ObjectAnimator.ofInt(progressBar, "progress", progressBar.getProgress(), progress);
+        animation.setDuration(700); // Smooth animation duration
+        animation.start();
     }
 }
