@@ -57,10 +57,39 @@
         app:layout_constraintTop_toBottomOf="@+id/txtviewHomeTitle">
 
         <TextView
+            android:id="@+id/stepTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:fontFamily="@font/metropolis_bold"
+            android:text="Step 2 out of 3"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="334dp"
+            android:layout_height="15dp"
+            android:layout_marginStart="18dp"
+            android:progress="0"
+            android:progressDrawable="@drawable/custom_progress"
+            app:circularflow_radiusInDP="15dp"
+            app:layout_constraintEnd_toEndOf="@+id/textView4"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/textView4"
+            app:layout_constraintTop_toBottomOf="@+id/stepTitle" />
+
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:paddingBottom="8dp"
+            android:layout_marginStart="18dp"
             android:text="Choose Available Schedule"
             android:textColor="@android:color/black"
             android:textSize="20sp"
@@ -70,11 +99,11 @@
 
         <LinearLayout
             android:layout_width="351dp"
-            android:layout_height="498dp"
+            android:layout_height="457dp"
+            android:layout_gravity="center"
             android:layout_marginBottom="20dp"
             android:background="@drawable/rounded_layout"
             android:orientation="vertical"
-            android:layout_gravity="center"
             android:padding="15dp"
             tools:layout_editor_absoluteX="30dp"
             tools:layout_editor_absoluteY="116dp">
@@ -123,7 +152,18 @@
             android:fontFamily="@font/metropolis_regular"
             android:textColor="@color/black"
             app:cornerRadius="158dp" />
+
     </LinearLayout>
 
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tablayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/UMAKBLUE"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:tabIconTint="@color/tab_layout_selector"
+        app:tabIndicatorColor="@color/UMAKYELLOW" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
