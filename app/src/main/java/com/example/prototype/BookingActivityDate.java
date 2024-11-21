@@ -89,11 +89,15 @@ public class BookingActivityDate extends BaseActivity {
 
         calendarView = findViewById(R.id.calendarView);
 
+        buttomTime = findViewById(R.id.buttomTime);
+
         // Handle time slot selection
-        findViewById(R.id.buttomTime).setOnClickListener(v -> {
+        buttomTime.setOnClickListener(v -> {
             bookingManager.showTimeSlotDialog(this, timeSlot -> {
                 chosenTimeSlot = timeSlot; // Save selected time slot
                 Toast.makeText(this, "Time selected: " + chosenTimeSlot, Toast.LENGTH_SHORT).show();
+                buttomTime.setText(chosenTimeSlot);
+
             });
         });
 
@@ -118,7 +122,7 @@ public class BookingActivityDate extends BaseActivity {
 
 
             // Pass the data to the next activity
-            Intent intentTime = new Intent(this, home.class);
+            Intent intentTime = new Intent(this, BookingValidate.class);
             intentTime.putExtra("CHOSEN_DATE", formattedDate);
             intentTime.putExtra("CHOSEN_TIME", formattedTime);
             intentTime.putExtra("Service", service);
