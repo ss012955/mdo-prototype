@@ -17,6 +17,12 @@
         android:theme="@style/Theme.Prototype"
         tools:targetApi="31">
         <activity
+            android:name=".ConfirmationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".BookingValidate"
+            android:exported="false" />
+        <activity
             android:name=".BookingActivityService"
             android:exported="false" />
         <activity
