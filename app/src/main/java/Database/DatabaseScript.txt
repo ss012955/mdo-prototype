@@ -37,3 +37,19 @@ CREATE TABLE UserProfile (
 
 INSERT INTO Admins (username, email, password) VALUES
 ('admin1', 'admin1@example.com', 'admin_password_1');
+
+
+USE MDOdb;
+
+CREATE TABLE IF NOT EXISTS Bookings (
+    booking_id INT AUTO_INCREMENT PRIMARY KEY,
+    umak_email VARCHAR(100) NOT NULL, -- Reference the umak_email field in Users table
+    service VARCHAR(100) NOT NULL,
+    service_type VARCHAR(100) NOT NULL,
+    booking_date DATE NOT NULL, -- Date in the format MM/dd/yyyy
+    booking_time TIME NOT NULL, -- Time in the format hh:mm AM/PM
+    remarks TEXT, -- Optional remarks
+    status ENUM('Pending', 'Approved', 'Cancelled') DEFAULT 'Pending', -- Status column with default value 'Pending'
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Timestamp for booking creation
+    FOREIGN KEY (umak_email) REFERENCES Users(umak_email) -- Establish relationship with Users table
+);

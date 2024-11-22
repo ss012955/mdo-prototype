@@ -6,8 +6,10 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.window.OnBackInvokedDispatcher;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -100,4 +102,19 @@ public class ConfirmationActivity extends AppCompatActivity {
             startActivity(intent.get());
         });
     }
+
+    @Override
+    public void onBackPressed() {
+        // Call the super method to handle default behavior (such as navigating back in the stack)
+        super.onBackPressed();
+
+        // Create an Intent to go back to home.class
+        Intent intent = new Intent(ConfirmationActivity.this, home.class);
+        startActivity(intent);
+
+        // Optionally, finish the current activity to prevent it from remaining in the back stack
+        finish();
+    }
+
+
 }
