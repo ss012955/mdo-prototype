@@ -36,7 +36,7 @@ public class BookingValidate extends AppCompatActivity {
     EditText remarks;
     Button buttonConfirm;
     TextView tvService, tvServiceType, tvDate;
-
+    String userEmail;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,7 +49,7 @@ public class BookingValidate extends AppCompatActivity {
         });
 
         SharedPreferences prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
-        String userEmail = prefs.getString("user_email", "No email found");
+        userEmail = prefs.getString("user_email", "No email found");
         Toast.makeText(BookingValidate.this, userEmail, Toast.LENGTH_SHORT).show();
 
         tabLayout = findViewById(R.id.tablayout);
@@ -111,7 +111,7 @@ public class BookingValidate extends AppCompatActivity {
         buttonConfirm.setOnClickListener(v->{
             remarksInput = remarks.getText().toString();  // Get remarks input here, not before
             BookingInsert insert = new BookingInsert();
-            insert.bookingInsert(this, service, serviceType, chosen_date, chosen_time, remarksInput);
+            insert.bookingInsert(this, service, serviceType, chosen_date, chosen_time, remarksInput, userEmail);
         });
 
 
