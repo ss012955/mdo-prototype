@@ -17,6 +17,8 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.tabs.TabLayout;
+
 import org.checkerframework.checker.units.qual.A;
 
 import java.util.ArrayList;
@@ -36,6 +38,7 @@ public class Appointments extends BaseActivity implements ItemClickListener {
     private AppointmentsAdapter adapter = new AppointmentsAdapter(appointmentsList);
     private SharedPreferences prefs;
     private String userEmail;
+    TabLayout tabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +54,25 @@ public class Appointments extends BaseActivity implements ItemClickListener {
 
         prefs = getApplicationContext().getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
         userEmail = prefs.getString("user_email", null);
+
+        tabLayout = findViewById(R.id.tablayout);
+        int[] icons = {R.drawable.home, R.drawable.user_journal, R.drawable.profile};
+        for (int i = 0; i < icons.length; i++) {
+            tabLayout.addTab(tabLayout.newTab().setIcon(icons[i]));
+        }
+
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                startActivity(new Intent(Appointments.this, home.class)
+                        .putExtra("tab_position", tab.getPosition()));
+            }
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {}
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {}
+        });
 
 
         recyclerView = findViewById(R.id.recyclerView);
