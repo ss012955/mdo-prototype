@@ -16,6 +16,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import HelperClasses.ItemClickListener;
+
 public class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final int TYPE_ANNOUNCEMENTS = 0;
@@ -23,6 +25,10 @@ public class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private static final int TYPE_TRIVIA = 2;
 
     private List<DashboardContent> contentList;
+    public static ItemClickListener clickListener;
+    public void setClickListener(ItemClickListener myListener){
+        this.clickListener = myListener;
+    }
 
     public DashboardAdapter(List<DashboardContent> contentList) {
         this.contentList = contentList;
@@ -83,23 +89,32 @@ public class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     // Define ViewHolder for Announcements
-    static class AnnouncementsViewHolder extends RecyclerView.ViewHolder {
+    static class AnnouncementsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ViewPager2 viewPagerAnnouncements;
 
         AnnouncementsViewHolder(View itemView) {
             super(itemView);
             viewPagerAnnouncements = itemView.findViewById(R.id.viewPagerAnnouncements);
+            itemView.setOnClickListener(this);
         }
 
         void bind(DashboardContent content) {
             List<String> images = content.getImages();
             ImageAdapter imageAdapter = new ImageAdapter(images);
             viewPagerAnnouncements.setAdapter(imageAdapter);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            if(clickListener != null){
+                clickListener.onClick(v, getBindingAdapterPosition());
+            }
         }
     }
 
     // Define ViewHolder for Appointments
-    static class AppointmentsViewHolder extends RecyclerView.ViewHolder {
+    static class AppointmentsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         CalendarView calendarView;
         Button btnStartBooking;
         ListView lvAppointments;
@@ -109,6 +124,8 @@ public class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             calendarView = itemView.findViewById(R.id.calendarView);
             btnStartBooking = itemView.findViewById(R.id.btnStartBooking);
             lvAppointments = itemView.findViewById(R.id.lvAppointments);
+            itemView.setOnClickListener(this);
+
         }
 
         void bind(DashboardContent content) {
@@ -127,21 +144,41 @@ public class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 Intent intent = new Intent(itemView.getContext(), BookingActivity.class);
                 itemView.getContext().startActivity(intent);
             });
+            itemView.setOnClickListener(this);
 
+
+        }
+
+        @Override
+        public void onClick(View v) {
+            if(clickListener != null){
+                clickListener.onClick(v, getBindingAdapterPosition());
+            }
         }
     }
 
     // Define ViewHolder for Trivia
-    static class TriviaViewHolder extends RecyclerView.ViewHolder {
+    static class TriviaViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView triviaContent;
 
         TriviaViewHolder(View itemView) {
             super(itemView);
             triviaContent = itemView.findViewById(R.id.triviaContent);
+            itemView.setOnClickListener(this);
         }
 
         void bind(DashboardContent content) {
             triviaContent.setText(content.getTrivia());
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            if(clickListener != null){
+                clickListener.onClick(v, getBindingAdapterPosition());
+            }
         }
     }
+
+
 }
