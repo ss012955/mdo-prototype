@@ -1,5 +1,6 @@
 package com.example.prototype;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -21,6 +23,7 @@ public class fJournal extends Fragment {
     private customAdapter adapter1;
     private List<content> contentList;
     private TextView txtviewHomeTitle;
+    private ImageView chatImageView;
     public fJournal() {
         // Required empty public constructor
     }
@@ -34,7 +37,14 @@ public class fJournal extends Fragment {
         txtviewHomeTitle.setText("Journal");
         // Initialize RecyclerView
         recyclerView = view.findViewById(R.id.recyclerView);
+        chatImageView = view.findViewById(R.id.chat);
 
+        // Set click listener for the chat image
+        chatImageView.setOnClickListener(v -> {
+
+            Intent intent = new Intent(getContext(), ChatActivity.class);
+            startActivity(intent);
+        });
         // Set up the content list
         contentList = new ArrayList<>();
         contentList.add(new content("Announcements"));

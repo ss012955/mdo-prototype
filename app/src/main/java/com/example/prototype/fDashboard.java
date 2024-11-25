@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ public class fDashboard extends Fragment implements ItemClickListener {
     private RecyclerView recyclerView;
     private DashboardAdapter adapter;
     private List<DashboardContent> contentList;
-
+    private ImageView chatImageView;
     private NetworkChangeReceiver networkChangeReceiver;
 
     public fDashboard() {
@@ -34,7 +35,14 @@ public class fDashboard extends Fragment implements ItemClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_f_dashboard, container, false);
+        chatImageView = view.findViewById(R.id.chat);
 
+        // Set click listener for the chat image
+        chatImageView.setOnClickListener(v -> {
+
+            Intent intent = new Intent(getContext(), ChatActivity.class);
+            startActivity(intent);
+        });
         // Initialize RecyclerView
         recyclerView = view.findViewById(R.id.recyclerView);
         List<String> images = Arrays.asList("chat", "umaklogo" , "home");
