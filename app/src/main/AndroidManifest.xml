@@ -17,6 +17,15 @@
         android:theme="@style/Theme.Prototype"
         tools:targetApi="31">
         <activity
+            android:name=".Trivia"
+            android:exported="false" />
+        <activity
+            android:name=".Announcements"
+            android:exported="false" />
+        <activity
+            android:name=".Appointments"
+            android:exported="false" />
+        <activity
             android:name=".ConfirmationActivity"
             android:exported="false" />
         <activity
