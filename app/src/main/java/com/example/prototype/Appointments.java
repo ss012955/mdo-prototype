@@ -23,10 +23,15 @@ public class Appointments extends BaseActivity implements ItemClickListener {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+
+
     }
 
     @Override
     public void onClick(View v, int position) {
 
     }
+
+
 }
