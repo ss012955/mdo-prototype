@@ -121,9 +121,9 @@ public class BookingInsert {
         SimpleDateFormat inputFormat = new SimpleDateFormat("h:mm a", Locale.getDefault());
         Date parsedTime = inputFormat.parse(newTime); // Parse the converted time (e.g., "8:00 AM")
 
-        // Format the time back to the desired format (e.g., "08:00 AM")
-        SimpleDateFormat sqlFormat = new SimpleDateFormat("hh:mm a", Locale.getDefault());
-        return sqlFormat.format(parsedTime);
+        // Format the time back to the 24-hour format (e.g., "08:00" or "16:00")
+        SimpleDateFormat sqlFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
+        return sqlFormat.format(parsedTime); // Returns time in 24-hour format, e.g., "16:00"
     }
 
     private String convertTimeSlot(String time) {
