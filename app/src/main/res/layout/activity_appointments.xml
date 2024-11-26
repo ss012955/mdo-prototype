@@ -67,11 +67,11 @@
 
         <LinearLayout
             android:layout_width="344dp"
-            android:layout_height="574dp"
-            android:layout_marginBottom="40dp"
-            android:orientation="vertical"
+            android:layout_height="590dp"
+            android:layout_marginBottom="25dp"
             android:background="@drawable/rounded_layout"
             android:backgroundTint="@color/gray"
+            android:orientation="vertical"
             app:layout_constraintBottom_toTopOf="@+id/tablayout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.492"
@@ -83,13 +83,12 @@
                 android:id="@+id/serviceTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
                 android:layout_marginStart="13dp"
-                android:text="Appointments"
+                android:layout_marginTop="5dp"
                 android:fontFamily="@font/metropolis_bold"
-                android:textSize="20sp"
+                android:text="Appointments"
                 android:textColor="@color/black"
-                />
+                android:textSize="20sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -103,10 +102,10 @@
                     android:layout_width="322dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
+                    android:backgroundTint="@android:color/white"
                     android:padding="8dp"
                     android:text="Click to start booking"
                     android:textSize="16sp"
-                    android:backgroundTint="@android:color/white"
                     android:theme="@style/CustomCalendarViewStyle" />
 
 
@@ -122,9 +121,9 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerView"
                     android:layout_width="322dp"
+                    android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:layout_marginEnd="2dp"
-                    android:layout_height="match_parent" />
+                    android:layout_marginEnd="2dp" />
 
             </LinearLayout>
 
