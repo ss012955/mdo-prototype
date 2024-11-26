@@ -48,7 +48,7 @@ public class BookingActivity extends BaseActivity implements ItemClickListener {
 
         SharedPreferences prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
         String userEmail = prefs.getString("user_email", "No email found");
-        Toast.makeText(BookingActivity.this, userEmail, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(BookingActivity.this, userEmail, Toast.LENGTH_SHORT).show();
 
 
         tabLayout = findViewById(R.id.tablayout);

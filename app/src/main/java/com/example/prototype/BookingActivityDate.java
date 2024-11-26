@@ -118,7 +118,7 @@ public class BookingActivityDate extends BaseActivity {
             String formattedTime = chosenTimeSlot;
 
             // Show the selected date and time in the desired format
-            Toast.makeText(this, "Date: " + formattedDate + " Time: " + formattedTime, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "Date: " + formattedDate + " Time: " + formattedTime, Toast.LENGTH_SHORT).show();
 
 
             // Pass the data to the next activity
@@ -140,7 +140,7 @@ public class BookingActivityDate extends BaseActivity {
         chosenDate = bookingManager.getSelectedDate();
 
         if (chosenDate != null) {
-            Toast.makeText(this, "Chosen date: " + chosenDate.toString(), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "Chosen date: " + chosenDate.toString(), Toast.LENGTH_SHORT).show();
         }
     }
 }

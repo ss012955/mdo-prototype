@@ -40,7 +40,7 @@ public class ConfirmationActivity extends AppCompatActivity {
         });
         SharedPreferences prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
         String userEmail = prefs.getString("user_email", "No email found");
-        Toast.makeText(ConfirmationActivity.this, userEmail, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(ConfirmationActivity.this, userEmail, Toast.LENGTH_SHORT).show();
 
         tabLayout = findViewById(R.id.tablayout);
         int[] icons = {R.drawable.home, R.drawable.user_journal, R.drawable.profile};

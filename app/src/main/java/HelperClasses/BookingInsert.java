@@ -36,7 +36,7 @@ public class BookingInsert {
             String serviceType,
             String date,
             String time,
-            String remarks,String umakEmail) {
+            String remarks,String umakEmail,  Runnable onComplete) {
 
         baseClass.showTwoButtonDialog(
                 context,
@@ -60,7 +60,7 @@ public class BookingInsert {
 
                     String convertedTime = convertTimeSlot(time);
                     // Call the insert method to log the booking data
-                    insert(context, service, serviceType, date, convertedTime, remarks, umakEmail);
+                    insert(context, service, serviceType, date, convertedTime, remarks, umakEmail, onComplete);
                 },
                 v -> {
                     // Handle "No" button click (optional)
@@ -70,7 +70,7 @@ public class BookingInsert {
 
 
     // Insert method to handle booking data
-    private void insert(Context context, String service, String serviceType, String date, String time, String remarks,String umakEmail) {
+    private void insert(Context context, String service, String serviceType, String date, String time, String remarks, String umakEmail, Runnable onComplete) {
         String url = "https://umakmdo-91b845374d5b.herokuapp.com/insert_booking.php"; // Replace with your PHP endpoint
 
         try {
@@ -79,10 +79,16 @@ public class BookingInsert {
 
             StringRequest request = new StringRequest(Request.Method.POST, url,
                     response -> {
-                        Toast.makeText(context, "Response: " + response, Toast.LENGTH_SHORT).show();
+                        // Response received
+                        //Toast.makeText(context, "Response: " + response, Toast.LENGTH_SHORT).show();
+                        // Notify completion (re-enable button)
+                        if (onComplete != null) onComplete.run();
                     },
                     error -> {
+                        // Error received
                         Toast.makeText(context, "Error: " + error.getMessage(), Toast.LENGTH_LONG).show();
+                        // Notify completion (re-enable button even on error)
+                        if (onComplete != null) onComplete.run();
                     }
             ) {
                 @Override
@@ -103,6 +109,8 @@ public class BookingInsert {
 
         } catch (ParseException e) {
             Toast.makeText(context, "Date/Time formatting error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            // Notify completion even if there was an error
+            if (onComplete != null) onComplete.run();
         }
     }
 

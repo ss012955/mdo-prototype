@@ -47,7 +47,7 @@ public class BookingActivityService extends BaseActivity implements ItemClickLis
         });
         SharedPreferences prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
         String userEmail = prefs.getString("user_email", "No email found");
-        Toast.makeText(BookingActivityService.this, userEmail, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(BookingActivityService.this, userEmail, Toast.LENGTH_SHORT).show();
 
         tabLayout = findViewById(R.id.tablayout);
         int[] icons = {R.drawable.home, R.drawable.user_journal, R.drawable.profile};
@@ -72,7 +72,7 @@ public class BookingActivityService extends BaseActivity implements ItemClickLis
         service = intent.getStringExtra("Service");
 
         if (service != null) {
-            Toast.makeText(this, "Selected Service: " + service, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "Selected Service: " + service, Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(this, "No service selected.", Toast.LENGTH_SHORT).show();
         }
@@ -80,7 +80,7 @@ public class BookingActivityService extends BaseActivity implements ItemClickLis
         recyclerView = findViewById(R.id.recyclerView);
         title = findViewById(R.id.serviceTitle);
         if (service != null) {
-            Toast.makeText(this, "Selected Service: " + service, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "Selected Service: " + service, Toast.LENGTH_SHORT).show();
 
             services = new ArrayList<>();
 
@@ -105,10 +105,10 @@ public class BookingActivityService extends BaseActivity implements ItemClickLis
                 services.add(new Services("Emergency Dental Care"));
                 services.add(new Services("Referrals to Dental Specialists"));
             } else {
-                Toast.makeText(this, "Unknown service type selected.", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "Unknown service type selected.", Toast.LENGTH_SHORT).show();
             }
         } else {
-            Toast.makeText(this, "No service selected.", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "No service selected.", Toast.LENGTH_SHORT).show();
             services = new ArrayList<>(); // Initialize an empty list
         }
 
