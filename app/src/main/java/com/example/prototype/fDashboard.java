@@ -65,7 +65,7 @@ public class fDashboard extends Fragment implements ItemClickListener {
             public void run() {
                 // Update UI when data is fetched
                 int numberOfAppointments = allAppointments.getInstance().getNumberOfAppointments();
-                Toast.makeText(getContext(), userEmail + " " + numberOfAppointments, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getContext(), userEmail + " " + numberOfAppointments, Toast.LENGTH_SHORT).show();
 
                 // Notify the adapter about the updated data
                 adapter.notifyDataSetChanged(); // Update the RecyclerView
