@@ -50,7 +50,7 @@ public class BookingValidate extends AppCompatActivity {
 
         SharedPreferences prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
         userEmail = prefs.getString("user_email", "No email found");
-        Toast.makeText(BookingValidate.this, userEmail, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(BookingValidate.this, userEmail, Toast.LENGTH_SHORT).show();
 
         tabLayout = findViewById(R.id.tablayout);
         int[] icons = {R.drawable.home, R.drawable.user_journal, R.drawable.profile};
@@ -109,9 +109,17 @@ public class BookingValidate extends AppCompatActivity {
 
         buttonConfirm = findViewById(R.id.buttonConfirm);
         buttonConfirm.setOnClickListener(v->{
+            // Disable the button to prevent multiple clicks
+            buttonConfirm.setEnabled(false);
+
             remarksInput = remarks.getText().toString();  // Get remarks input here, not before
             BookingInsert insert = new BookingInsert();
-            insert.bookingInsert(this, service, serviceType, chosen_date, chosen_time, remarksInput, userEmail);
+
+            // Call the insert method with a callback to re-enable the button
+            insert.bookingInsert(this, service, serviceType, chosen_date, chosen_time, remarksInput, userEmail, () -> {
+                // Re-enable the button after the insert operation is completed
+                buttonConfirm.setEnabled(true);
+            });
         });
 
 

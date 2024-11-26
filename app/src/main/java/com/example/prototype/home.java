@@ -105,7 +105,7 @@ public class home extends BaseActivity {
         if (isLoggedIn) {
             String userEmail = prefs.getString("user_email", "No email found");
             int numberOfAppointments = allAppointments.getInstance().getNumberOfAppointments();
-            Toast.makeText(this, "Logged in as: " + userEmail + numberOfAppointments, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "Logged in as: " + userEmail + numberOfAppointments, Toast.LENGTH_SHORT).show();
         }else{
             navigateToLogin();
         }
