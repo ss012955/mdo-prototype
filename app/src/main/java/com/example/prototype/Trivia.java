@@ -43,12 +43,18 @@ public class Trivia extends BaseActivity implements ItemClickListener {
         triviaAdapter = new TriviaAdapter(triviaList);
         recyclerView.setAdapter(triviaAdapter);
 
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         // Fetch trivia data from the server
         fetchTrivia();
     }
 
     private void fetchTrivia() {
-        String url = "http://192.168.100.4/MDOapp-main/Admin/trivia.php";  // Your server URL
+        String url = "http://192.168.100.4/MDOapp-main/Admin/trivia.php?type=all";  // Your server URL
 
         // Make a GET request to fetch trivia data
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, response -> {
@@ -69,7 +75,7 @@ public class Trivia extends BaseActivity implements ItemClickListener {
                     String text = triviaObject.getString("details");
 
                     // Add the trivia item to your list
-                    triviaList.add(new TriviaItem(title, text));
+                    triviaList.add(new TriviaItem(title, "\t"+ text));
                 }
 
                 // Notify the adapter to update the UI with the new data

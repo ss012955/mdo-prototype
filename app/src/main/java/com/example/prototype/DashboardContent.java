@@ -7,7 +7,7 @@ public class DashboardContent {
     private List<String> images;       // For announcements slideshow
     private List<String> appointments; // For upcoming appointments
     private String trivia;             // For trivia text
-
+    private String triviaTitle;  // Add a field for trivia title
     // General Constructor
     public DashboardContent(String type, List<String> images, List<String> appointments, String trivia) {
         this.type = type;
@@ -42,5 +42,14 @@ public class DashboardContent {
 
     public String getTrivia() {
         return trivia;
+    }
+
+    // Getter and setter for trivia title
+    public String getTriviaTitle() {
+        return triviaTitle;
+    }
+
+    public void setTriviaTitle(String triviaTitle) {
+        this.triviaTitle = triviaTitle;
     }
 }

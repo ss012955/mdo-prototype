@@ -28,12 +28,15 @@
             android:gravity="center"
             android:paddingBottom="8dp"/>
 
+        <!-- Title and Content Combined TextView -->
         <TextView
             android:id="@+id/triviaContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Trivia content goes here"
+            android:text="Trivia Title\nTrivia content goes here"
+            android:textSize="16sp"
+            android:padding="10dp"
             android:background="@drawable/header"
-            android:textSize="16sp" />
+            android:textColor="@android:color/black" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

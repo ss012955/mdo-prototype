@@ -168,7 +168,7 @@ public class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
 
         void bind(DashboardContent content) {
-            triviaContent.setText(content.getTrivia());
+            triviaContent.setText(content.getTriviaTitle());
             itemView.setOnClickListener(this);
         }
 
