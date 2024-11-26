@@ -97,12 +97,16 @@ public class AppointmentsManager {
                                         // Format the date and time
                                         String formattedDateTime = formatDateTime(rawDate, rawTime);
 
+                                        String appointNumber = "Appointment " + (i + 1); // Incremented appointment number
                                         // Create and add the appointment to the list
-                                        AppointmentsClass appointment = new AppointmentsClass(bookingID, status, "Appointment", service, formattedDateTime, remarks);
+                                        AppointmentsClass appointment = new AppointmentsClass(bookingID, status, appointNumber, service, formattedDateTime, remarks);
                                         appointmentsList.add(appointment);
 
                                         int numberOfAppointments = appointmentsList.size();
                                         String appointmentText = "You have " + numberOfAppointments + " appointments.";
+
+
+
 
                                     }
 
@@ -173,6 +177,8 @@ public class AppointmentsManager {
     public interface AppointmentsCallback {
         void onAppointmentsFetched(List<AppointmentsClass> fetchedList);
     }
+
+
     public void fetchAllAppointments(String userEmail, final Runnable callback) {
         String url = "https://umakmdo-91b845374d5b.herokuapp.com/fetchAll_bookings.php";
         String fullUrl = url + "?user_email=" + userEmail;
