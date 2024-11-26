@@ -7,18 +7,18 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CalendarView;
-import android.widget.ListView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import HelperClasses.AppointmentsClass;
 import HelperClasses.ItemClickListener;
+import Singleton.allAppointments;
 
 public class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private static List<AppointmentsClass> appointmentsList;
 
     private static final int TYPE_ANNOUNCEMENTS = 0;
     private static final int TYPE_APPOINTMENTS = 1;
@@ -113,31 +113,31 @@ public class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
     }
 
+
     // Define ViewHolder for Appointments
     static class AppointmentsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         CalendarView calendarView;
         Button btnStartBooking;
-        ListView lvAppointments;
+        TextView tvNumberofAppointments;
 
         AppointmentsViewHolder(View itemView) {
             super(itemView);
             calendarView = itemView.findViewById(R.id.calendarView);
             btnStartBooking = itemView.findViewById(R.id.btnStartBooking);
-            lvAppointments = itemView.findViewById(R.id.lvAppointments);
-            itemView.setOnClickListener(this);
+            tvNumberofAppointments = itemView.findViewById(R.id.tvNumberofAppointments);
 
+            itemView.setOnClickListener(this);
         }
 
         void bind(DashboardContent content) {
-            List<String> appointments = content.getAppointments();
+            int numberOfAppointments = allAppointments.getInstance().getNumberOfAppointments();
 
-            // Initialize with the default message to show when no appointments are available
-            ArrayList<String> appointmentList = new ArrayList<>();
-            appointmentList.add("You have no appointments");
+            String appointmentText = "You have " + numberOfAppointments + " appointment";
+            if (numberOfAppointments != 1) {
+                appointmentText += "s"; // Add "s" if more than 1 appointment
+            }
+            tvNumberofAppointments.setText(appointmentText + ".");
 
-            // Set the adapter with the appointment list (either default or fetched)
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(itemView.getContext(), android.R.layout.simple_list_item_1, appointmentList);
-            lvAppointments.setAdapter(adapter);
 
             btnStartBooking.setOnClickListener(v -> {
                 // Start the BookingActivity
@@ -156,6 +156,7 @@ public class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             }
         }
     }
+
 
     // Define ViewHolder for Trivia
     static class TriviaViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{

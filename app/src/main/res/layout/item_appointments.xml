@@ -27,17 +27,24 @@
 
         <!-- Booking button -->
 
-        <ListView
-            android:id="@+id/lvAppointments"
-            android:layout_width="wrap_content"
-            android:layout_height="70dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/rounded_edge"
-            android:divider="@android:color/darker_gray"
-            android:dividerHeight="1dp"
-            android:paddingBottom="15dp" />
 
         <!-- Calendar -->
+
+
+        <TextView
+            android:id="@+id/tvNumberofAppointments"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/rounded_edge"
+            android:backgroundTint="@color/white"
+            android:fontFamily="@font/metropolis_bold"
+            android:padding="16dp"
+            android:text="You have 0 appointments"
+            android:textColor="@color/black"
+            android:textSize="15sp" />
+
         <CalendarView
             android:id="@+id/calendarView"
             android:layout_width="match_parent"

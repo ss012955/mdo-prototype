@@ -3,6 +3,9 @@ package HelperClasses;
 import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Looper;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,6 +20,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -26,8 +30,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import Singleton.allAppointments;
+
 public class AppointmentsManager {
     private Context context;
+
+    public AppointmentsManager() {
+    }
 
     public AppointmentsManager(Context context) {
         this.context = context;
@@ -91,6 +100,10 @@ public class AppointmentsManager {
                                         // Create and add the appointment to the list
                                         AppointmentsClass appointment = new AppointmentsClass(bookingID, status, "Appointment", service, formattedDateTime, remarks);
                                         appointmentsList.add(appointment);
+
+                                        int numberOfAppointments = appointmentsList.size();
+                                        String appointmentText = "You have " + numberOfAppointments + " appointments.";
+
                                     }
 
                                     // Notify the callback
@@ -159,6 +172,60 @@ public class AppointmentsManager {
 
     public interface AppointmentsCallback {
         void onAppointmentsFetched(List<AppointmentsClass> fetchedList);
+    }
+    public void fetchAllAppointments(String userEmail, final Runnable callback) {
+        String url = "https://umakmdo-91b845374d5b.herokuapp.com/fetchAll_bookings.php";
+        String fullUrl = url + "?user_email=" + userEmail;
+
+        // Start a background thread to handle the network operation
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    // Create the URL object
+                    URL urlObj = new URL(fullUrl);
+
+                    // Set up the connection
+                    HttpURLConnection connection = (HttpURLConnection) urlObj.openConnection();
+                    connection.setRequestMethod("GET");
+                    connection.setConnectTimeout(3000); // Timeout 5 seconds
+                    connection.setReadTimeout(3000); // Timeout 5 seconds
+
+                    // Read the response
+                    InputStream inputStream = connection.getInputStream();
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                    StringBuilder response = new StringBuilder();
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        response.append(line);
+                    }
+                    reader.close();
+                    connection.disconnect();
+
+
+                    // Parse the response (assuming it's just a number)
+                    final int numberOfAppointments = Integer.parseInt(response.toString());
+
+                    // Store the result in the AppointmentData singleton
+                    allAppointments.getInstance().setNumberOfAppointments(numberOfAppointments);
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            callback.run(); // This will notify the adapter to update
+                        }
+                    });
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    // Handle errors like connection issues
+                }
+            }
+        }).start();
+    }
+
+    // Listener interface for fetching appointments
+    public interface AppointmentsFetchListener {
+        void onAppointmentsFetched(int numberOfAppointments);
     }
 
 }
