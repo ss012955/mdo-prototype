@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/navy_blue"
+    tools:context=".CancelReschedActivity">
+
+    <ImageView
+        android:id="@+id/logoumak"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/umaklogo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="7dp"
+        android:layout_marginTop="6dp"/>
+
+    <ImageView
+        android:id="@+id/chat"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/chat"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginRight="7dp"
+        android:layout_marginTop="6dp"/>
+
+    <TextView
+        android:id="@+id/txtviewHomeTitle"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:fontFamily="@font/metropolis_bold"
+        android:padding="7dp"
+        android:text="Appointments"
+        android:textAlignment="center"
+        android:textSize="30sp"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="679dp"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tablayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/UMAKBLUE"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:tabIconTint="@color/tab_layout_selector"
+            app:tabIndicatorColor="@color/UMAKYELLOW" />
+
+
+        <LinearLayout
+            android:id="@+id/linearLayout3"
+            android:layout_width="335dp"
+            android:layout_height="203dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="48dp"
+            android:layout_marginEnd="15dp"
+            android:background="@drawable/rounded_layout"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            <TextView
+                android:id="@+id/tvService"
+                android:layout_width="328dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="3dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="3dp"
+                android:background="@drawable/rounded_edge"
+                android:backgroundTint="@color/white"
+                android:fontFamily="@font/metropolis_bold"
+                android:padding="16dp"
+                android:text="Service: "
+                android:textColor="@color/black"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/tvDate"
+                android:layout_width="328dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="3dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="3dp"
+                android:background="@drawable/rounded_edge"
+                android:backgroundTint="@color/white"
+                android:fontFamily="@font/metropolis_bold"
+                android:padding="16dp"
+                android:text="Date/Time: "
+                android:textColor="@color/black"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/tvRemarks"
+                android:layout_width="328dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="3dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="3dp"
+                android:background="@drawable/rounded_edge"
+                android:backgroundTint="@color/white"
+                android:ems="10"
+                android:fontFamily="@font/metropolis_bold"
+                android:text="Remarks:"
+                android:padding="15dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
+                android:textSize="15sp" />
+
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/buttonCancel"
+            android:layout_width="150dp"
+            android:layout_height="55dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="304dp"
+            android:backgroundTint="@color/red"
+            android:fontFamily="@font/metropolis_regular"
+            android:text="CANCEL"
+            android:textColor="@color/black"
+            app:cornerRadius="158dp"
+            app:layout_constraintBottom_toTopOf="@+id/tablayout"
+            app:layout_constraintStart_toStartOf="@+id/linearLayout3"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <Button
+            android:id="@+id/buttonReschedule"
+            android:layout_width="150dp"
+            android:layout_height="53dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="304dp"
+            android:backgroundTint="@color/gray"
+            android:fontFamily="@font/metropolis_regular"
+            android:text="RESCHEDULE"
+            android:textColor="@color/black"
+            app:cornerRadius="158dp"
+            app:layout_constraintBottom_toTopOf="@+id/tablayout"
+            app:layout_constraintEnd_toEndOf="@+id/linearLayout3"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/buttonCancel" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

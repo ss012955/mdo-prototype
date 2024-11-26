@@ -117,13 +117,19 @@ public class Appointments extends BaseActivity implements ItemClickListener {
     @Override
     public void onClick(View v, int position) {
         AppointmentsClass clickedAppointment = appointmentsList.get(position);
-
         // Get the bookingID of the clicked appointment
         String bookingID = clickedAppointment.getBookingID();
+        String service = clickedAppointment.getService();
+        String dateTime = clickedAppointment.getDateTime();
+        String remarks = clickedAppointment.getRemarks();
 
-        // Toast the bookingID or pass it to the next activity
-        Toast.makeText(this, "Clicked Booking ID: " + bookingID, Toast.LENGTH_SHORT).show();
-
+        // Pass the values to the CancelReschedActivity
+        Intent i = new Intent(Appointments.this, CancelReschedActivity.class);
+        i.putExtra("bookingID", bookingID);
+        i.putExtra("service", service);
+        i.putExtra("dateTime", dateTime);
+        i.putExtra("remarks", remarks);
+        startActivity(i);
     }
 
 
