@@ -24,7 +24,9 @@ import com.google.android.material.tabs.TabLayoutMediator;
 import java.util.ArrayList;
 import java.util.List;
 
+import HelperClasses.AppointmentsManager;
 import HelperClasses.DashboardManager;
+import Singleton.allAppointments;
 
 public class home extends BaseActivity {
 
@@ -46,7 +48,6 @@ public class home extends BaseActivity {
         });
         prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
         int tabPosition = getIntent().getIntExtra("tab_position", 0);
-
         checkLoginStatus();
         dashboardManager = new DashboardManager();
 
@@ -103,7 +104,8 @@ public class home extends BaseActivity {
         boolean isLoggedIn = prefs.getBoolean("is_logged_in", false);
         if (isLoggedIn) {
             String userEmail = prefs.getString("user_email", "No email found");
-            Toast.makeText(this, "Logged in as: " + userEmail, Toast.LENGTH_SHORT).show();
+            int numberOfAppointments = allAppointments.getInstance().getNumberOfAppointments();
+            Toast.makeText(this, "Logged in as: " + userEmail + numberOfAppointments, Toast.LENGTH_SHORT).show();
         }else{
             navigateToLogin();
         }

@@ -1,6 +1,7 @@
 package com.example.prototype;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -8,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -16,16 +18,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import HelperClasses.AppointmentsManager;
 import HelperClasses.ItemClickListener;
 import HelperClasses.NetworkChangeReceiver;
+import Singleton.allAppointments;
 
 public class fDashboard extends Fragment implements ItemClickListener {
 
     private RecyclerView recyclerView;
     private DashboardAdapter adapter;
     private List<DashboardContent> contentList;
-
-    private NetworkChangeReceiver networkChangeReceiver;
+    private SharedPreferences prefs;
 
     public fDashboard() {
         // Required empty public constructor
@@ -52,11 +55,31 @@ public class fDashboard extends Fragment implements ItemClickListener {
         recyclerView.setAdapter(adapter);
         adapter.setClickListener(this);
 
+
+        prefs = getActivity().getSharedPreferences("user_prefs", getContext().MODE_PRIVATE);
+        String userEmail = prefs.getString("user_email", "No email found");
+
+        AppointmentsManager appointmentsManager = new AppointmentsManager();
+        appointmentsManager.fetchAllAppointments(userEmail, new Runnable() {
+            @Override
+            public void run() {
+                // Update UI when data is fetched
+                int numberOfAppointments = allAppointments.getInstance().getNumberOfAppointments();
+                Toast.makeText(getContext(), userEmail + " " + numberOfAppointments, Toast.LENGTH_SHORT).show();
+
+                // Notify the adapter about the updated data
+                adapter.notifyDataSetChanged(); // Update the RecyclerView
+            }
+        });
         return view;
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
 
+    }
     @Override
     public void onClick(View v, int position) {
         if (position >= 0 && position < contentList.size()) {
