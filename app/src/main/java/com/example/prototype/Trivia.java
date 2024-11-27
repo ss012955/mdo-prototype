@@ -41,8 +41,13 @@ public class Trivia extends BaseActivity implements ItemClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_trivia);
-
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
         recyclerView = findViewById(R.id.recyclerViewTrivia);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -57,6 +62,7 @@ public class Trivia extends BaseActivity implements ItemClickListener {
 
         triviaAdapter = new TriviaAdapter(triviaList);
         recyclerView.setAdapter(triviaAdapter);
+
         tabLayout = findViewById(R.id.tablayout);
         int[] icons = {R.drawable.home, R.drawable.user_journal, R.drawable.profile};
         for (int i = 0; i < icons.length; i++) {

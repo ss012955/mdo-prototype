@@ -1,33 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/UMAKBLUE"
     tools:context=".ChatActivity">
 
-    <!-- Top Bar for Chat Support -->
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
+    <!-- UMAK Logo -->
+    <ImageView
+        android:id="@+id/logoumak"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="7dp"
+        android:layout_marginTop="6dp"
+        android:src="@drawable/umaklogo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Chat Icon -->
+    <ImageView
+        android:id="@+id/chat"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="7dp"
+        android:layout_marginTop="6dp"
+        android:src="@drawable/chat_yellow"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Title -->
+    <TextView
+        android:id="@+id/txtviewHomeTitle"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@color/UMAKBLUE"
-        android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:layout_height="50dp"
+        android:layout_marginTop="6dp"
+        android:fontFamily="@font/metropolis_bold"
+        android:padding="7dp"
+        android:text="Chat"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:padding="10dp"
-        app:title="Chat Support"
-        app:titleTextColor="@android:color/white" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <!-- Chat Area -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
-        app:layout_constraintBottom_toTopOf="@id/tabs"
+        android:background="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/txtviewHomeTitle"
+        app:layout_constraintBottom_toTopOf="@id/tablayout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
@@ -68,9 +94,9 @@
             android:clipToPadding="false"
             android:padding="16dp"
             android:scrollbars="vertical"
+            app:layout_constraintBottom_toTopOf="@id/message_input_area"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/message_input_area" />
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <!-- Input Area -->
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -81,7 +107,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
-            <!-- Line above the input section -->
+
+            <!-- Divider Line -->
             <View
                 android:id="@+id/divider_line"
                 android:layout_width="0dp"
@@ -89,8 +116,9 @@
                 android:background="@color/black"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/input_message" />
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!-- Input Message -->
             <EditText
                 android:id="@+id/input_message"
                 android:layout_width="0dp"
@@ -102,31 +130,33 @@
                 android:drawablePadding="8dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/btn_send_message"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/divider_line"
                 app:layout_constraintBottom_toBottomOf="parent" />
 
+            <!-- Send Button -->
             <ImageButton
                 android:id="@+id/btn_send_message"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/chat_black"
                 android:background="@null"
+                android:contentDescription="Send Message"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:contentDescription="Send Message" />
+                app:layout_constraintTop_toTopOf="@id/input_message"
+                app:layout_constraintBottom_toBottomOf="@id/input_message" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
+
     <!-- TabLayout -->
     <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabs"
+        android:id="@+id/tablayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:background="@color/UMAKBLUE"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:tabIconTint="@color/white"
-        app:tabIndicatorColor="@color/white"
-        android:background="@color/UMAKBLUE" />
+        app:tabIconTint="@color/tab_layout_selector"
+        app:tabIndicatorColor="@color/UMAKYELLOW" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
