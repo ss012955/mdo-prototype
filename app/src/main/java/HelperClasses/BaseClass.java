@@ -65,4 +65,28 @@ public class BaseClass {
         dialog.show();
     }
 
+    public void showOneButtonDialogNotCancellable(Context context, String title, String message, String positiveText,
+                                    View.OnClickListener oneAction){
+        Dialog dialog = new Dialog(context);
+        dialog.setContentView(R.layout.dialog_onebutton);
+
+        // Prevent the dialog from being canceled
+        dialog.setCancelable(false);
+
+        TextView dialogTitle = dialog.findViewById(R.id.dialog_title);
+        TextView dialogMessage = dialog.findViewById(R.id.dialog_message);
+        Button oneButton = dialog.findViewById(R.id.retry_button);
+
+        dialogTitle.setText(title);
+        dialogMessage.setText(message);
+        oneButton.setText(positiveText);
+
+        oneButton.setOnClickListener(v -> {
+            oneAction.onClick(v);
+            dialog.dismiss(); // Dismiss only when the button is clicked
+        });
+
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.show();
+    }
 }

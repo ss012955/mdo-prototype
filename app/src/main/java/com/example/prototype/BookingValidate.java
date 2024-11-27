@@ -14,9 +14,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
-import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
 
@@ -24,9 +21,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import HelperClasses.BaseClass;
 import HelperClasses.BookingInsert;
 import HelperClasses.BookingManager;
+import HelperClasses.BookingUpdate;
 
 public class BookingValidate extends AppCompatActivity {
     BookingManager bookingManager;
@@ -37,6 +34,9 @@ public class BookingValidate extends AppCompatActivity {
     Button buttonConfirm;
     TextView tvService, tvServiceType, tvDate;
     String userEmail;
+    String bookingID;
+
+    String serviceResched, remarksResched;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,14 +81,15 @@ public class BookingValidate extends AppCompatActivity {
         remarksInput = remarks.getText().toString();
 
         Intent intent = getIntent();
-        service = intent.getStringExtra("Service");
-        serviceType = intent.getStringExtra("ServiceType");
+        bookingID = intent.getStringExtra("bookingID");
         chosen_date = intent.getStringExtra("CHOSEN_DATE");
         chosen_time = intent.getStringExtra("CHOSEN_TIME");
-
-
         tvService = findViewById(R.id.tvService);
         tvDate = findViewById(R.id.tvDate);
+
+        serviceResched = intent.getStringExtra("ServiceResched");
+        remarksResched = intent.getStringExtra("RemarksResched");
+
 
         try {
             // Assuming chosen_date is in "yyyy-MM-dd" format
@@ -98,30 +99,50 @@ public class BookingValidate extends AppCompatActivity {
             Date date = inputFormat.parse(chosen_date);
             String formattedDate = outputFormat.format(date);
 
-            String serviceText = String.format("%-16s %s", "Service:", serviceType);
             String dateText = String.format("%-14s %s / %s", "Date/Time:", formattedDate, chosen_time);
+            String serviceText = "";
 
-            tvService.setText(serviceText);
-            tvDate.setText(dateText);
+            if (bookingID != null) {
+                serviceText = String.format("%-14s %s", "Service:", serviceResched);
+                remarks.setText(remarksResched);
+            } else {
+                service = intent.getStringExtra("Service");
+                serviceType = intent.getStringExtra("ServiceType");
+                serviceText = String.format("%-14s %s", "Service:", serviceType);
+            }
+
+            remarksInput = remarks.getText().toString();
+           tvDate.setText(dateText);
+           remarks.setText(remarksResched);
+           tvService.setText(serviceText);
+
         } catch (Exception e) {
             e.fillInStackTrace();
         }
 
-        buttonConfirm = findViewById(R.id.buttonConfirm);
-        buttonConfirm.setOnClickListener(v->{
-            // Disable the button to prevent multiple clicks
-            buttonConfirm.setEnabled(false);
+            buttonConfirm = findViewById(R.id.buttonConfirm);
+            buttonConfirm.setOnClickListener(v->{
+                // Disable the button to prevent multiple clicks
+                buttonConfirm.setEnabled(false);
 
-            remarksInput = remarks.getText().toString();  // Get remarks input here, not before
-            BookingInsert insert = new BookingInsert();
+                remarksInput = remarks.getText().toString();  // Get remarks input here, not before
+                BookingInsert insert = new BookingInsert();
+                BookingUpdate update = new BookingUpdate();
 
-            // Call the insert method with a callback to re-enable the button
-            insert.bookingInsert(this, service, serviceType, chosen_date, chosen_time, remarksInput, userEmail, () -> {
-                // Re-enable the button after the insert operation is completed
-                buttonConfirm.setEnabled(true);
+                    if(bookingID != null ){
+                            update.bookingUpdate(this,serviceResched, bookingID, userEmail, chosen_date, chosen_time, remarksInput, () -> {
+                                buttonConfirm.setEnabled(true);
+                            });
+                    }else{
+                        insert.bookingInsert(this, service, serviceType, chosen_date, chosen_time, remarksInput, userEmail, () -> {
+                            // Re-enable the button after the insert operation is completed
+                            buttonConfirm.setEnabled(true);
+                        });
+
+                    }
             });
-        });
 
 
-    }
+        }
+
 }

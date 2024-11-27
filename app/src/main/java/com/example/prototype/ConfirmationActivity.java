@@ -85,7 +85,7 @@ public class ConfirmationActivity extends AppCompatActivity {
             Date date = inputFormat.parse(chosen_date);
             String formattedDate = outputFormat.format(date);
 
-            String serviceText = String.format("%-16s %s", "Service:", serviceType);
+            String serviceText = String.format("%-14s %s", "Service:", serviceType);
             String dateText = String.format("%-14s %s / %s", "Date/Time:", formattedDate, chosen_time);
             String remarks = String.format("%-14s %s", "Remarks:", remarksInput);
 

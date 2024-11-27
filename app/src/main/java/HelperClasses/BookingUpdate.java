@@ -1,13 +1,11 @@
 package HelperClasses;
-
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
-
-import androidx.fragment.app.FragmentActivity;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -17,63 +15,60 @@ import com.example.prototype.ConfirmationActivity;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-public class BookingInsert {
-    DashboardManager dashboardManager;
-    BaseClass baseClass;
+public class BookingUpdate {
+    private BaseClass baseClass;
 
-    public BookingInsert() {
-        baseClass = new BaseClass(); // Initialize baseClass here
+    public BookingUpdate() {
+        baseClass = new BaseClass(); // Initialize BaseClass here
     }
 
-    public void bookingInsert(
+    public void bookingUpdate(
             Context context,
             String service,
-            String serviceType,
+            String bookingID,
+            String userEmail,
             String date,
             String time,
-            String remarks,String umakEmail,  Runnable onComplete) {
+            String remarks,
+            Runnable onComplete) {
 
         baseClass.showTwoButtonDialog(
                 context,
                 "Confirmation",
-                "Confirm this booking?",
+                "Confirm updating this booking?",
                 "Yes",
                 "No",
                 v -> {
-                    String convertedTime = convertTimeSlot(time);
-
-                    insert(context, service, serviceType, date, convertedTime, remarks, umakEmail, onComplete);
-
-                    baseClass.showOneButtonDialogNotCancellable(context, "Confirmation", "Booking successful", "Okay", v1->{
+                    String newTime = convertTimeSlot(time);
+                    update(context, bookingID, userEmail, date, newTime, remarks,()->{
+                        // Only navigate to the ConfirmationActivity if the insert is successful
                         Intent intent = new Intent(context, ConfirmationActivity.class);
-                        intent.putExtra("Service", service);
-                        intent.putExtra("ServiceType", serviceType);
+                        intent.putExtra("ServiceType", service);
                         intent.putExtra("ChosenDate", date);
                         intent.putExtra("ChosenTime", time);
                         intent.putExtra("Remarks", remarks);
                         context.startActivity(intent);
-
                         if (onComplete != null) onComplete.run();
                     });
+
+
                 },
                 v -> {
                     // Handle "No" button click (optional)
                 }
-
         );
-
-
     }
 
+    private void update(Context context, String bookingID, String userEmail, String date, String time, String remarks, Runnable onComplete) {
+        String url = "https://umakmdo-91b845374d5b.herokuapp.com/update_booking.php";
 
-    // Insert method to handle booking data
-    private void insert(Context context, String service, String serviceType, String date, String time, String remarks, String umakEmail, Runnable onComplete) {
-        String url = "https://umakmdo-91b845374d5b.herokuapp.com/insert_booking.php"; // Replace with your PHP endpoint
 
         try {
             String formattedDate = convertToSqlDateFormat(date);
@@ -81,26 +76,21 @@ public class BookingInsert {
 
             StringRequest request = new StringRequest(Request.Method.POST, url,
                     response -> {
-                        // Response received
-                        //Toast.makeText(context, "Response: " + response, Toast.LENGTH_SHORT).show();
-                        // Notify completion (re-enable button)
+                        Toast.makeText(context, "Booking updated successfully!", Toast.LENGTH_SHORT).show();
                         if (onComplete != null) onComplete.run();
                     },
                     error -> {
-                        // Error received
                         Toast.makeText(context, "Error: " + error.getMessage(), Toast.LENGTH_LONG).show();
-                        // Notify completion (re-enable button even on error)
                         if (onComplete != null) onComplete.run();
                     }
             ) {
                 @Override
                 protected Map<String, String> getParams() {
                     Map<String, String> params = new HashMap<>();
-                    params.put("umak_email", umakEmail); // Replace with the actual user email
-                    params.put("service", service);
-                    params.put("service_type", serviceType);
+                    params.put("booking_id", bookingID);
+                    params.put("umak_email", userEmail);
                     params.put("booking_date", formattedDate);
-                    params.put("booking_time", formattedTime);
+                    params.put("booking_time", formattedTime); // Pass the time as is
                     params.put("remarks", remarks);
                     return params;
                 }
@@ -114,6 +104,7 @@ public class BookingInsert {
             // Notify completion even if there was an error
             if (onComplete != null) onComplete.run();
         }
+
     }
 
     private String convertToSqlDateFormat(String date) throws ParseException {
@@ -124,14 +115,11 @@ public class BookingInsert {
     }
 
     private String convertToSqlTimeFormat(String time) throws ParseException {
-        // Call the method to handle time slot conversion
-        String newTime = convertTimeSlot(time); // Get converted time, e.g., "8:00 AM"
-
         // Parse the time string into a Date object using SimpleDateFormat
         SimpleDateFormat inputFormat = new SimpleDateFormat("h:mm a", Locale.getDefault());
-        Date parsedTime = inputFormat.parse(newTime); // Parse the converted time (e.g., "8:00 AM")
+        Date parsedTime = inputFormat.parse(time); // Parse the converted time (e.g., "4:00 PM")
 
-        // Format the time back to the 24-hour format (e.g., "08:00" or "16:00")
+        // Format the time back to the 24-hour format (e.g., "16:00")
         SimpleDateFormat sqlFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
         return sqlFormat.format(parsedTime); // Returns time in 24-hour format, e.g., "16:00"
     }
@@ -163,7 +151,7 @@ public class BookingInsert {
                 newTime = "3:00 PM";
                 break;
             case "4:00-5:00 PM":
-                newTime = "4:00 PM";
+                newTime = "4:00 PM";  // Ensure this conversion is correct
                 break;
             default:
                 // If the time doesn't match a specific slot, leave it unchanged
@@ -173,5 +161,6 @@ public class BookingInsert {
 
         return newTime;
     }
+
 
 }

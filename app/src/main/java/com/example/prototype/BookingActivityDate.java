@@ -51,9 +51,10 @@ public class BookingActivityDate extends BaseActivity {
         SharedPreferences prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
         String userEmail = prefs.getString("user_email", "No email found");
 
-        Toast.makeText(BookingActivityDate.this, userEmail, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(BookingActivityDate.this, userEmail, Toast.LENGTH_SHORT).show();
 
         Intent intent = getIntent();
+
         service = intent.getStringExtra("Service");
         serviceType = intent.getStringExtra("ServiceType");
         if (service != null || serviceType != null) {
@@ -61,6 +62,11 @@ public class BookingActivityDate extends BaseActivity {
         } else {
             Toast.makeText(this, "No service selected.", Toast.LENGTH_SHORT).show();
         }
+
+        String serviceR = intent.getStringExtra("ServiceResched");
+        String bookingID = intent.getStringExtra("bookingID");
+        String remarksR = intent.getStringExtra("RemarksResched");
+
 
         tabLayout = findViewById(R.id.tablayout);
         int[] icons = {R.drawable.home, R.drawable.user_journal, R.drawable.profile};
@@ -127,6 +133,13 @@ public class BookingActivityDate extends BaseActivity {
             intentTime.putExtra("CHOSEN_TIME", formattedTime);
             intentTime.putExtra("Service", service);
             intentTime.putExtra("ServiceType", serviceType);
+
+
+
+            intentTime.putExtra("bookingID", bookingID);
+            intentTime.putExtra("ServiceResched", serviceR);
+            intentTime.putExtra("RemarksResched", remarksR);
+
             startActivity(intentTime);
         });
 

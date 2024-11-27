@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -64,13 +65,14 @@ public class CancelReschedActivity extends BaseActivity {
 
         Intent intent = getIntent();
         String bookingID = intent.getStringExtra("bookingID");
-        String service = intent.getStringExtra("service");
+        String serviceR = intent.getStringExtra("service");
         String dateTime = intent.getStringExtra("dateTime");
-        String remarks = intent.getStringExtra("remarks");
+        String remarksR = intent.getStringExtra("remarks");
 
-        tvService.setText(String.format("%-15s %s", "Service:", service));
+
+        tvService.setText(String.format("%-15s %s", "Service:", serviceR));
         tvDate.setText(String.format("%-13s %s", "Date/Time:", dateTime));
-        tvRemarks.setText(String.format("%-15s %s", "Remarks:", remarks));
+        tvRemarks.setText(String.format("%-15s %s", "Remarks:", remarksR));
 
 
         buttonCancel = findViewById(R.id.buttonCancel);
@@ -80,6 +82,17 @@ public class CancelReschedActivity extends BaseActivity {
         buttonCancel.setOnClickListener(v->{
             UpdateAppointmentsManager delete = new UpdateAppointmentsManager();
             delete.bookingDelete(this, userEmail, bookingID);
+        });
+
+
+        buttonReschedule.setOnClickListener(v->{
+            Intent i = new Intent(this, BookingActivityDate.class);
+            i.putExtra("bookingID", bookingID);
+            i.putExtra("ServiceResched", serviceR);
+            i.putExtra("DateTime", dateTime);
+            i.putExtra("RemarksResched", remarksR);
+            startActivity(i);
+
         });
 
 
