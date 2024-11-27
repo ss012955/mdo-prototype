@@ -50,8 +50,6 @@ public class DashboardContent {
     }
 
 
-
-
     // Getter and setter for trivia title
     public String getTriviaTitle() {
         return triviaTitle;

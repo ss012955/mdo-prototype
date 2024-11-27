@@ -5,15 +5,30 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CalendarView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.List;
 
+import HelperClasses.AnnouncementManager;
+import HelperClasses.AnnouncementsItems;
 import HelperClasses.AppointmentsClass;
 import HelperClasses.ItemClickListener;
 import HelperClasses.TriviaItem;
@@ -83,7 +98,7 @@ public class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         DashboardContent content = contentList.get(position);
         switch (holder.getItemViewType()) {
             case TYPE_ANNOUNCEMENTS:
-                ((AnnouncementsViewHolder) holder).bind(content);
+                ((AnnouncementsViewHolder) holder).bind(content, context);
                 break;
             case TYPE_APPOINTMENTS:
                 ((AppointmentsViewHolder) holder).bind(content);
@@ -103,26 +118,46 @@ public class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     // Define ViewHolder for Announcements
     static class AnnouncementsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        ViewPager2 viewPagerAnnouncements;
+        TextView announcementTitleTextView;
+        TextView announcementDescripTextView;
+        ImageView announcementImageView;
 
         AnnouncementsViewHolder(View itemView) {
             super(itemView);
-            viewPagerAnnouncements = itemView.findViewById(R.id.viewPagerAnnouncements);
+            announcementTitleTextView = itemView.findViewById(R.id.announcementsTitle);
+            announcementDescripTextView = itemView.findViewById(R.id.announcementsText);
+            announcementImageView = itemView.findViewById(R.id.announcementsImage);
             itemView.setOnClickListener(this);
+
         }
 
-        void bind(DashboardContent content) {
-            List<String> images = content.getImages();
-            ImageAdapter imageAdapter = new ImageAdapter(images);
-            viewPagerAnnouncements.setAdapter(imageAdapter);
-            itemView.setOnClickListener(this);
+        void bind(DashboardContent content, Context context) {
+            // Fetch announcements
+           AnnouncementManager.fetchAnnouncements(context, new AnnouncementManager.AnnouncementsCallback() {
+                @Override
+                public void onSuccess(List<AnnouncementsItems> announcements) {
+                    if (!announcements.isEmpty()) {
+                        AnnouncementsItems latestAnnouncement = announcements.get(0);
+                        announcementTitleTextView.setText(latestAnnouncement.getTitle());
+                        announcementDescripTextView.setText(latestAnnouncement.getText());
+                        Glide.with(context)
+                                .load(latestAnnouncement.getImageUrl())
+                                .placeholder(R.drawable.placeholder_image)
+                                .into(announcementImageView);
+                    }
+                }
+
+                @Override
+                public void onError(String errorMessage) {
+                    Log.e("AnnouncementsViewHolder", errorMessage);
+                }
+            });
         }
 
         @Override
         public void onClick(View v) {
-            if(clickListener != null){
-                clickListener.onClick(v, getBindingAdapterPosition());
-            }
+            Intent intent = new Intent(itemView.getContext(), Announcements.class);
+            itemView.getContext().startActivity(intent);
         }
     }
 
@@ -231,6 +266,4 @@ public class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             }
         }
     }
-
-
 }
