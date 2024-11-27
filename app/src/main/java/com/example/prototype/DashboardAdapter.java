@@ -3,22 +3,41 @@ package com.example.prototype;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CalendarView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.List;
 
+import HelperClasses.AnnouncementManager;
+import HelperClasses.AnnouncementsItems;
 import HelperClasses.AppointmentsClass;
 import HelperClasses.ItemClickListener;
+import HelperClasses.TriviaItem;
+import HelperClasses.TriviaManager;
 import Singleton.allAppointments;
 
 public class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static List<AppointmentsClass> appointmentsList;
+    private final Context context;
 
     private static final int TYPE_ANNOUNCEMENTS = 0;
     private static final int TYPE_APPOINTMENTS = 1;
@@ -30,9 +49,16 @@ public class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         this.clickListener = myListener;
     }
 
-    public DashboardAdapter(List<DashboardContent> contentList) {
+    public DashboardAdapter(Context context, List<DashboardContent> contentList) {
+        this.context = context;
         this.contentList = contentList;
     }
+    public DashboardAdapter(List<DashboardContent> contentList) {
+        // If you need this constructor, you can either provide a default context or leave it for future use
+        this.context = null;  // Or handle as appropriate
+        this.contentList = contentList;
+    }
+
 
     @Override
     public int getItemViewType(int position) {
@@ -72,13 +98,15 @@ public class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         DashboardContent content = contentList.get(position);
         switch (holder.getItemViewType()) {
             case TYPE_ANNOUNCEMENTS:
-                ((AnnouncementsViewHolder) holder).bind(content);
+                ((AnnouncementsViewHolder) holder).bind(content, context);
                 break;
             case TYPE_APPOINTMENTS:
                 ((AppointmentsViewHolder) holder).bind(content);
                 break;
             case TYPE_TRIVIA:
-                ((TriviaViewHolder) holder).bind(content);
+                if (holder instanceof TriviaViewHolder) {
+                    ((TriviaViewHolder) holder).bind(content, context);
+                }
                 break;
         }
     }
@@ -90,26 +118,46 @@ public class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     // Define ViewHolder for Announcements
     static class AnnouncementsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        ViewPager2 viewPagerAnnouncements;
+        TextView announcementTitleTextView;
+        TextView announcementDescripTextView;
+        ImageView announcementImageView;
 
         AnnouncementsViewHolder(View itemView) {
             super(itemView);
-            viewPagerAnnouncements = itemView.findViewById(R.id.viewPagerAnnouncements);
+            announcementTitleTextView = itemView.findViewById(R.id.announcementsTitle);
+            announcementDescripTextView = itemView.findViewById(R.id.announcementsText);
+            announcementImageView = itemView.findViewById(R.id.announcementsImage);
             itemView.setOnClickListener(this);
+
         }
 
-        void bind(DashboardContent content) {
-            List<String> images = content.getImages();
-            ImageAdapter imageAdapter = new ImageAdapter(images);
-            viewPagerAnnouncements.setAdapter(imageAdapter);
-            itemView.setOnClickListener(this);
+        void bind(DashboardContent content, Context context) {
+            // Fetch announcements
+           AnnouncementManager.fetchAnnouncements(context, new AnnouncementManager.AnnouncementsCallback() {
+                @Override
+                public void onSuccess(List<AnnouncementsItems> announcements) {
+                    if (!announcements.isEmpty()) {
+                        AnnouncementsItems latestAnnouncement = announcements.get(0);
+                        announcementTitleTextView.setText(latestAnnouncement.getTitle());
+                        announcementDescripTextView.setText(latestAnnouncement.getText());
+                        Glide.with(context)
+                                .load(latestAnnouncement.getImageUrl())
+                                .placeholder(R.drawable.placeholder_image)
+                                .into(announcementImageView);
+                    }
+                }
+
+                @Override
+                public void onError(String errorMessage) {
+                    Log.e("AnnouncementsViewHolder", errorMessage);
+                }
+            });
         }
 
         @Override
         public void onClick(View v) {
-            if(clickListener != null){
-                clickListener.onClick(v, getBindingAdapterPosition());
-            }
+            Intent intent = new Intent(itemView.getContext(), Announcements.class);
+            itemView.getContext().startActivity(intent);
         }
     }
 
@@ -160,18 +208,56 @@ public class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     // Define ViewHolder for Trivia
     static class TriviaViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        TextView triviaContent;
+        TextView triviaContent, triviaContent1, triviaContent2, triviaContent3;
+        TriviaManager triviaManager = new TriviaManager();
 
         TriviaViewHolder(View itemView) {
             super(itemView);
             triviaContent = itemView.findViewById(R.id.triviaContent);
+            triviaContent1 = itemView.findViewById(R.id.triviaContent1);
+            triviaContent2 = itemView.findViewById(R.id.triviaContent2);
+            triviaContent3 = itemView.findViewById(R.id.triviaContent3);
+
             itemView.setOnClickListener(this);
         }
 
-        void bind(DashboardContent content) {
-            triviaContent.setText(content.getTrivia());
-            itemView.setOnClickListener(this);
+        void bind(DashboardContent content, Context context) {
+            triviaContent.setText("Loading trivia...");
+
+            // Fetch trivia and display in this ViewHolder
+// Fetch trivia and display in this ViewHolder
+            TriviaManager.fetchTrivia(context, new TriviaManager.TriviaCallback() {
+                @Override
+                public void onSuccess(List<TriviaItem> triviaItems) {
+                    if (triviaItems.size() > 0) {
+                        TriviaItem trivia1 = triviaItems.get(0);
+                        triviaContent.setText(trivia1.getTitle());
+                    } else {
+                        triviaContent.setText("No trivia available");
+                        return; // Exit early if there is no trivia
+                    }
+
+                    if (triviaItems.size() > 1) { // Check if there is a second item
+                        TriviaItem trivia2 = triviaItems.get(1);
+                        triviaContent1.setText(trivia2.getTitle());
+                        triviaContent1.setVisibility(View.VISIBLE);
+                    }
+
+                    if (triviaItems.size() > 2) { // Check if there is a third item
+                        TriviaItem trivia3 = triviaItems.get(2);
+                        triviaContent2.setText(trivia3.getTitle());
+                        triviaContent2.setVisibility(View.VISIBLE);
+                    }
+                }
+
+                @Override
+                public void onError(String errorMessage) {
+
+                }
+            });
+
         }
+
 
         @Override
         public void onClick(View v) {
@@ -180,6 +266,4 @@ public class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             }
         }
     }
-
-
 }

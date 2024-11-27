@@ -50,7 +50,7 @@ public class fDashboard extends Fragment implements ItemClickListener {
         contentList.add(new DashboardContent("Trivia", null, null, "Did you know..."));
 
         // Set up the adapter and RecyclerView
-        adapter = new DashboardAdapter(contentList);
+        adapter = new DashboardAdapter(getContext(), contentList);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
         adapter.setClickListener(this);
