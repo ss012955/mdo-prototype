@@ -31,6 +31,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -81,6 +82,7 @@ public class fDashboard extends Fragment implements ItemClickListener {
         recyclerView.setAdapter(adapter);
         adapter.setClickListener(this);
         createNotificationChannel();
+        createAnnouncementNotificationChannel();
         return view;
 
     }
@@ -89,6 +91,7 @@ public class fDashboard extends Fragment implements ItemClickListener {
     public void onResume() {
         super.onResume();
         fetchTrivia();
+        fetchAnnouncements();
     }
 
     @Override
@@ -174,6 +177,70 @@ public class fDashboard extends Fragment implements ItemClickListener {
         // Make the network request
         Volley.newRequestQueue(requireContext()).add(stringRequest);
     }
+
+    private void fetchAnnouncements() {
+        String url = "http://192.168.100.4/MDOapp-main/Admin/announcement.php?type=latest"; // Update this URL
+
+        // Get saved announcement from SharedPreferences
+        SharedPreferences sharedPreferences = requireContext().getSharedPreferences("AnnouncementPrefs", Context.MODE_PRIVATE);
+        String lastFetchedAnnouncement = sharedPreferences.getString("lastFetchedAnnouncement", "");
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, response -> {
+            try {
+                // Log the raw response
+                Log.d("Announcements Response", response);
+
+                // Parse the JSON array
+                JSONObject announcementObject = new JSONObject(response);
+
+                String title = announcementObject.getString("title");
+                String text = announcementObject.getString("details");
+                String imageUrl = announcementObject.getString("image_url");
+
+                // Check if the fetched announcement is different from the last fetched announcement
+                if (!text.equals(lastFetchedAnnouncement)) {
+                    // New announcement, show the notification
+                    showNewAnnouncementNotification(title, text);
+
+                    // Save the new announcement in SharedPreferences
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("lastFetchedAnnouncement", text); // Store the new announcement
+                    editor.apply();
+                }
+
+                for (DashboardContent content : contentList) {
+                    if ("Announcements".equals(content.getType())) {
+                        content.setAnnouncementTitle(title);
+                        content.setAnnouncementDescrip(text);
+                        content.setImageUrl(imageUrl);
+
+                        // Log the update for confirmation
+
+                        break;
+                    }
+                }
+
+                // Notify the adapter to update the RecyclerView
+                adapter.notifyItemChanged(contentList.indexOf(contentList.stream()
+                        .filter(c -> "Announcements".equals(c.getType()))
+                        .findFirst()
+                        .orElse(null)));
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Toast.makeText(getContext(), "Error parsing announcements data", Toast.LENGTH_SHORT).show();
+            }
+        }, error -> {
+            // Handle network errors
+            Toast.makeText(getContext(), "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+            Log.d("Announcements Fetch Error", error.getMessage());
+        });
+
+        // Add the request to the queue
+        Volley.newRequestQueue(requireContext()).add(stringRequest);
+    }
+
     private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = "Trivia Channel";
@@ -211,5 +278,42 @@ public class fDashboard extends Fragment implements ItemClickListener {
         // Show the notification
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getContext());
         notificationManager.notify(1, builder.build()); // Unique ID for notification
+    }
+    private void showNewAnnouncementNotification(String title, String text) {
+        // Check and request notification permission if needed
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                // Request the permission
+                requestPermissions(new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, 1);
+                return; // Do not proceed until permission is granted
+            }
+        }
+
+        // Create the notification
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(), "ANNOUNCEMENT_CHANNEL")
+                .setSmallIcon(R.drawable.ic_notification) // Add your icon here
+                .setContentTitle("New Announcement")
+                .setContentText(title + "\n" + text)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setAutoCancel(true); // Dismiss the notification when clicked
+
+        // Show the notification
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getContext());
+        notificationManager.notify(2, builder.build()); // Unique ID for notification (e.g., ID 2 for announcements)
+    }
+    private void createAnnouncementNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "Announcement Channel";
+            String description = "Channel for Announcement notifications";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("ANNOUNCEMENT_CHANNEL", name, importance);
+            channel.setDescription(description);
+
+            // Register the channel with the system
+            NotificationManager notificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+            if (notificationManager != null) {
+                notificationManager.createNotificationChannel(channel);
+            }
+        }
     }
 }

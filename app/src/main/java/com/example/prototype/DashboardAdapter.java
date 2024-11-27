@@ -4,14 +4,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CalendarView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -90,24 +94,32 @@ public class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     // Define ViewHolder for Announcements
     static class AnnouncementsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        ViewPager2 viewPagerAnnouncements;
-
+        TextView announcementTitleTextView;
+        TextView announcementDescripTextView;
+        ImageView announcementImageView;
         AnnouncementsViewHolder(View itemView) {
             super(itemView);
-            viewPagerAnnouncements = itemView.findViewById(R.id.viewPagerAnnouncements);
+            announcementTitleTextView = itemView.findViewById(R.id.announcementTitle);
+            announcementDescripTextView = itemView.findViewById(R.id.announcementDescription);
+            announcementImageView = itemView.findViewById(R.id.imageViewSlide);
             itemView.setOnClickListener(this);
         }
 
         void bind(DashboardContent content) {
-            List<String> images = content.getImages();
-            ImageAdapter imageAdapter = new ImageAdapter(images);
-            viewPagerAnnouncements.setAdapter(imageAdapter);
-            itemView.setOnClickListener(this);
+            announcementTitleTextView.setText(content.getAnnouncementTitle());
+            announcementDescripTextView.setText(content.getAnnouncementDescrip());
+            Glide.with(announcementImageView.getContext())
+                    .load(content.getImageUrl())
+                    .placeholder(R.drawable.placeholder_image)
+                    .into(announcementImageView);
+            Log.d("AnnouncementsViewHolder", "Title: " + content.getAnnouncementTitle());
+            Log.d("AnnouncementsViewHolder", "Description: " + content.getAnnouncementDescrip());
+            Log.d("AnnouncementsViewHolder", "Image URL: " + content.getImageUrl());
         }
 
         @Override
         public void onClick(View v) {
-            if(clickListener != null){
+            if (clickListener != null) {
                 clickListener.onClick(v, getBindingAdapterPosition());
             }
         }
@@ -170,6 +182,8 @@ public class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         void bind(DashboardContent content) {
             triviaContent.setText(content.getTriviaTitle());
             itemView.setOnClickListener(this);
+
+            Log.d("AnnouncementsViewHolder", "Image URL: " + content.getTriviaTitle());
         }
 
         @Override

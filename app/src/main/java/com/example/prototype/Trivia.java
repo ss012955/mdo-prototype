@@ -51,6 +51,11 @@ public class Trivia extends BaseActivity implements ItemClickListener {
         recyclerView = findViewById(R.id.recyclerViewTrivia);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+
+
+        triviaAdapter = new TriviaAdapter(triviaList);
+        recyclerView.setAdapter(triviaAdapter);
+
         chatImageView = findViewById(R.id.chat);
 
         // Set click listener for the chat image
@@ -59,9 +64,6 @@ public class Trivia extends BaseActivity implements ItemClickListener {
             Intent intent = new Intent(this, ChatActivity.class);
             startActivity(intent);
         });
-
-        triviaAdapter = new TriviaAdapter(triviaList);
-        recyclerView.setAdapter(triviaAdapter);
 
         tabLayout = findViewById(R.id.tablayout);
         int[] icons = {R.drawable.home, R.drawable.user_journal, R.drawable.profile};
@@ -113,7 +115,7 @@ public class Trivia extends BaseActivity implements ItemClickListener {
                     String text = triviaObject.getString("details");
 
                     // Add the trivia item to your list
-                    triviaList.add(new TriviaItem(title, "\t"+ text));
+                    triviaList.add(0,new TriviaItem(title, "\t"+ text));
                 }
 
                 // Notify the adapter to update the UI with the new data
