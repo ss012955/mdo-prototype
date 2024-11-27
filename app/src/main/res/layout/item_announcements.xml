@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="405dp"
+    android:layout_height="450dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="30dp"
     app:cardBackgroundColor="@color/UMAKLIGHTBLUE"
@@ -47,7 +47,7 @@
                 <ImageView
                     android:id="@+id/announcementsImage"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
+                    android:layout_height="300dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/edit" />
 
