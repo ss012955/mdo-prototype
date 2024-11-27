@@ -33,6 +33,11 @@ public class UpdateAppointmentsManager {
                 v->{
                     delete(context, umakEmail, bookingID);
 
+                    baseClass.showOneButtonDialogNotCancellable(context, "Confirmation", "Booking cancelled successfully.\n Please wait for email confirmation. Thank you", "Confirm",
+                            v2->{
+                                Intent i = new Intent(context, home.class);
+                                context.startActivity(i);
+                            });
                 },
                 v->{
 
@@ -53,11 +58,6 @@ public class UpdateAppointmentsManager {
                         String message = jsonResponse.getString("message");
 
                         if (success) {
-                            baseClass.showOneButtonDialog(context, "Confirmation", "Booking cancelled successfully.\n Please wait for email confirmation. Thank you", "Confirm",
-                                    v2->{
-                                        Intent i = new Intent(context, home.class);
-                                        context.startActivity(i);
-                                    });
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
