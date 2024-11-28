@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -19,11 +18,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import Adapters.DashboardAdapter;
 import HelperClasses.AnnouncementManager;
 import HelperClasses.AnnouncementsItems;
 import HelperClasses.AppointmentsManager;
 import HelperClasses.ItemClickListener;
-import HelperClasses.NetworkChangeReceiver;
 import Singleton.allAppointments;
 
 public class fDashboard extends Fragment implements ItemClickListener {

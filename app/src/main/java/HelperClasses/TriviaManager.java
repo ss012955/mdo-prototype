@@ -15,6 +15,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class TriviaManager {
@@ -27,13 +29,22 @@ public class TriviaManager {
                 Log.d("Trivia Response", response);
                 JSONArray jsonArray = new JSONArray(response);
                 List<TriviaItem> triviaItems = new ArrayList<>();
+
+                // Loop through the response and add trivia items
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject triviaObject = jsonArray.getJSONObject(i);
                     String title = triviaObject.getString("title");
                     String text = triviaObject.getString("details");
-                    triviaItems.add(new TriviaItem(title, "\t" + text));
+
+                    triviaItems.add(0,new TriviaItem(title, "\t" + text));
                 }
-                callback.onSuccess(triviaItems); // Pass data to callback
+
+                // Get the two trivia items with the highest IDs
+                List<TriviaItem> latestTriviaItems = triviaItems.size() > 2 ? triviaItems.subList(0, 2) : triviaItems;
+
+                // Pass the two most recent trivia items to the callback
+                callback.onSuccess(latestTriviaItems);
+
             } catch (JSONException e) {
                 e.printStackTrace();
                 callback.onError("Error parsing trivia data");
@@ -56,3 +67,4 @@ public class TriviaManager {
 
 
 }
+

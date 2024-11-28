@@ -70,7 +70,7 @@ public class Trivia extends BaseActivity implements ItemClickListener {
         recyclerView = findViewById(R.id.recyclerViewTrivia);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        triviaAdapter = new TriviaAdapter(triviaList);
+        triviaAdapter = new TriviaAdapter(this, triviaList);
         recyclerView.setAdapter(triviaAdapter);
 
         chatImageView.setOnClickListener(v -> {
@@ -125,7 +125,7 @@ public class Trivia extends BaseActivity implements ItemClickListener {
                     JSONObject triviaObject = jsonArray.getJSONObject(i);
                     String title = triviaObject.getString("title");
                     String text = triviaObject.getString("details");
-                    triviaList.add(0, new TriviaItem(title, "\t" + text));
+                    triviaList.add(0, new TriviaItem(title, text));
 
                     if (!jsonArray.equals(lastFetchedTrivia)) {
                         // New trivia, show the notification
