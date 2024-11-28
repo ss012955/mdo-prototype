@@ -1,8 +1,12 @@
 package com.example.prototype;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,6 +15,10 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -91,7 +99,7 @@ public class Announcements extends BaseActivity implements ItemClickListener {
             public void onTabReselected(TabLayout.Tab tab) {}
         });
 
-
+        createNotificationChannel();
 
 
     }
@@ -104,44 +112,83 @@ public class Announcements extends BaseActivity implements ItemClickListener {
     }
 
     private void fetchAnnouncements() {
-        String url = "https://umakmdo-91b845374d5b.herokuapp.com/Admin/announcements.php?type=all"; // Update this URL
+        String url = "https://umakmdo-91b845374d5b.herokuapp.com/Admin/announcements.php?type=all";
+
+        SharedPreferences sharedPreferences = getSharedPreferences("AnnouncementsPrefs", Context.MODE_PRIVATE);
+        String lastFetchedAnnouncements = sharedPreferences.getString("lastFetchedAnnouncements", "");
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, response -> {
             try {
-                // Log the raw response
-                Log.d("Announcements Response", response);
-
-                // Parse the JSON array
                 JSONArray jsonArray = new JSONArray(response);
-                announcementsList.clear(); // Clear previous data
+                announcementsList.clear();
 
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject announcementObject = jsonArray.getJSONObject(i);
-
-                    // Extract data for each announcement
                     String title = announcementObject.getString("title");
                     String text = announcementObject.getString("details");
-                    String imageUrl = announcementObject.getString("image_url"); // Assuming there's an image URL
+                    String imageUrl = announcementObject.getString("image_url");
 
-                    // Add the announcement item to the list
-                    announcementsList.add(0,new AnnouncementsItems(title, text, imageUrl));
+                    announcementsList.add(0, new AnnouncementsItems(title, text, imageUrl));
+
+                    // Check if the new announcement is different from the last fetched
+                    if (!response.equals(lastFetchedAnnouncements)) {
+                        showNewAnnouncementNotification(title, text);
+
+                        // Save the new response in SharedPreferences
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString("lastFetchedAnnouncements", response);
+                        editor.apply();
+                    }
                 }
 
-                // Notify the adapter to update the RecyclerView
                 announcementsAdapter.notifyDataSetChanged();
             } catch (JSONException e) {
                 e.printStackTrace();
                 Toast.makeText(this, "Error parsing announcements data", Toast.LENGTH_SHORT).show();
             }
         }, error -> {
-            // Handle network errors
             Toast.makeText(this, "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
             Log.d("Announcements Fetch Error", error.getMessage());
         });
 
-        // Add the request to the queue
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
+    }
+
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(
+                    "ANNOUNCEMENTS_CHANNEL",
+                    "Announcements Channel",
+                    NotificationManager.IMPORTANCE_HIGH
+            );
+            channel.setDescription("Channel for Announcements notifications");
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+    private void showNewAnnouncementNotification(String title, String text) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            boolean hasPermission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS)
+                    == PackageManager.PERMISSION_GRANTED;
+            if (!hasPermission) {
+                // Request permission if not granted
+                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, 1);
+                return;
+            }
+        }
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "ANNOUNCEMENTS_CHANNEL")
+                .setSmallIcon(R.drawable.ic_notification)
+                .setContentTitle("New Announcement")
+                .setContentText(title + "\n" + text)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setDefaults(NotificationCompat.DEFAULT_ALL)
+                .setAutoCancel(true);
+
+        runOnUiThread(() -> {
+            NotificationManagerCompat.from(this).notify(1, builder.build());
+        });
     }
 
     @Override

@@ -18,6 +18,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import HelperClasses.AnnouncementManager;
+import HelperClasses.AnnouncementsItems;
 import HelperClasses.AppointmentsManager;
 import HelperClasses.ItemClickListener;
 import HelperClasses.NetworkChangeReceiver;
@@ -78,7 +80,36 @@ public class fDashboard extends Fragment implements ItemClickListener {
     @Override
     public void onResume() {
         super.onResume();
+        fetchAndUpdateAnnouncements();
+    }
+    private void fetchAndUpdateAnnouncements() {
+        AnnouncementManager.fetchAnnouncements(getContext(), new AnnouncementManager.AnnouncementsCallback() {
+            @Override
+            public void onSuccess(List<AnnouncementsItems> announcements) {
+                if (!announcements.isEmpty()) {
+                    List<DashboardContent> updatedContentList = new ArrayList<>(contentList);
 
+                    // Update the first item (Announcements) in the contentList
+                    DashboardContent announcementsContent = updatedContentList.get(0);
+                    List<String> announcementImages = new ArrayList<>();
+                    for (AnnouncementsItems item : announcements) {
+                        announcementImages.add(item.getImageUrl());
+
+                    }
+
+                    announcementsContent.setAnnouncementTitle(announcements.get(0).getTitle());
+                    announcementsContent.setImageUrl(announcements.get(0).getImageUrl());
+                    announcementsContent.setAnnouncementDescrip(announcements.get(0).getText());
+                    // Update adapter
+                    adapter.updateContentList(updatedContentList);
+                }
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                Toast.makeText(getContext(), "Failed to load announcements: " + errorMessage, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
     @Override
     public void onClick(View v, int position) {

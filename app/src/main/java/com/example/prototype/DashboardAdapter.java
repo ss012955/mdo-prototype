@@ -136,15 +136,13 @@ public class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
            AnnouncementManager.fetchAnnouncements(context, new AnnouncementManager.AnnouncementsCallback() {
                 @Override
                 public void onSuccess(List<AnnouncementsItems> announcements) {
-                    if (!announcements.isEmpty()) {
-                        AnnouncementsItems latestAnnouncement = announcements.get(0);
-                        announcementTitleTextView.setText(latestAnnouncement.getTitle());
-                        announcementDescripTextView.setText(latestAnnouncement.getText());
-                        Glide.with(context)
-                                .load(latestAnnouncement.getImageUrl())
-                                .placeholder(R.drawable.placeholder_image)
-                                .into(announcementImageView);
-                    }
+                    Glide.with(announcementImageView.getContext())
+                            .load(content.getImageUrl())
+                            .placeholder(R.drawable.placeholder_image)
+                            .into(announcementImageView);
+
+                    announcementTitleTextView.setText(content.getAnnouncementTitle());
+                    announcementDescripTextView.setText(content.getAnnouncementDescrip());
                 }
 
                 @Override
@@ -265,5 +263,9 @@ public class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 clickListener.onClick(v, getBindingAdapterPosition());
             }
         }
+    }
+    public void updateContentList(List<DashboardContent> newContentList) {
+        this.contentList = newContentList;
+        notifyDataSetChanged(); // Refresh the adapter
     }
 }
