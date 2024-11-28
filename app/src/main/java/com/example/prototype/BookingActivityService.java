@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,7 +35,7 @@ public class BookingActivityService extends BaseActivity implements ItemClickLis
     private List<Services> services;
     ServicesAdapter adapter = new ServicesAdapter(services);
     String service;
-
+    private ImageView chatImageView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +49,7 @@ public class BookingActivityService extends BaseActivity implements ItemClickLis
         SharedPreferences prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
         String userEmail = prefs.getString("user_email", "No email found");
         //Toast.makeText(BookingActivityService.this, userEmail, Toast.LENGTH_SHORT).show();
-
+        chatImageView = findViewById(R.id.chat);
         tabLayout = findViewById(R.id.tablayout);
         int[] icons = {R.drawable.home, R.drawable.user_journal, R.drawable.profile};
         for (int i = 0; i < icons.length; i++) {
@@ -67,7 +68,11 @@ public class BookingActivityService extends BaseActivity implements ItemClickLis
             @Override
             public void onTabReselected(TabLayout.Tab tab) {}
         });
+        chatImageView.setOnClickListener(v -> {
 
+            Intent chatIntent = new Intent(this, ChatActivity.class);
+            startActivity(chatIntent);
+        });
         Intent intent = getIntent();
         service = intent.getStringExtra("Service");
 

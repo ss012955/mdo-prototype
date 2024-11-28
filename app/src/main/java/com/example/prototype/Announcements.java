@@ -64,7 +64,7 @@ public class Announcements extends BaseActivity implements ItemClickListener {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
+        chatImageView = findViewById(R.id.chat);
         recyclerView = findViewById(R.id.recyclerViewAnnouncements);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         announcementsAdapter = new AnnouncementsAdapter(announcementsList);
@@ -79,6 +79,11 @@ public class Announcements extends BaseActivity implements ItemClickListener {
         prefs = getApplicationContext().getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
         userEmail = prefs.getString("user_email", null);
 
+        chatImageView.setOnClickListener(v -> {
+
+            Intent intent = new Intent(this, ChatActivity.class);
+            startActivity(intent);
+        });
 
         tabLayout = findViewById(R.id.tablayout);
         int[] icons = {R.drawable.home, R.drawable.user_journal, R.drawable.profile};

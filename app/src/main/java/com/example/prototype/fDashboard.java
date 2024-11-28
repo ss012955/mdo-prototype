@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +32,7 @@ public class fDashboard extends Fragment implements ItemClickListener {
     private DashboardAdapter adapter;
     private List<DashboardContent> contentList;
     private SharedPreferences prefs;
+    private ImageView chatImageView;
 
     public fDashboard() {
         // Required empty public constructor
@@ -42,6 +44,7 @@ public class fDashboard extends Fragment implements ItemClickListener {
 
         // Initialize RecyclerView
         recyclerView = view.findViewById(R.id.recyclerView);
+        chatImageView = view.findViewById(R.id.chat); //
         List<String> images = Arrays.asList("chat", "umaklogo" , "home");
         List<String> appointments = Arrays.asList("Appointment 1", "Appointment 2", "Appointment 3");
         // Set up the content list
@@ -57,6 +60,11 @@ public class fDashboard extends Fragment implements ItemClickListener {
         recyclerView.setAdapter(adapter);
         adapter.setClickListener(this);
 
+        chatImageView.setOnClickListener(v -> {
+
+            Intent intent = new Intent(getContext(), ChatActivity.class);
+            startActivity(intent);
+        });
 
         prefs = getActivity().getSharedPreferences("user_prefs", getContext().MODE_PRIVATE);
         String userEmail = prefs.getString("user_email", "No email found");

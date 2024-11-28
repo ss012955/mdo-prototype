@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -50,7 +51,7 @@ public class Trivia extends BaseActivity implements ItemClickListener {
     private TriviaAdapter triviaAdapter;
     private List<TriviaItem> triviaList = new ArrayList<>();
     TabLayout tabLayout;
-
+    private ImageView chatImageView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,14 +66,18 @@ public class Trivia extends BaseActivity implements ItemClickListener {
 
         prefs = getApplicationContext().getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
         userEmail = prefs.getString("user_email", null);
-
+        chatImageView = findViewById(R.id.chat);
         recyclerView = findViewById(R.id.recyclerViewTrivia);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         triviaAdapter = new TriviaAdapter(triviaList);
         recyclerView.setAdapter(triviaAdapter);
 
+        chatImageView.setOnClickListener(v -> {
 
+            Intent intent = new Intent(this, ChatActivity.class);
+            startActivity(intent);
+        });
 
         tabLayout = findViewById(R.id.tablayout);
         int[] icons = {R.drawable.home, R.drawable.user_journal, R.drawable.profile};

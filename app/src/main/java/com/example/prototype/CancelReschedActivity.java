@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,7 +25,7 @@ public class CancelReschedActivity extends BaseActivity {
     TabLayout tabLayout;
     TextView tvService, tvDate,tvRemarks;
     private Button buttonCancel, buttonReschedule;
-
+    private ImageView chatImageView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,7 +40,7 @@ public class CancelReschedActivity extends BaseActivity {
 
         prefs = getApplicationContext().getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
         userEmail = prefs.getString("user_email", null);
-
+        chatImageView = findViewById(R.id.chat);
         tabLayout = findViewById(R.id.tablayout);
         int[] icons = {R.drawable.home, R.drawable.user_journal, R.drawable.profile};
         for (int i = 0; i < icons.length; i++) {
@@ -58,7 +59,11 @@ public class CancelReschedActivity extends BaseActivity {
             @Override
             public void onTabReselected(TabLayout.Tab tab) {}
         });
+        chatImageView.setOnClickListener(v -> {
 
+            Intent chatIntent = new Intent(this, ChatActivity.class);
+            startActivity(chatIntent);
+        });
         tvService = findViewById(R.id.tvService);
         tvDate = findViewById(R.id.tvDate);
         tvRemarks = findViewById(R.id.tvRemarks);
