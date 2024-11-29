@@ -52,6 +52,7 @@ dependencies {
     implementation("com.google.firebase:firebase-storage:20.0.0")
     implementation("com.github.bumptech.glide:glide:4.15.1")
     annotationProcessor("com.github.bumptech.glide:compiler:4.15.1")
+    implementation("androidx.work:work-runtime:2.8.1")
 
 }
 

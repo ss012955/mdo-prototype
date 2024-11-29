@@ -6,6 +6,8 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,10 +21,13 @@ import java.util.List;
 import java.util.Map;
 
 import Adapters.DashboardAdapter;
+import Adapters.TriviaDashboardAdapter;
 import HelperClasses.AnnouncementManager;
 import HelperClasses.AnnouncementsItems;
 import HelperClasses.AppointmentsManager;
 import HelperClasses.ItemClickListener;
+import HelperClasses.TriviaItem;
+import HelperClasses.TriviaManager;
 import Singleton.allAppointments;
 
 public class fDashboard extends Fragment implements ItemClickListener {
@@ -44,13 +49,11 @@ public class fDashboard extends Fragment implements ItemClickListener {
         // Initialize RecyclerView
         recyclerView = view.findViewById(R.id.recyclerView);
         chatImageView = view.findViewById(R.id.chat); //
-        List<String> images = Arrays.asList("chat", "umaklogo" , "home");
-        List<String> appointments = Arrays.asList("Appointment 1", "Appointment 2", "Appointment 3");
         // Set up the content list
         contentList = new ArrayList<>();
 
-        contentList.add(new DashboardContent("Announcements", images, null, null));
-        contentList.add(new DashboardContent("Appointments", null, appointments, null));
+        contentList.add(new DashboardContent("Announcements", null, null, null));
+        contentList.add(new DashboardContent("Appointments", null,null, null));
         contentList.add(new DashboardContent("Trivia", null, null, "Did you know..."));
 
         // Set up the adapter and RecyclerView
@@ -88,6 +91,7 @@ public class fDashboard extends Fragment implements ItemClickListener {
     public void onResume() {
         super.onResume();
         fetchAndUpdateAnnouncements();
+        fetchAndUpdateTrivia();
     }
     private void fetchAndUpdateAnnouncements() {
         AnnouncementManager.fetchAnnouncements(getContext(), new AnnouncementManager.AnnouncementsCallback() {
@@ -115,6 +119,26 @@ public class fDashboard extends Fragment implements ItemClickListener {
             @Override
             public void onError(String errorMessage) {
                 Toast.makeText(getContext(), "Failed to load announcements: " + errorMessage, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void fetchAndUpdateTrivia(){
+        TriviaManager.fetchTrivia(getContext(), new TriviaManager.TriviaCallback() {
+            @Override
+            public void onSuccess(List<TriviaItem> fetchedTriviaItems) {
+                if (!fetchedTriviaItems.isEmpty()) {
+                    List<DashboardContent> updatedContentList = new ArrayList<>(contentList);
+                    DashboardContent triviaContent = updatedContentList.get(0);
+                    triviaContent.setTriviaTitle(fetchedTriviaItems.get(0).getTitle());
+                    adapter.updateContentList(updatedContentList);
+                }
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                // Handle error (if needed)
+                Log.e("TriviaViewHolder", errorMessage);
             }
         });
     }

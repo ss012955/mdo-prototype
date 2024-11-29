@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CalendarView;
+import android.widget.ImageView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.core.graphics.Insets;
@@ -35,6 +36,7 @@ public class Appointments extends BaseActivity implements ItemClickListener {
     private SharedPreferences prefs;
     private String userEmail;
     TabLayout tabLayout;
+    private ImageView chatImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +48,12 @@ public class Appointments extends BaseActivity implements ItemClickListener {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        chatImageView = findViewById(R.id.chat);
+        chatImageView.setOnClickListener(v -> {
 
+            Intent intent = new Intent(this, ChatActivity.class);
+            startActivity(intent);
+        });
 
         prefs = getApplicationContext().getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
         userEmail = prefs.getString("user_email", null);
@@ -55,6 +62,14 @@ public class Appointments extends BaseActivity implements ItemClickListener {
         int[] icons = {R.drawable.home, R.drawable.user_journal, R.drawable.profile};
         for (int i = 0; i < icons.length; i++) {
             tabLayout.addTab(tabLayout.newTab().setIcon(icons[i]));
+        }
+        tabLayout.selectTab(null);
+        // Reset the tab icons to their unselected state
+        for (int i = 0; i < tabLayout.getTabCount(); i++) {
+            TabLayout.Tab tab = tabLayout.getTabAt(i);
+            if (tab != null) {
+                tab.setIcon(icons[i]); // Reset to the original icon (unselected)
+            }
         }
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
