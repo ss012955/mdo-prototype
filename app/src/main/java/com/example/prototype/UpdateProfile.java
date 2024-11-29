@@ -26,6 +26,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.tabs.TabLayout;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -51,7 +52,7 @@ public class UpdateProfile extends AppCompatActivity implements Profile_CustomAd
     ImageView eyePassword, eyeConfirmPassword;
     Button buttonSave;
     UpdateProfileManager updateProfileManager;
-
+    TabLayout tabLayout;
 
 
     @Override
@@ -80,6 +81,7 @@ public class UpdateProfile extends AppCompatActivity implements Profile_CustomAd
         etFirstname = findViewById(R.id.etFirstName);
         etLastname = findViewById(R.id.etLastName);
         etPassword = findViewById(R.id.etPassword);
+        tabLayout = findViewById(R.id.tablayout);
         etConfirmPassword = findViewById(R.id.etConfirmPassword);
         eyePassword= findViewById(R.id.eyePassword);
         eyeConfirmPassword= findViewById(R.id.eyeConfirmPassword);
@@ -129,7 +131,7 @@ public class UpdateProfile extends AppCompatActivity implements Profile_CustomAd
                     etPassword, etConfirmPassword);
         });
 
-
+        tabLayouter();
     }
     public void onEditButtonClick(int position) {
 
@@ -144,9 +146,32 @@ public class UpdateProfile extends AppCompatActivity implements Profile_CustomAd
         }
     }
 
+    public void tabLayouter(){
+        tabLayout = findViewById(R.id.tablayout);
+        int[] icons = {R.drawable.home, R.drawable.user_journal, R.drawable.profile};
+        for (int i = 0; i < icons.length; i++) {
+            tabLayout.addTab(tabLayout.newTab().setIcon(icons[i]));
+        }
+        tabLayout.selectTab(null);
+        // Reset the tab icons to their unselected state
+        for (int i = 0; i < tabLayout.getTabCount(); i++) {
+            TabLayout.Tab tab = tabLayout.getTabAt(i);
+            if (tab != null) {
+                tab.setIcon(icons[i]); // Reset to the original icon (unselected)
+            }
+        }
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                startActivity(new Intent(UpdateProfile.this, home.class)
+                        .putExtra("tab_position", tab.getPosition()));
+            }
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {}
 
-
-
-    //Local uploading of il
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {}
+        });
+    }
 
 }
