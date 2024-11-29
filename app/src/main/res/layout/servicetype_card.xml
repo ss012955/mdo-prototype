@@ -8,12 +8,8 @@
     app:cardCornerRadius="35dp"
     android:layout_marginTop="10dp"
     app:cardBackgroundColor="@color/white"
-    app:cardElevation="20dp"
-    android:layout_margin="2dp">
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    android:layout_margin="10dp"
+    android:padding="10dp">
 
         <TextView
             android:id="@+id/serviceTitle"
@@ -27,12 +23,8 @@
             android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
+            app:layout_constraintTop_toTopOf="parent"
+            />
 
 
 </androidx.cardview.widget.CardView>

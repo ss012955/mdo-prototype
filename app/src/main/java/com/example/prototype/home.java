@@ -51,7 +51,7 @@ public class home extends BaseActivity {
         viewpager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
 
         viewpager.setAdapter(myAdapter);
-
+        viewpager.setUserInputEnabled(false);
         fProfile profileFragment = new fProfile();
 
         myAdapter.addFragment(new fDashboard());

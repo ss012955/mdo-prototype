@@ -115,31 +115,36 @@ public class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     // Define ViewHolder for Announcements
     static class AnnouncementsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView announcementTitleTextView;
-        TextView announcementDescripTextView;
-        ImageView announcementImageView;
-
+        RecyclerView recyclerViewAnnouncement;
+        AnnouncementDashboardAdapter announcementRecyclerViewAdapter;
         AnnouncementsViewHolder(View itemView) {
             super(itemView);
-            announcementTitleTextView = itemView.findViewById(R.id.announcementsTitle);
-            announcementDescripTextView = itemView.findViewById(R.id.announcementsText);
-            announcementImageView = itemView.findViewById(R.id.announcementsImage);
+            recyclerViewAnnouncement= itemView.findViewById(R.id.recyclerViewAnnouncements);
+
             itemView.setOnClickListener(this);
+
 
         }
 
         void bind(DashboardContent content, Context context) {
-            // Fetch announcements
-           AnnouncementManager.fetchAnnouncements(context, new AnnouncementManager.AnnouncementsCallback() {
-                @Override
-                public void onSuccess(List<AnnouncementsItems> announcements) {
-                    Glide.with(announcementImageView.getContext())
-                            .load(content.getImageUrl())
-                            .placeholder(R.drawable.placeholder_image)
-                            .into(announcementImageView);
+            List<AnnouncementsItems> announcementsList = new ArrayList<>();  // Corrected name
 
-                    announcementTitleTextView.setText(content.getAnnouncementTitle());
-                    announcementDescripTextView.setText(content.getAnnouncementDescrip());
+            // Fetch announcements
+            AnnouncementManager.fetchAnnouncements(context, new AnnouncementManager.AnnouncementsCallback() {
+                @Override
+                public void onSuccess(List<AnnouncementsItems> fetchedAnnouncementsItems) {
+
+                    int limit = Math.min(fetchedAnnouncementsItems.size(), 3);
+                    for (int i = 0; i < limit; i++) {
+                        announcementsList.add(fetchedAnnouncementsItems.get(i));  // Corrected name here
+                    }
+
+                    announcementRecyclerViewAdapter = new AnnouncementDashboardAdapter(context,announcementsList); // Updated constructor
+                    recyclerViewAnnouncement.setLayoutManager(new LinearLayoutManager(context));
+                    recyclerViewAnnouncement.setAdapter(announcementRecyclerViewAdapter);
+                    recyclerViewAnnouncement.setLayoutManager(
+                            new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                    );
                 }
 
                 @Override
@@ -229,6 +234,9 @@ public class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     triviaRecyclerViewAdapter = new TriviaDashboardAdapter(context, triviaItems);
                     recyclerViewTrivia.setLayoutManager(new LinearLayoutManager(context));
                     recyclerViewTrivia.setAdapter(triviaRecyclerViewAdapter);
+                    recyclerViewTrivia.setLayoutManager(
+                            new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                    );
                 }
 
                 @Override

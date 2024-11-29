@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="280dp"
+    android:layout_height="170dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="30dp"
     app:cardBackgroundColor="@color/UMAKLIGHTBLUE"
@@ -13,7 +13,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="280dp"
+        android:layout_height="170dp"
         android:layout_marginBottom="40dp"
         android:background="@drawable/rounded_layout"
         android:backgroundTint="@color/gray"
@@ -40,6 +40,7 @@
             android:id="@+id/recyclerViewTrivia"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:padding="10dp"
             android:background="@drawable/rounded_layout"
             />
     </LinearLayout>

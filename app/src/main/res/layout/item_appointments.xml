@@ -3,70 +3,76 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="20dp"
+    android:layout_height="560dp"
     app:cardCornerRadius="30dp"
-    app:cardBackgroundColor="@color/UMAKLIGHTBLUE">
+    app:cardBackgroundColor="@color/UMAKLIGHTBLUE"
+    app:cardElevation="30dp"
+    android:padding="10dp"
+    android:layout_margin="20dp">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="15dp">
+        android:layout_height="match_parent"
+        android:background="@drawable/rounded_layout"
+        android:backgroundTint="@color/gray"
+        android:orientation="vertical">
 
         <!-- Title -->
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="APPOINTMENTS"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:textColor="@android:color/black"
-            android:gravity="center"
-            android:paddingBottom="8dp"/>
-
-        <!-- Booking button -->
-
-
-        <!-- Calendar -->
-
-
-        <TextView
-            android:id="@+id/tvNumberofAppointments"
+            android:id="@+id/tvAppointments"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_gravity="center"
-            android:layout_marginBottom="5dp"
-            android:background="@drawable/rounded_edge"
-            android:backgroundTint="@color/white"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="13dp"
+            android:layout_marginTop="10dp"
+            android:text="Appointments"
             android:fontFamily="@font/metropolis_bold"
-            android:padding="16dp"
-            android:text="You have 0 appointments"
-            android:textColor="@color/black"
-            android:textSize="15sp" />
+            android:textSize="20sp"
+            android:textColor="@color/black" />
 
-        <CalendarView
-            android:id="@+id/calendarView"
+        <!-- Inner CardView -->
+
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:accessibilityHeading="false"
-            android:background="@drawable/rounded_edge"
-            android:backgroundTint="@color/navy_blue"
-/>
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="20dp"
+            android:background="@drawable/rounded_layout">
 
+            <!-- Appointment Info -->
+            <TextView
+                android:id="@+id/tvNumberofAppointments"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_edge"
+                android:backgroundTint="@color/white"
+                android:fontFamily="@font/metropolis_bold"
+                android:padding="16dp"
+                android:text="You have 0 appointments"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:layout_marginBottom="10dp" />
 
+            <!-- Calendar -->
+            <CalendarView
+                android:id="@+id/calendarView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                android:background="@drawable/rounded_edge"
+                android:backgroundTint="@color/navy_blue" />
 
-        <Button
-            android:id="@+id/btnStartBooking"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Click to start booking"
-            android:textSize="16sp"
-            android:backgroundTint="@android:color/white"
-            android:theme="@style/CustomCalendarViewStyle"
-            android:padding="8dp"/>
+            <!-- Booking Button -->
+            <Button
+                android:id="@+id/btnStartBooking"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Click to start booking"
+                android:textSize="16sp"
+                android:layout_marginVertical="10dp"
+                android:backgroundTint="@color/white"
+                android:textColor="@color/white" />
+        </LinearLayout>
 
-
-        <!-- No appointments text -->
     </LinearLayout>
 </androidx.cardview.widget.CardView>

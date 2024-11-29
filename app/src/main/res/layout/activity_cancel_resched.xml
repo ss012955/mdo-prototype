@@ -43,33 +43,22 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="679dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:background="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:padding="16dp"
+        app:layout_constraintBottom_toTopOf="@id/tablayout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tablayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/UMAKBLUE"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:tabIconTint="@color/tab_layout_selector"
-            app:tabIndicatorColor="@color/UMAKYELLOW" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txtviewHomeTitle">
 
 
         <LinearLayout
             android:id="@+id/linearLayout3"
-            android:layout_width="335dp"
-            android:layout_height="203dp"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="48dp"
-            android:layout_marginEnd="15dp"
+            android:layout_width="350dp"
+            android:layout_height="230dp"
+
+            android:layout_margin="150dp"
             android:background="@drawable/rounded_layout"
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
@@ -81,9 +70,9 @@
                 android:id="@+id/tvService"
                 android:layout_width="328dp"
                 android:layout_height="50dp"
-                android:layout_marginStart="3dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="3dp"
+                android:layout_marginStart="11dp"
+                android:layout_marginTop="20dp"
+
                 android:background="@drawable/rounded_edge"
                 android:backgroundTint="@color/white"
                 android:fontFamily="@font/metropolis_bold"
@@ -96,9 +85,8 @@
                 android:id="@+id/tvDate"
                 android:layout_width="328dp"
                 android:layout_height="50dp"
-                android:layout_marginStart="3dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="3dp"
+                android:layout_marginStart="11dp"
+                android:layout_marginTop="20dp"
                 android:background="@drawable/rounded_edge"
                 android:backgroundTint="@color/white"
                 android:fontFamily="@font/metropolis_bold"
@@ -111,15 +99,14 @@
                 android:id="@+id/tvRemarks"
                 android:layout_width="328dp"
                 android:layout_height="50dp"
-                android:layout_marginStart="3dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="3dp"
+                android:layout_marginStart="11dp"
+                android:layout_marginTop="20dp"
                 android:background="@drawable/rounded_edge"
                 android:backgroundTint="@color/white"
                 android:ems="10"
                 android:fontFamily="@font/metropolis_bold"
-                android:text="Remarks:"
                 android:padding="15dp"
+                android:text="Remarks:"
                 android:textColor="@color/black"
                 android:textColorHint="@color/black"
                 android:textSize="15sp" />
@@ -132,34 +119,44 @@
             android:layout_width="150dp"
             android:layout_height="55dp"
             android:layout_gravity="center"
-            android:layout_marginBottom="304dp"
+            android:layout_marginStart="36dp"
+            android:layout_marginTop="60dp"
             android:backgroundTint="@color/red"
             android:fontFamily="@font/metropolis_regular"
             android:text="CANCEL"
             android:textColor="@color/black"
             app:cornerRadius="158dp"
-            app:layout_constraintBottom_toTopOf="@+id/tablayout"
-            app:layout_constraintStart_toStartOf="@+id/linearLayout3"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
 
         <Button
             android:id="@+id/buttonReschedule"
             android:layout_width="150dp"
             android:layout_height="53dp"
             android:layout_gravity="center"
-            android:layout_marginBottom="304dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="60dp"
             android:backgroundTint="@color/gray"
             android:fontFamily="@font/metropolis_regular"
             android:text="RESCHEDULE"
+
             android:textColor="@color/black"
             app:cornerRadius="158dp"
-            app:layout_constraintBottom_toTopOf="@+id/tablayout"
-            app:layout_constraintEnd_toEndOf="@+id/linearLayout3"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@+id/buttonCancel" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.309"
+            app:layout_constraintStart_toEndOf="@+id/buttonCancel"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tablayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/UMAKBLUE"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:tabIconTint="@color/tab_layout_selector"
+        app:tabIndicatorColor="@color/UMAKYELLOW" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
