@@ -6,6 +6,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Switch;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +19,7 @@ import com.google.android.material.tabs.TabLayout;
 public class SettingsActivity extends AppCompatActivity {
     TabLayout tabLayout;
     private ImageView chatImageView;
+    TextView terms;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +33,7 @@ public class SettingsActivity extends AppCompatActivity {
         Switch switchAppointmentReminder = findViewById(R.id.switchAppointmentReminder);
         LinearLayout reminderOptions = findViewById(R.id.reminderOptions);
         chatImageView = findViewById(R.id.chat);
+        terms = findViewById(R.id.tvTermsAndPrivacy);
         tabLayout = findViewById(R.id.tablayout);
         // Toggle visibility of reminder options
         switchAppointmentReminder.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -46,6 +49,10 @@ public class SettingsActivity extends AppCompatActivity {
         chatImageView.setOnClickListener(v -> {
 
             Intent intent = new Intent(this, ChatActivity.class);
+            startActivity(intent);
+        });
+        terms.setOnClickListener(v ->{
+            Intent intent = new Intent(this, termsActivity.class);
             startActivity(intent);
         });
         int[] icons = {R.drawable.home, R.drawable.user_journal, R.drawable.profile};
