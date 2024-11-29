@@ -1,4 +1,4 @@
-package com.example.prototype;
+package Adapters;
 
 public class content {
     String contentName;

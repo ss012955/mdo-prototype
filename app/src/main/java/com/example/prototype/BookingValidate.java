@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,7 +36,7 @@ public class BookingValidate extends AppCompatActivity {
     TextView tvService, tvServiceType, tvDate;
     String userEmail;
     String bookingID;
-
+    private ImageView chatImageView;
     String serviceResched, remarksResched;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +52,7 @@ public class BookingValidate extends AppCompatActivity {
         SharedPreferences prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
         userEmail = prefs.getString("user_email", "No email found");
         //Toast.makeText(BookingValidate.this, userEmail, Toast.LENGTH_SHORT).show();
-
+        chatImageView = findViewById(R.id.chat);
         tabLayout = findViewById(R.id.tablayout);
         int[] icons = {R.drawable.home, R.drawable.user_journal, R.drawable.profile};
         for (int i = 0; i < icons.length; i++) {
@@ -79,7 +80,11 @@ public class BookingValidate extends AppCompatActivity {
 
         remarks = findViewById(R.id.remarksText);
         remarksInput = remarks.getText().toString();
+        chatImageView.setOnClickListener(v -> {
 
+            Intent chatIntent = new Intent(this, ChatActivity.class);
+            startActivity(chatIntent);
+        });
         Intent intent = getIntent();
         bookingID = intent.getStringExtra("bookingID");
         chosen_date = intent.getStringExtra("CHOSEN_DATE");

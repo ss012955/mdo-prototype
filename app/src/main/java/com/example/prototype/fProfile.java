@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.fragment.app.Fragment;
@@ -30,6 +31,7 @@ public class fProfile extends Fragment implements Profile_CustomAdapter.OnEditBu
     public TextView emergency_details, settings, send_feedback, logout;
     public DashboardManager dashboardManager;
     public Intent intent;
+    private ImageView chatImageView;
 
 
     public fProfile() {
@@ -48,13 +50,18 @@ public class fProfile extends Fragment implements Profile_CustomAdapter.OnEditBu
         settings = view.findViewById(R.id.tvSettings);
         send_feedback = view.findViewById(R.id.tvSendFeedback);
         logout = view.findViewById(R.id.tvLogOut);
+        chatImageView = view.findViewById(R.id.chat);
         dashboardManager = new DashboardManager();
 
         logout.setOnClickListener(v->{
             dashboardManager.showLogoutValidator(getActivity(), fProfile.this);
         });
 
+        chatImageView.setOnClickListener(v -> {
 
+            Intent intent = new Intent(getContext(), ChatActivity.class);
+            startActivity(intent);
+        });
 
         profile_recycler.setLayoutManager(new LinearLayoutManager(getContext()));
 

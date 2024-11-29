@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -34,7 +35,7 @@ public class BookingActivity extends BaseActivity implements ItemClickListener {
     private List<ServiceType> serviceType;
     ServiceTypeAdapter adapter = new ServiceTypeAdapter(serviceType);
     BookingManager bookingManager;
-
+    private ImageView chatImageView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,8 +50,7 @@ public class BookingActivity extends BaseActivity implements ItemClickListener {
         SharedPreferences prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
         String userEmail = prefs.getString("user_email", "No email found");
         //Toast.makeText(BookingActivity.this, userEmail, Toast.LENGTH_SHORT).show();
-
-
+        chatImageView = findViewById(R.id.chat);
         tabLayout = findViewById(R.id.tablayout);
         int[] icons = {R.drawable.home, R.drawable.user_journal, R.drawable.profile};
         for (int i = 0; i < icons.length; i++) {
@@ -69,6 +69,13 @@ public class BookingActivity extends BaseActivity implements ItemClickListener {
             @Override
             public void onTabReselected(TabLayout.Tab tab) {}
         });
+
+        chatImageView.setOnClickListener(v -> {
+
+            Intent chatIntent = new Intent(this, ChatActivity.class);
+            startActivity(chatIntent);
+        });
+
         bookingManager = new BookingManager();
         progressBar = findViewById(R.id.progressBar);
         bookingManager.smoothProgressUpdate(progressBar, 35);

@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -18,9 +18,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import Adapters.DashboardAdapter;
+import HelperClasses.AnnouncementManager;
+import HelperClasses.AnnouncementsItems;
 import HelperClasses.AppointmentsManager;
 import HelperClasses.ItemClickListener;
-import HelperClasses.NetworkChangeReceiver;
 import Singleton.allAppointments;
 
 public class fDashboard extends Fragment implements ItemClickListener {
@@ -29,6 +31,7 @@ public class fDashboard extends Fragment implements ItemClickListener {
     private DashboardAdapter adapter;
     private List<DashboardContent> contentList;
     private SharedPreferences prefs;
+    private ImageView chatImageView;
 
     public fDashboard() {
         // Required empty public constructor
@@ -40,6 +43,7 @@ public class fDashboard extends Fragment implements ItemClickListener {
 
         // Initialize RecyclerView
         recyclerView = view.findViewById(R.id.recyclerView);
+        chatImageView = view.findViewById(R.id.chat); //
         List<String> images = Arrays.asList("chat", "umaklogo" , "home");
         List<String> appointments = Arrays.asList("Appointment 1", "Appointment 2", "Appointment 3");
         // Set up the content list
@@ -55,6 +59,11 @@ public class fDashboard extends Fragment implements ItemClickListener {
         recyclerView.setAdapter(adapter);
         adapter.setClickListener(this);
 
+        chatImageView.setOnClickListener(v -> {
+
+            Intent intent = new Intent(getContext(), ChatActivity.class);
+            startActivity(intent);
+        });
 
         prefs = getActivity().getSharedPreferences("user_prefs", getContext().MODE_PRIVATE);
         String userEmail = prefs.getString("user_email", "No email found");
@@ -78,7 +87,36 @@ public class fDashboard extends Fragment implements ItemClickListener {
     @Override
     public void onResume() {
         super.onResume();
+        fetchAndUpdateAnnouncements();
+    }
+    private void fetchAndUpdateAnnouncements() {
+        AnnouncementManager.fetchAnnouncements(getContext(), new AnnouncementManager.AnnouncementsCallback() {
+            @Override
+            public void onSuccess(List<AnnouncementsItems> announcements) {
+                if (!announcements.isEmpty()) {
+                    List<DashboardContent> updatedContentList = new ArrayList<>(contentList);
 
+                    // Update the first item (Announcements) in the contentList
+                    DashboardContent announcementsContent = updatedContentList.get(0);
+                    List<String> announcementImages = new ArrayList<>();
+                    for (AnnouncementsItems item : announcements) {
+                        announcementImages.add(item.getImageUrl());
+
+                    }
+
+                    announcementsContent.setAnnouncementTitle(announcements.get(0).getTitle());
+                    announcementsContent.setImageUrl(announcements.get(0).getImageUrl());
+                    announcementsContent.setAnnouncementDescrip(announcements.get(0).getText());
+                    // Update adapter
+                    adapter.updateContentList(updatedContentList);
+                }
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                Toast.makeText(getContext(), "Failed to load announcements: " + errorMessage, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
     @Override
     public void onClick(View v, int position) {

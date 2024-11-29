@@ -1,6 +1,7 @@
 package Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,23 +11,24 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.prototype.R;
+import com.example.prototype.Trivia;
 
 import java.util.List;
 
 import HelperClasses.TriviaItem;
 
-public class TriviaAdapter extends RecyclerView.Adapter<TriviaAdapter.TriviaViewHolder> {
+public class TriviaDashboardAdapter extends RecyclerView.Adapter<TriviaDashboardAdapter.TriviaViewHolder> {
     private List<TriviaItem> triviaList; // Use TriviaItem instead of Trivia
     private Context context;
 
-    public TriviaAdapter(Context context,List<TriviaItem> triviaList) {
+    public TriviaDashboardAdapter(Context context,List<TriviaItem> triviaList) {
         this.context = context;
         this.triviaList = triviaList;
     }
 
     @Override
     public TriviaViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.trivia_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_trivia_card, parent, false);
         return new TriviaViewHolder(view);
     }
 
@@ -34,7 +36,13 @@ public class TriviaAdapter extends RecyclerView.Adapter<TriviaAdapter.TriviaView
     public void onBindViewHolder(TriviaViewHolder holder, int position) {
         TriviaItem trivia = triviaList.get(position); // Use TriviaItem instead of Trivia
         holder.triviaTitle.setText(trivia.getTitle());
-        holder.triviaText.setText(trivia.getText());
+
+        // Set a click listener on the item view
+        holder.itemView.setOnClickListener(v -> {
+            // When an item is clicked, start the Trivia activity
+            Intent intent = new Intent(context, Trivia.class);
+            context.startActivity(intent); // Start the Trivia activity
+        });
     }
     @Override
     public int getItemCount() {
@@ -47,7 +55,6 @@ public class TriviaAdapter extends RecyclerView.Adapter<TriviaAdapter.TriviaView
         public TriviaViewHolder(View itemView) {
             super(itemView);
             triviaTitle = itemView.findViewById(R.id.triviaTitle);
-            triviaText = itemView.findViewById(R.id.triviaText);
         }
     }
 }

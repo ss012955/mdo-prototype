@@ -30,11 +30,11 @@ public class AnnouncementManager {
                     String text = announcementObject.getString("details");
                     String imageUrl = announcementObject.getString("image_url");
 
-                    announcementsList.add(new AnnouncementsItems(title, text, imageUrl));
+                    announcementsList.add(0,new AnnouncementsItems(title, text, imageUrl));
                 }
-
+                List<AnnouncementsItems> latestAnnounceItems = announcementsList.size() > 3 ? announcementsList.subList(0, 3) : announcementsList;
                 // Pass the list back to the callback
-                callback.onSuccess(announcementsList);
+                callback.onSuccess(latestAnnounceItems);
             } catch (JSONException e) {
                 e.printStackTrace();
                 callback.onError("Error parsing announcements data");

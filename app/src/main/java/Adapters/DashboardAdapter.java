@@ -1,7 +1,7 @@
-package com.example.prototype;
+package Adapters;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,15 +14,12 @@ import android.widget.CalendarView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.example.prototype.Announcements;
+import com.example.prototype.BookingActivity;
+import com.example.prototype.DashboardContent;
+import com.example.prototype.R;
+import com.example.prototype.Trivia;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -118,33 +115,36 @@ public class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     // Define ViewHolder for Announcements
     static class AnnouncementsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView announcementTitleTextView;
-        TextView announcementDescripTextView;
-        ImageView announcementImageView;
-
+        RecyclerView recyclerViewAnnouncement;
+        AnnouncementDashboardAdapter announcementRecyclerViewAdapter;
         AnnouncementsViewHolder(View itemView) {
             super(itemView);
-            announcementTitleTextView = itemView.findViewById(R.id.announcementsTitle);
-            announcementDescripTextView = itemView.findViewById(R.id.announcementsText);
-            announcementImageView = itemView.findViewById(R.id.announcementsImage);
+            recyclerViewAnnouncement= itemView.findViewById(R.id.recyclerViewAnnouncements);
+
             itemView.setOnClickListener(this);
+
 
         }
 
         void bind(DashboardContent content, Context context) {
+            List<AnnouncementsItems> announcementsList = new ArrayList<>();  // Corrected name
+
             // Fetch announcements
-           AnnouncementManager.fetchAnnouncements(context, new AnnouncementManager.AnnouncementsCallback() {
+            AnnouncementManager.fetchAnnouncements(context, new AnnouncementManager.AnnouncementsCallback() {
                 @Override
-                public void onSuccess(List<AnnouncementsItems> announcements) {
-                    if (!announcements.isEmpty()) {
-                        AnnouncementsItems latestAnnouncement = announcements.get(0);
-                        announcementTitleTextView.setText(latestAnnouncement.getTitle());
-                        announcementDescripTextView.setText(latestAnnouncement.getText());
-                        Glide.with(context)
-                                .load(latestAnnouncement.getImageUrl())
-                                .placeholder(R.drawable.placeholder_image)
-                                .into(announcementImageView);
+                public void onSuccess(List<AnnouncementsItems> fetchedAnnouncementsItems) {
+
+                    int limit = Math.min(fetchedAnnouncementsItems.size(), 3);
+                    for (int i = 0; i < limit; i++) {
+                        announcementsList.add(fetchedAnnouncementsItems.get(i));  // Corrected name here
                     }
+
+                    announcementRecyclerViewAdapter = new AnnouncementDashboardAdapter(context,announcementsList); // Updated constructor
+                    recyclerViewAnnouncement.setLayoutManager(new LinearLayoutManager(context));
+                    recyclerViewAnnouncement.setAdapter(announcementRecyclerViewAdapter);
+                    recyclerViewAnnouncement.setLayoutManager(
+                            new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                    );
                 }
 
                 @Override
@@ -207,63 +207,56 @@ public class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
 
     // Define ViewHolder for Trivia
-    static class TriviaViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        TextView triviaContent, triviaContent1, triviaContent2, triviaContent3;
-        TriviaManager triviaManager = new TriviaManager();
+    static class TriviaViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        RecyclerView recyclerViewTrivia;
+        TriviaDashboardAdapter triviaRecyclerViewAdapter;
 
         TriviaViewHolder(View itemView) {
             super(itemView);
-            triviaContent = itemView.findViewById(R.id.triviaContent);
-            triviaContent1 = itemView.findViewById(R.id.triviaContent1);
-            triviaContent2 = itemView.findViewById(R.id.triviaContent2);
-            triviaContent3 = itemView.findViewById(R.id.triviaContent3);
-
+            recyclerViewTrivia = itemView.findViewById(R.id.recyclerViewTrivia);
             itemView.setOnClickListener(this);
         }
 
         void bind(DashboardContent content, Context context) {
-            triviaContent.setText("Loading trivia...");
+            List<TriviaItem> triviaItems = new ArrayList<>();
 
-            // Fetch trivia and display in this ViewHolder
-// Fetch trivia and display in this ViewHolder
+            // Fetch trivia and update RecyclerView
             TriviaManager.fetchTrivia(context, new TriviaManager.TriviaCallback() {
                 @Override
-                public void onSuccess(List<TriviaItem> triviaItems) {
-                    if (triviaItems.size() > 0) {
-                        TriviaItem trivia1 = triviaItems.get(0);
-                        triviaContent.setText(trivia1.getTitle());
-                    } else {
-                        triviaContent.setText("No trivia available");
-                        return; // Exit early if there is no trivia
+                public void onSuccess(List<TriviaItem> fetchedTriviaItems) {
+                    // Store the latest three trivia items
+                    int limit = Math.min(fetchedTriviaItems.size(), 3); // Limit to 3 items
+                    for (int i = 0; i < limit; i++) {
+                        triviaItems.add(fetchedTriviaItems.get(i));
                     }
 
-                    if (triviaItems.size() > 1) { // Check if there is a second item
-                        TriviaItem trivia2 = triviaItems.get(1);
-                        triviaContent1.setText(trivia2.getTitle());
-                        triviaContent1.setVisibility(View.VISIBLE);
-                    }
-
-                    if (triviaItems.size() > 2) { // Check if there is a third item
-                        TriviaItem trivia3 = triviaItems.get(2);
-                        triviaContent2.setText(trivia3.getTitle());
-                        triviaContent2.setVisibility(View.VISIBLE);
-                    }
+                    // Set up RecyclerView
+                    triviaRecyclerViewAdapter = new TriviaDashboardAdapter(context, triviaItems);
+                    recyclerViewTrivia.setLayoutManager(new LinearLayoutManager(context));
+                    recyclerViewTrivia.setAdapter(triviaRecyclerViewAdapter);
+                    recyclerViewTrivia.setLayoutManager(
+                            new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                    );
                 }
 
                 @Override
                 public void onError(String errorMessage) {
-
+                    // Handle error (if needed)
+                    Log.e("TriviaViewHolder", errorMessage);
                 }
             });
-
         }
+
 
 
         @Override
         public void onClick(View v) {
-            if(clickListener != null){
-                clickListener.onClick(v, getBindingAdapterPosition());
-            }
+            Intent intent = new Intent(itemView.getContext(), Trivia.class);
+            itemView.getContext().startActivity(intent);
         }
+    }
+    public void updateContentList(List<DashboardContent> newContentList) {
+        this.contentList = newContentList;
+        notifyDataSetChanged(); // Refresh the adapter
     }
 }

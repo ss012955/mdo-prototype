@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CalendarView;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,6 +38,7 @@ public class BookingActivityDate extends BaseActivity {
     String service, serviceType;
     ProgressBar progressBar;
     CalendarView calendarView;
+    private ImageView chatImageView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,12 +49,16 @@ public class BookingActivityDate extends BaseActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
+        chatImageView = findViewById(R.id.chat);
         SharedPreferences prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
         String userEmail = prefs.getString("user_email", "No email found");
 
         //Toast.makeText(BookingActivityDate.this, userEmail, Toast.LENGTH_SHORT).show();
+        chatImageView.setOnClickListener(v -> {
 
+            Intent chatIntent = new Intent(this, ChatActivity.class);
+            startActivity(chatIntent);
+        });
         Intent intent = getIntent();
 
         service = intent.getStringExtra("Service");
@@ -66,7 +72,6 @@ public class BookingActivityDate extends BaseActivity {
         String serviceR = intent.getStringExtra("ServiceResched");
         String bookingID = intent.getStringExtra("bookingID");
         String remarksR = intent.getStringExtra("RemarksResched");
-
 
         tabLayout = findViewById(R.id.tablayout);
         int[] icons = {R.drawable.home, R.drawable.user_journal, R.drawable.profile};

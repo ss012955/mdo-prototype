@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.window.OnBackInvokedDispatcher;
@@ -27,7 +28,7 @@ public class ConfirmationActivity extends AppCompatActivity {
     String service, serviceType, chosen_date, chosen_time, remarksInput;
     TabLayout tabLayout;
     Button buttonClose;
-    Intent intent;
+    private ImageView chatImageView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,7 +42,7 @@ public class ConfirmationActivity extends AppCompatActivity {
         SharedPreferences prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
         String userEmail = prefs.getString("user_email", "No email found");
         //Toast.makeText(ConfirmationActivity.this, userEmail, Toast.LENGTH_SHORT).show();
-
+        chatImageView = findViewById(R.id.chat);
         tabLayout = findViewById(R.id.tablayout);
         int[] icons = {R.drawable.home, R.drawable.user_journal, R.drawable.profile};
         for (int i = 0; i < icons.length; i++) {
@@ -60,7 +61,11 @@ public class ConfirmationActivity extends AppCompatActivity {
             @Override
             public void onTabReselected(TabLayout.Tab tab) {}
         });
+        chatImageView.setOnClickListener(v -> {
 
+            Intent chatIntent = new Intent(this, ChatActivity.class);
+            startActivity(chatIntent);
+        });
         AtomicReference<Intent> intent = new AtomicReference<>(getIntent());
         service = intent.get().getStringExtra("Service");
         serviceType = intent.get().getStringExtra("ServiceType");
