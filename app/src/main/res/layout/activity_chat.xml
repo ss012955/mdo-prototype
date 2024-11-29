@@ -16,6 +16,7 @@
         android:layout_height="40dp"
         android:layout_marginStart="7dp"
         android:layout_marginTop="6dp"
+        android:contentDescription="UMAK Logo"
         android:src="@drawable/umaklogo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -27,6 +28,7 @@
         android:layout_height="40dp"
         android:layout_marginEnd="7dp"
         android:layout_marginTop="6dp"
+        android:contentDescription="Chat Icon"
         android:src="@drawable/chat_yellow"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -49,31 +51,97 @@
 
     <!-- Chat Area -->
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@color/white"
-        app:layout_constraintTop_toBottomOf="@id/txtviewHomeTitle"
         app:layout_constraintBottom_toTopOf="@id/tablayout"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/txtviewHomeTitle">
 
-        <!-- Buttons for FAQ and Services -->
-        <LinearLayout
+
+        <!-- RecyclerView for Chat Messages -->
+
+
+        <!-- Input Area -->
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_messages"
+            android:layout_width="match_parent"
+            android:layout_height="567dp"
+            android:clipToPadding="false"
+            android:padding="16dp"
+            android:scrollbars="vertical"
+            app:flow_horizontalAlign="end"
+            app:layout_constraintBottom_toTopOf="@id/message_input_area"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/message_input_area"
             android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <!-- Divider -->
+            <View
+                android:id="@+id/divider_line"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:background="@color/black"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!-- Message Input -->
+            <EditText
+                android:id="@+id/input_message"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:drawableStart="@drawable/edit"
+                android:drawablePadding="8dp"
+                android:hint="Type your message..."
+                android:padding="8dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/btn_send_message"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/divider_line" />
+
+            <!-- Send Button -->
+            <ImageButton
+                android:id="@+id/btn_send_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:contentDescription="Send Message"
+                android:src="@drawable/chat_black"
+                app:layout_constraintBottom_toBottomOf="@id/input_message"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/input_message" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="8dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintTop_toTopOf="@+id/recycler_view_messages">
 
             <Button
                 android:id="@+id/btn_view_services"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="View Services."
                 android:backgroundTint="@color/UMAKLIGHTBLUE"
+                android:text="View Services"
                 android:textColor="@android:color/white" />
 
             <Button
@@ -81,70 +149,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="View FAQs."
                 android:backgroundTint="@color/UMAKLIGHTBLUE"
+                android:text="View FAQs"
                 android:textColor="@android:color/white" />
         </LinearLayout>
-
-        <!-- Chat Messages -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view_messages"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:clipToPadding="false"
-            android:padding="16dp"
-            android:scrollbars="vertical"
-            app:layout_constraintBottom_toTopOf="@id/message_input_area"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
-
-        <!-- Input Area -->
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/message_input_area"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:padding="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
-
-            <!-- Divider Line -->
-            <View
-                android:id="@+id/divider_line"
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:background="@color/black"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <!-- Input Message -->
-            <EditText
-                android:id="@+id/input_message"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:hint="Type your message..."
-                android:padding="8dp"
-                android:background="@android:color/transparent"
-                android:drawableStart="@drawable/edit"
-                android:drawablePadding="8dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/btn_send_message"
-                app:layout_constraintTop_toBottomOf="@id/divider_line"
-                app:layout_constraintBottom_toBottomOf="parent" />
-
-            <!-- Send Button -->
-            <ImageButton
-                android:id="@+id/btn_send_message"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/chat_black"
-                android:background="@null"
-                android:contentDescription="Send Message"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/input_message"
-                app:layout_constraintBottom_toBottomOf="@id/input_message" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!-- TabLayout -->
