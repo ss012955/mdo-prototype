@@ -4,7 +4,7 @@
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:allowBackup="true"
@@ -17,7 +17,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Prototype"
         tools:targetApi="31">
-
+        <activity
+            android:name=".viewServicesActivity"
+            android:exported="false" />
         <activity
             android:name=".ChatActivity"
             android:exported="false" />
@@ -73,4 +75,5 @@
             </intent-filter>
         </activity>
     </application>
+
 </manifest>

@@ -2,6 +2,7 @@ package com.example.prototype;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,6 +14,7 @@ import com.google.android.material.tabs.TabLayout;
 
 public class ChatActivity extends AppCompatActivity {
     TabLayout tabLayout;
+    Button viewService;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,7 +25,12 @@ public class ChatActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        viewService = findViewById(R.id.btn_view_services);
+        viewService.setOnClickListener(v -> {
 
+            Intent chatIntent = new Intent(this, viewServicesActivity.class);
+            startActivity(chatIntent);
+        });
         tabLayout = findViewById(R.id.tablayout);
         int[] icons = {R.drawable.home, R.drawable.user_journal, R.drawable.profile};
         for (int i = 0; i < icons.length; i++) {
