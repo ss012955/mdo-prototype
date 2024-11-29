@@ -52,7 +52,6 @@ public class fProfile extends Fragment implements Profile_CustomAdapter.OnEditBu
         logout = view.findViewById(R.id.tvLogOut);
         chatImageView = view.findViewById(R.id.chat);
         dashboardManager = new DashboardManager();
-
         logout.setOnClickListener(v->{
             dashboardManager.showLogoutValidator(getActivity(), fProfile.this);
         });
@@ -64,6 +63,10 @@ public class fProfile extends Fragment implements Profile_CustomAdapter.OnEditBu
         });
         settings.setOnClickListener(v ->{
             Intent intent = new Intent(getContext(), SettingsActivity.class);
+            startActivity(intent);
+        });
+        emergency_details.setOnClickListener(v ->{
+            Intent intent = new Intent(getContext(), contactActivity.class);
             startActivity(intent);
         });
         profile_recycler.setLayoutManager(new LinearLayoutManager(getContext()));
