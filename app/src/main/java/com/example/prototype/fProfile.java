@@ -69,6 +69,10 @@ public class fProfile extends Fragment implements Profile_CustomAdapter.OnEditBu
             Intent intent = new Intent(getContext(), contactActivity.class);
             startActivity(intent);
         });
+        send_feedback.setOnClickListener(v ->{
+            Intent intent = new Intent(getContext(), feedbackActivity.class);
+            startActivity(intent);
+        });
         profile_recycler.setLayoutManager(new LinearLayoutManager(getContext()));
 
         profileList = new ArrayList<>();
