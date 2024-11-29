@@ -63,6 +63,7 @@ public class fDashboard extends Fragment implements ItemClickListener {
 
             Intent intent = new Intent(getContext(), ChatActivity.class);
             startActivity(intent);
+
         });
 
         prefs = getActivity().getSharedPreferences("user_prefs", getContext().MODE_PRIVATE);
