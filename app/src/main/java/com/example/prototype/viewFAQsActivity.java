@@ -2,42 +2,40 @@ package com.example.prototype;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.tabs.TabLayout;
 
-public class ChatActivity extends AppCompatActivity {
+import java.util.ArrayList;
+import java.util.List;
+
+import Adapters.FAQsAdapter;
+import HelperClasses.FAQsItem;
+
+public class viewFAQsActivity extends AppCompatActivity {
     TabLayout tabLayout;
-    Button viewService;
-    Button viewFaqs;
+    private RecyclerView recyclerView;
+    private FAQsAdapter faqsAdapter;
+    private List<FAQsItem> faqsList =new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_chat);
+        setContentView(R.layout.activity_view_faqs);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        viewService = findViewById(R.id.btn_view_services);
-        viewService.setOnClickListener(v -> {
-
-            Intent chatIntent = new Intent(this, viewServicesActivity.class);
-            startActivity(chatIntent);
-        });
-        viewFaqs = findViewById(R.id.btn_faq);
-        viewFaqs.setOnClickListener(v -> {
-
-            Intent chatIntent = new Intent(this, viewFAQsActivity.class);
-            startActivity(chatIntent);
-        });
+        recyclerView = findViewById(R.id.recyclerViewFAQs);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         tabLayout = findViewById(R.id.tablayout);
         int[] icons = {R.drawable.home, R.drawable.user_journal, R.drawable.profile};
         for (int i = 0; i < icons.length; i++) {
@@ -55,7 +53,7 @@ public class ChatActivity extends AppCompatActivity {
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                startActivity(new Intent(ChatActivity.this, home.class)
+                startActivity(new Intent(viewFAQsActivity.this, home.class)
                         .putExtra("tab_position", tab.getPosition()));
             }
             @Override
@@ -64,5 +62,19 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onTabReselected(TabLayout.Tab tab) {}
         });
+        faqsList =new ArrayList<>();
+        populateFAQS();
+
+        // Set Adapter
+        faqsAdapter = new FAQsAdapter(faqsList);
+        recyclerView.setAdapter(faqsAdapter);
     }
+
+    public void populateFAQS(){
+        faqsList.add(new FAQsItem("What are the clinic hours?", "Clinic hours are 8 AM to 5 PM on weekdays."));
+        faqsList.add(new FAQsItem("Do I need an appointment?", "Appointments are recommended but not required."));
+        faqsList.add(new FAQsItem("Are vaccinations available?", "Yes, vaccinations are available upon request."));
+        faqsList.add(new FAQsItem("Is emergency care provided?", "Emergency care is not provided. Please visit a hospital."));
+        faqsList.add(new FAQsItem("Do you offer health screening services?", "Yes, we offer a range of health screening services."));
+        faqsList.add(new FAQsItem("Is dental care available?", "Yes, dental care is available, including cleaning and extractions."));}
 }
