@@ -30,11 +30,13 @@ import org.json.JSONObject;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
 
 public class ChatActivity extends BaseActivity {
@@ -111,17 +113,12 @@ public class ChatActivity extends BaseActivity {
                             String receiverEmail = messageObject.getString("receiver_email");
                             String timestampString = messageObject.getString("timestamp");
 
-                            // Parse the timestamp string into a long (milliseconds)
-                            long timestamp = 0;
-                            try {
-                                Date date = dateFormat.parse(timestampString); // Parse the string into a Date object
-                                if (date != null) {
-                                    timestamp = date.getTime(); // Get the time in milliseconds
-                                }
-                            } catch (ParseException e) {
-                                e.printStackTrace();
-                                Toast.makeText(ChatActivity.this, "Error parsing timestamp", Toast.LENGTH_SHORT).show();
-                            }
+                            Calendar calendar = Calendar.getInstance();
+                            TimeZone manilaTimeZone = TimeZone.getTimeZone("Asia/Manila");
+                            calendar.setTimeZone(manilaTimeZone);
+
+                            // Get the timestamp in long format (milliseconds since epoch)
+                            long timestamp = calendar.getTimeInMillis();
 
                             // Create a new Message object and add it to the list
                             Message newMessage = new Message(messageText, senderEmail, receiverEmail, timestamp);
@@ -214,8 +211,16 @@ public class ChatActivity extends BaseActivity {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 response -> {
                     if ("Message sent successfully.".equals(response)) {
-                        long timestamp = System.currentTimeMillis();
+                        Calendar calendar = Calendar.getInstance();
+                        TimeZone manilaTimeZone = TimeZone.getTimeZone("Asia/Manila");
+                        calendar.setTimeZone(manilaTimeZone);
+
+                        // Get the timestamp in long format (milliseconds since epoch)
+                        long timestamp = calendar.getTimeInMillis();
+
+                        // Create new message with Manila timestamp in long format
                         Message newMessage = new Message(messageText, userEmail, ADMIN_EMAIL, timestamp);
+
 
                         messages.add(newMessage);
                         chatAdapter.notifyItemInserted(messages.size() - 1);
