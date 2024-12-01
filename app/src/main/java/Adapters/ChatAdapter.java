@@ -1,8 +1,10 @@
 package Adapters;
 
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,19 +56,57 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
         private final TextView messageTextView;
         private final TextView senderTextView;
         private final TextView timestampTextView;
+        private final LinearLayout chatLinear;  // Declare chatLinear here
+        private final LinearLayout chatDetails;  // Declare chatLinear here
+        private final LinearLayout timeDetails;  // Declare chatLinear here
 
         public ChatViewHolder(View itemView) {
             super(itemView);
             messageTextView = itemView.findViewById(R.id.message_text);
             senderTextView = itemView.findViewById(R.id.message_sender);
             timestampTextView = itemView.findViewById(R.id.message_timestamp);
+            chatLinear = itemView.findViewById(R.id.chatLinear);
+            chatDetails = itemView.findViewById(R.id.chatDetails);
+            timeDetails = itemView.findViewById(R.id.timeDetails);
+
+
         }
 
         public void bind(Message message) {
             messageTextView.setText(message.getMessage());
-            senderTextView.setText(message.getSender());
+            senderTextView.setText(message.getSenderEmail());
             Date messageDate = new Date(message.getTimestamp());
             Date currentDate = new Date();
+
+
+            if ("admin2@example.com".equals(message.getSenderEmail())) {
+                // Set the sender's text and make it visible
+                senderTextView.setText("MDO Admin");
+                senderTextView.setVisibility(View.VISIBLE);
+
+                // Align the message bubble and timestamp to the start (left)
+                chatLinear.setGravity(Gravity.START);   // Align the message bubble to the left
+                chatDetails.setGravity(Gravity.START);  // Align the whole chat details to the left
+
+                // Align sender's name and timestamp to the left
+                senderTextView.setGravity(Gravity.START);
+                timestampTextView.setForegroundGravity(Gravity.START);
+
+                // Set the background for the admin's message
+                chatLinear.setBackgroundResource(R.drawable.roundedchat_admin);
+
+            } else {
+                chatLinear.setGravity(Gravity.END);   // Align the message bubble to the right
+                chatDetails.setGravity(Gravity.END);  // Align the whole chat details to the right
+
+                // Align sender's name and timestamp to the right
+                senderTextView.setGravity(Gravity.END);
+                timestampTextView.setForegroundGravity(Gravity.START);
+
+                // Set the background for the normal message
+                chatLinear.setBackgroundResource(R.drawable.rounded_chat);
+            }
+
 
             // Format the timestamp for today (only show time)
             SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm a", Locale.getDefault());
