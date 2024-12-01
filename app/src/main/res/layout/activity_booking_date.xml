@@ -115,14 +115,20 @@
             <!-- Calendar -->
 
 
-            <CalendarView
+            <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/calendarView"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_marginHorizontal="10dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:accessibilityHeading="false"
-                android:background="@drawable/rounded_edge"
-                android:backgroundTint="@color/navy_blue" />
+                app:mcv_showOtherDates="none"
+                app:mcv_headerTextAppearance="@style/MonthTextAppearance"
+                app:mcv_weekDayTextAppearance="@style/WeekDayTextAppearance"
+                app:mcv_dateTextAppearance="@style/DateTextAppearance"
+                app:mcv_selectionColor="@color/UMAKYELLOW"
+                app:mcv_leftArrow="@drawable/arrow_back"
+                app:mcv_rightArrow="@drawable/arrow_forward"
+                />
 
             <Button
                 android:id="@+id/buttomTime"

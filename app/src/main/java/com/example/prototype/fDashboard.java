@@ -1,5 +1,8 @@
 package com.example.prototype;
 
+import static HelperClasses.SignupManager.context;
+import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -14,17 +17,25 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import Adapters.DashboardAdapter;
+import Adapters.DefaultAdapter;
 import Adapters.TriviaDashboardAdapter;
 import HelperClasses.AnnouncementManager;
 import HelperClasses.AnnouncementsItems;
+import HelperClasses.AppointmentsClass;
 import HelperClasses.AppointmentsManager;
+import HelperClasses.EventDecorator;
 import HelperClasses.ItemClickListener;
 import HelperClasses.TriviaItem;
 import HelperClasses.TriviaManager;
@@ -37,7 +48,6 @@ public class fDashboard extends Fragment implements ItemClickListener {
     private List<DashboardContent> contentList;
     private SharedPreferences prefs;
     private ImageView chatImageView;
-
     public fDashboard() {
         // Required empty public constructor
     }
@@ -83,6 +93,7 @@ public class fDashboard extends Fragment implements ItemClickListener {
                 adapter.notifyDataSetChanged(); // Update the RecyclerView
             }
         });
+
         return view;
 
     }
@@ -165,5 +176,9 @@ public class fDashboard extends Fragment implements ItemClickListener {
         put("Announcements", Announcements.class);
         put("Trivia", Trivia.class);
     }};
+    public DashboardAdapter getAdapter() {
+        return adapter;
+    }
+
 
 }

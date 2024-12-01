@@ -2,7 +2,10 @@ package com.example.prototype;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,16 +19,42 @@ public class ChatActivity extends AppCompatActivity {
     TabLayout tabLayout;
     Button viewService;
     Button viewFaqs;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_chat);
+
+        View messageInputArea = findViewById(R.id.message_input_area);
+
+        ViewCompat.setOnApplyWindowInsetsListener(messageInputArea, (v, insets) -> {
+            Insets imeInsets = insets.getInsets(WindowInsetsCompat.Type.ime());
+
+            // Ensure padding matches the keyboard height when visible
+            v.setPadding(
+                    v.getPaddingLeft(),
+                    v.getPaddingTop(),
+                    v.getPaddingRight(),
+                    imeInsets.bottom // This adjusts for the keyboard height
+            );
+            return WindowInsetsCompat.CONSUMED;
+        });
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            boolean isKeyboardVisible = insets.isVisible(WindowInsetsCompat.Type.ime());
+
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+
+            if (isKeyboardVisible) {
+                tabLayout.setVisibility(View.GONE);
+            } else {
+                tabLayout.setVisibility(View.VISIBLE);
+            }
+
             return insets;
         });
+
         viewService = findViewById(R.id.btn_view_services);
         viewService.setOnClickListener(v -> {
 

@@ -7,7 +7,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/UMAKBLUE"
-    tools:context=".ChatActivity">
+    tools:context=".ChatActivity"
+    android:fitsSystemWindows="true">
 
     <!-- UMAK Logo -->
     <ImageView
@@ -49,6 +50,7 @@
 
     <!-- Chat Area -->
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/chat_area"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@color/white"
@@ -105,10 +107,10 @@
             android:id="@+id/message_input_area"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:padding="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintEnd_toEndOf="parent"
+           >
 
             <!-- Divider Line -->
             <View
@@ -130,6 +132,7 @@
                 android:background="@android:color/transparent"
                 android:drawableStart="@drawable/edit"
                 android:drawablePadding="8dp"
+                android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/btn_send_message"
                 app:layout_constraintTop_toBottomOf="@id/divider_line"

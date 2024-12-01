@@ -1,6 +1,6 @@
 package Adapters;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +18,6 @@ import HelperClasses.AnnouncementsItems;
 
 public class AnnouncementsAdapter extends RecyclerView.Adapter<AnnouncementsAdapter.ViewHolder> {
     private final List<AnnouncementsItems> announcementsList;
-
     public AnnouncementsAdapter(List<AnnouncementsItems> announcementsList) {
         this.announcementsList = announcementsList;
     }

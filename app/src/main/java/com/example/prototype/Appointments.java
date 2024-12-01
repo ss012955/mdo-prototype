@@ -1,13 +1,17 @@
 package com.example.prototype;
 
+import static HelperClasses.SignupManager.context;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.core.graphics.Insets;
@@ -17,12 +21,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.tabs.TabLayout;
-
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import Adapters.AppointmentsAdapter;
 import Adapters.DefaultAdapter;
+import HelperClasses.AppointmentDaysClass;
 import HelperClasses.AppointmentsClass;
 import HelperClasses.AppointmentsManager;
 import HelperClasses.ItemClickListener;
@@ -31,13 +38,14 @@ public class Appointments extends BaseActivity implements ItemClickListener {
     private RecyclerView recyclerView;
     private List<AppointmentsClass> appointmentsList;
     private Button button;
-    private CalendarView calendarView;
+    MaterialCalendarView calendarView;
     private AppointmentsAdapter adapter = new AppointmentsAdapter(appointmentsList);
     private SharedPreferences prefs;
     private String userEmail;
     TabLayout tabLayout;
     private ImageView chatImageView;
-
+    private List<AppointmentDaysClass> appointmentsDays = new ArrayList<>();
+    private final HashSet<CalendarDay> fetched = new HashSet<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +56,8 @@ public class Appointments extends BaseActivity implements ItemClickListener {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        calendarView = findViewById(R.id.calendarView);
         chatImageView = findViewById(R.id.chat);
         chatImageView.setOnClickListener(v -> {
 
@@ -108,17 +118,21 @@ public class Appointments extends BaseActivity implements ItemClickListener {
             AppointmentsManager manager = new AppointmentsManager(this);
 
             // Pass a callback to handle the appointment list after it is fetched
-            manager.fetchAppointments(url, userEmail, appointmentsList, adapter, this, new AppointmentsManager.AppointmentsCallback() {
+            manager.fetchAppointments(url, userEmail, appointmentsList, appointmentsDays, adapter, this, new AppointmentsManager.AppointmentsCallback() {
                 @Override
-                public void onAppointmentsFetched(List<AppointmentsClass> fetchedList) {
-                    if (fetchedList.isEmpty()) {
-                        // Use the DefaultAdapter if there are no appointments
+                public void onAppointmentsFetched(List<AppointmentsClass> fetchedList, List<AppointmentDaysClass> appointmentsDays) {
+                    if (fetchedList.isEmpty() && appointmentsDays.isEmpty()) {
                         DefaultAdapter defaultAdapter = new DefaultAdapter("You have no appointments");
                         recyclerView.setAdapter(defaultAdapter);
                     } else {
+                        Log.d("AppointmentsDebug", "Applying decorator with dates: " + appointmentsDays);
                         // Use the normal adapter if appointments exist
                         recyclerView.setAdapter(adapter);
                     }
+                }
+                @Override
+                public void onError(String errorMessage) {
+                    Toast.makeText(context, "Error fetching appointments: " + errorMessage, Toast.LENGTH_LONG).show();
                 }
             });
         }
