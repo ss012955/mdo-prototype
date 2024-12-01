@@ -39,27 +39,6 @@ public class LoginManager implements DefaultLifecycleObserver {
                                 ((MainActivity) context).runOnUiThread(() -> {
                                     callback.onLoginSuccess();
                                 });
-
-                                user.getIdToken(true).addOnCompleteListener(tokenTask -> {
-                                    if (tokenTask.isSuccessful()) {
-                                        String token = tokenTask.getResult().getToken();
-
-                                        // Save token to SharedPreferences
-                                        SharedPreferences prefs = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
-                                        SharedPreferences.Editor editor = prefs.edit();
-                                        editor.putString("id_token", token);
-                                        editor.apply();
-
-                                        Log.d("LoginManager", "Token saved successfully: " + token);
-
-                                        // Notify login success
-                                        ((MainActivity) context).runOnUiThread(callback::onLoginSuccess);
-                                    } else {
-                                        Log.e("LoginManager", "Error fetching token: " + tokenTask.getException());
-                                        ((MainActivity) context).runOnUiThread(() -> callback.onLoginFailed("Failed to get ID token."));
-                                    }
-                                });
-
                             } else {
                                 // Email not verified
                                 ((MainActivity) context).runOnUiThread(() -> {
