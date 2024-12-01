@@ -116,6 +116,7 @@
                     app:mcv_leftArrow="@drawable/arrow_back"
                     android:layout_marginBottom="10dp"
                     app:mcv_rightArrow="@drawable/arrow_forward"
+                    app:mcv_selectionMode="none"
                     />
 
                 <!-- RecyclerView -->
