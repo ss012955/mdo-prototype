@@ -106,14 +106,15 @@
                     xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/calendarView"
                     android:layout_width="match_parent"
-                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginHorizontal="20dp"
                     android:layout_height="wrap_content"
                     app:mcv_showOtherDates="none"
                     app:mcv_headerTextAppearance="@style/MonthTextAppearance"
                     app:mcv_weekDayTextAppearance="@style/WeekDayTextAppearance"
                     app:mcv_dateTextAppearance="@style/DateTextAppearance"
-                    app:mcv_selectionColor="@color/UMAKYELLOW"
+                    app:mcv_selectionColor="#D3D3D3"
                     app:mcv_leftArrow="@drawable/arrow_back"
+                    android:layout_marginBottom="10dp"
                     app:mcv_rightArrow="@drawable/arrow_forward"
                     />
 
@@ -122,7 +123,6 @@
                     android:id="@+id/recyclerView"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginHorizontal="16dp"
                     android:layout_marginBottom="16dp" />
             </LinearLayout>
         </LinearLayout>

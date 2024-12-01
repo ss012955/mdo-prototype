@@ -34,11 +34,12 @@ import HelperClasses.AnnouncementsItems;
 import HelperClasses.AppointmentDaysClass;
 import HelperClasses.AppointmentsClass;
 import HelperClasses.AppointmentsManager;
-import HelperClasses.EventDecorator;
+import HelperClasses.EventDecoratorPending;
 import HelperClasses.ItemClickListener;
 import HelperClasses.TriviaItem;
 import HelperClasses.TriviaManager;
 import Singleton.allAppointments;
+import HelperClasses.EventDecoratorApproved;
 
 public class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 

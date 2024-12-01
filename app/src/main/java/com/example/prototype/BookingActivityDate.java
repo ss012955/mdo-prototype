@@ -20,6 +20,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.tabs.TabLayout;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 
 import java.sql.Time;
 import java.text.SimpleDateFormat;
@@ -37,7 +38,7 @@ public class BookingActivityDate extends BaseActivity {
     String chosenTimeSlot;
     String service, serviceType;
     ProgressBar progressBar;
-    CalendarView calendarView;
+    MaterialCalendarView calendarView;
     private ImageView chatImageView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -35,7 +35,6 @@ import HelperClasses.AnnouncementManager;
 import HelperClasses.AnnouncementsItems;
 import HelperClasses.AppointmentsClass;
 import HelperClasses.AppointmentsManager;
-import HelperClasses.EventDecorator;
 import HelperClasses.ItemClickListener;
 import HelperClasses.TriviaItem;
 import HelperClasses.TriviaManager;
