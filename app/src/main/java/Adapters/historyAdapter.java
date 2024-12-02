@@ -19,19 +19,18 @@ import java.util.List;
 
 import HelperClasses.HistoryItem;
 
-public class historyJournalAdapter extends RecyclerView.Adapter<historyJournalAdapter.HistoryViewHolder> {
+public class historyAdapter extends RecyclerView.Adapter<historyAdapter.HistoryViewHolder> {
 
     private final List<HistoryItem> historyList;
-    private Context context;
-    public historyJournalAdapter(Context context,List<HistoryItem> historyList) {
+
+    public historyAdapter(List<HistoryItem> historyList) {
         this.historyList = historyList;
-        this.context = context;
     }
 
     @NonNull
     @Override
     public HistoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_history_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_history_real, parent, false);
         return new HistoryViewHolder(view);
     }
 
@@ -39,11 +38,7 @@ public class historyJournalAdapter extends RecyclerView.Adapter<historyJournalAd
     public void onBindViewHolder(@NonNull HistoryViewHolder holder, int position) {
         HistoryItem historyItem = historyList.get(position);
         holder.titleTextView.setText(historyItem.getTitle());
-        holder.itemView.setOnClickListener(v -> {
-            // When an item is clicked, start the Trivia activity
-            Intent intent = new Intent(context, History.class);
-            context.startActivity(intent); // Start the Trivia activity
-        });
+        holder.contentTextView.setText(historyItem.getDetails());
     }
 
     @Override
@@ -58,7 +53,8 @@ public class historyJournalAdapter extends RecyclerView.Adapter<historyJournalAd
         public HistoryViewHolder(@NonNull View itemView) {
             super(itemView);
             historyRecyclerView = itemView.findViewById(R.id.historyRecyclerView);
-            titleTextView = itemView.findViewById(R.id.appointmentTitleTextView); // ID should match XML// ID should match XML
+            titleTextView = itemView.findViewById(R.id.appointmentTitleTextView);
+            contentTextView = itemView.findViewById(R.id.appointmentDetailsTextView);// ID should match XML// ID should match XML
         }
 
     }
