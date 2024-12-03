@@ -18,6 +18,9 @@
         android:theme="@style/Theme.Prototype"
         tools:targetApi="31">
         <activity
+            android:name=".contactActivity"
+            android:exported="false" />
+        <activity
             android:name=".termsActivity"
             android:exported="false" />
         <activity
