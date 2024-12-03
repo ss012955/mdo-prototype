@@ -38,6 +38,8 @@ import java.util.Map;
 import HelperClasses.ProfileClass;
 import HelperClasses.ProfileDatabaseHelper;
 import HelperClasses.UpdateProfileManager;
+import com.google.android.material.tabs.TabLayout;
+
 
 public class UpdateProfile extends AppCompatActivity implements Profile_CustomAdapter.OnEditButtonClickListener {
     private SharedPreferences prefs;
@@ -51,6 +53,7 @@ public class UpdateProfile extends AppCompatActivity implements Profile_CustomAd
     ImageView eyePassword, eyeConfirmPassword;
     Button buttonSave;
     UpdateProfileManager updateProfileManager;
+    TabLayout tabLayout;
 
 
 
@@ -73,6 +76,7 @@ public class UpdateProfile extends AppCompatActivity implements Profile_CustomAd
             Toast.makeText(UpdateProfile.this, message, Toast.LENGTH_SHORT).show();
         };
         showToast.run(); // Display the toast message
+        tabLayout = findViewById(R.id.tablayout);
 
         // Initialize RecyclerView
         profile_recycler = findViewById(R.id.profile_recyclerview);
@@ -130,6 +134,8 @@ public class UpdateProfile extends AppCompatActivity implements Profile_CustomAd
         });
 
 
+        tabLayouter();
+
     }
     public void onEditButtonClick(int position) {
 
@@ -144,7 +150,34 @@ public class UpdateProfile extends AppCompatActivity implements Profile_CustomAd
         }
     }
 
+    public void tabLayouter(){
+        tabLayout = findViewById(R.id.tablayout);
+        int[] icons = {R.drawable.home, R.drawable.user_journal, R.drawable.profile};
+        for (int i = 0; i < icons.length; i++) {
+            tabLayout.addTab(tabLayout.newTab().setIcon(icons[i]));
+        }
+        tabLayout.selectTab(null);
+        // Reset the tab icons to their unselected state
+        for (int i = 0; i < tabLayout.getTabCount(); i++) {
+            TabLayout.Tab tab = tabLayout.getTabAt(i);
+            if (tab != null) {
+                tab.setIcon(icons[i]); // Reset to the original icon (unselected)
+            }
+        }
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                startActivity(new Intent(UpdateProfile.this, home.class)
+                        .putExtra("tab_position", tab.getPosition()));
+            }
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {}
 
+            //Local uploading of il
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {}
+        });
+    }
 
 
     //Local uploading of il
