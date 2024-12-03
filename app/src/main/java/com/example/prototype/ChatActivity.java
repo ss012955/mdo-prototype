@@ -49,7 +49,7 @@ public class ChatActivity extends BaseActivity {
     List<Message> messages = new ArrayList<>();
     private static final String ADMIN_EMAIL = "admin2@example.com";
     String userEmail;
-    Button viewService;
+    Button viewService, viewFaqs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +72,11 @@ public class ChatActivity extends BaseActivity {
             startActivity(chatIntent);
         });
 
+        viewFaqs = findViewById(R.id.btn_faq);
+        viewFaqs.setOnClickListener(v -> {
+            Intent chatIntent = new Intent(this, viewFAQsActivity.class);
+            startActivity(chatIntent);
+        });
 
         tabLayout = findViewById(R.id.tablayout);
         buttonSendMessage = findViewById(R.id.btn_send_message);
