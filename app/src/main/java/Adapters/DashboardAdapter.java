@@ -27,7 +27,8 @@ import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-
+import HelperClasses.EventDecoratorPending;
+import HelperClasses.EventDecoratorApproved;
 import HelperClasses.AnnouncementManager;
 import HelperClasses.AnnouncementsItems;
 import HelperClasses.AppointmentDaysClass;
