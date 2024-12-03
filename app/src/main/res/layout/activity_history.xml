@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/UMAKBLUE"
-    tools:context=".viewFAQsActivity">
+    tools:context=".History">
 
     <!-- UMAK Logo -->
     <ImageView
@@ -39,7 +39,7 @@
         android:layout_marginTop="6dp"
         android:fontFamily="@font/metropolis_bold"
         android:padding="7dp"
-        android:text="Help Center"
+        android:text="User Journal"
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="30sp"
@@ -85,7 +85,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:layout_marginStart="13dp"
-                    android:text="Frequently Asked Questions"
+                    android:text="Appoitnment History"
                     android:fontFamily="@font/metropolis_bold"
                     android:textSize="20sp"
                     android:textColor="@color/black"
@@ -93,7 +93,7 @@
 
                 <!-- RecyclerView -->
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerViewFAQs"
+                    android:id="@+id/recyclerViewHistory"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:padding="10dp"
