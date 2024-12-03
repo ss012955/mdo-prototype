@@ -1,45 +1,51 @@
 package Adapters;
 
+
+
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CalendarView;
-import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.example.prototype.Announcements;
 import com.example.prototype.BookingActivity;
 import com.example.prototype.DashboardContent;
 import com.example.prototype.R;
 import com.example.prototype.Trivia;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import HelperClasses.AnnouncementManager;
 import HelperClasses.AnnouncementsItems;
+import HelperClasses.AppointmentDaysClass;
 import HelperClasses.AppointmentsClass;
+import HelperClasses.AppointmentsManager;
 import HelperClasses.ItemClickListener;
 import HelperClasses.TriviaItem;
 import HelperClasses.TriviaManager;
 import Singleton.allAppointments;
 
 public class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private static List<AppointmentsClass> appointmentsList;
+
     private final Context context;
 
     private static final int TYPE_ANNOUNCEMENTS = 0;
     private static final int TYPE_APPOINTMENTS = 1;
     private static final int TYPE_TRIVIA = 2;
-
+    public SharedPreferences prefs;
     private List<DashboardContent> contentList;
     public static ItemClickListener clickListener;
     public void setClickListener(ItemClickListener myListener){
@@ -54,6 +60,7 @@ public class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         // If you need this constructor, you can either provide a default context or leave it for future use
         this.context = null;  // Or handle as appropriate
         this.contentList = contentList;
+
     }
 
 
@@ -164,28 +171,30 @@ public class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     // Define ViewHolder for Appointments
     static class AppointmentsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        CalendarView calendarView;
+        MaterialCalendarView calendarView;
         Button btnStartBooking;
         TextView tvNumberofAppointments;
 
+        private Context context;
+        private List<AppointmentsClass> appointmentsList = new ArrayList<>();
+        private List<AppointmentDaysClass> appointmentsDays = new ArrayList<>();
+        private final HashSet<CalendarDay> fetched = new HashSet<>();
         AppointmentsViewHolder(View itemView) {
             super(itemView);
             calendarView = itemView.findViewById(R.id.calendarView);
             btnStartBooking = itemView.findViewById(R.id.btnStartBooking);
             tvNumberofAppointments = itemView.findViewById(R.id.tvNumberofAppointments);
-
+            context = itemView.getContext();
             itemView.setOnClickListener(this);
         }
 
-        void bind(DashboardContent content) {
+        void bind(DashboardContent content){
             int numberOfAppointments = allAppointments.getInstance().getNumberOfAppointments();
-
             String appointmentText = "You have " + numberOfAppointments + " appointment";
             if (numberOfAppointments != 1) {
                 appointmentText += "s"; // Add "s" if more than 1 appointment
             }
             tvNumberofAppointments.setText(appointmentText + ".");
-
 
             btnStartBooking.setOnClickListener(v -> {
                 // Start the BookingActivity
@@ -194,7 +203,35 @@ public class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             });
             itemView.setOnClickListener(this);
 
+            fetchAppointments();
 
+        }
+        private void fetchAppointments() {
+            String url = "https://umakmdo-91b845374d5b.herokuapp.com/fetch_bookings.php";
+
+            // Retrieve SharedPreferences locally
+            SharedPreferences prefs = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
+            String userEmail = prefs.getString("user_email", "No email found");
+            AppointmentsManager manager = new AppointmentsManager(context);
+            // Use the fetchAppointments() method defined earlier
+            manager.fetchAppointments(url, userEmail, appointmentsList,appointmentsDays,null,context, new AppointmentsManager.AppointmentsCallback() {
+                @Override
+                public void onAppointmentsFetched(List<AppointmentsClass> fetchedAppointments, List<AppointmentDaysClass> fetchedDays) {
+                    appointmentsList.clear();
+                    appointmentsList.addAll(fetchedAppointments);
+                    appointmentsDays.clear();
+                    for (AppointmentDaysClass day : fetchedDays) {
+                        // Assuming AppointmentDaysClass has getYear(), getMonth(), and getDay() methods
+                        CalendarDay calendarDay = CalendarDay.from(day.getYear(), day.getMonth() - 1, day.getDay());
+                        fetched.add(calendarDay);
+                    }
+                }
+                @Override
+                public void onError(String errorMessage) {
+                    Toast.makeText(context, "Error fetching appointments: " + errorMessage, Toast.LENGTH_LONG).show();
+                }
+
+            });
         }
 
         @Override

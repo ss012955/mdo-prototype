@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Weekday Text Appearance -->
+    <style name="WeekDayTextAppearance" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">@color/UMAKYELLOW</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/metropolis_bold</item>
+    </style>
+
+    <!-- Date Text Appearance -->
+    <style name="DateTextAppearance" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">@font/metropolis_regular</item>
+    </style>
+    <!-- Month Text Appearance -->
+    <style name="MonthTextAppearance" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:fontFamily">@font/metropolis_bold</item>
+    </style>
+</resources>

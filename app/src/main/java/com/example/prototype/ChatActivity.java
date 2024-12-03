@@ -7,7 +7,10 @@ import android.os.Bundle;
 import Adapters.ChatAdapter;
 import Singleton.Message;
 
+import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -58,12 +61,33 @@ public class ChatActivity extends BaseActivity {
         setContentView(R.layout.activity_chat);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            boolean isKeyboardVisible = insets.isVisible(WindowInsetsCompat.Type.ime());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            if (isKeyboardVisible) {
+                tabLayout.setVisibility(View.GONE);
+            } else {
+                tabLayout.setVisibility(View.VISIBLE);
+            }
             return insets;
         });
+
         SharedPreferences prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
         userEmail = prefs.getString("user_email", "No email found");
         String token = prefs.getString("id_token", null);
+
+
+        View messageInputArea = findViewById(R.id.message_input_area);
+        ViewCompat.setOnApplyWindowInsetsListener(messageInputArea, (v, insets) -> {
+            Insets imeInsets = insets.getInsets(WindowInsetsCompat.Type.ime());
+            // Ensure padding matches the keyboard height when visible
+            v.setPadding(
+                    v.getPaddingLeft(),
+                    v.getPaddingTop(),
+                    v.getPaddingRight(),
+                    imeInsets.bottom // This adjusts for the keyboard height
+            );
+            return WindowInsetsCompat.CONSUMED;
+        });
 
         viewService = findViewById(R.id.btn_view_services);
         viewService.setOnClickListener(v -> {
