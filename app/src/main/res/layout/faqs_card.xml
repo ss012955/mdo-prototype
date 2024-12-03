@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    app:cardCornerRadius="35dp"
+    app:cardBackgroundColor="@color/white"
+    android:padding="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Question Text -->
+        <TextView
+            android:id="@+id/faqsQuestion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/metropolis_bold"
+            android:padding="8dp"
+            android:layout_margin="10dp"
+            android:text="MEDICAL SERVICES"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <!-- Answer Text -->
+        <TextView
+            android:id="@+id/faqsAnswer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:fontFamily="@font/metropolis_bold"
+            android:padding="8dp"
+            android:layout_margin="10dp"
+            android:text="Description of medical services goes here."
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

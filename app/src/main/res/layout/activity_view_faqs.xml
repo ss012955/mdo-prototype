@@ -85,7 +85,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:layout_marginStart="13dp"
-                    android:text="Services"
+                    android:text="Frequently Asked Questions"
                     android:fontFamily="@font/metropolis_bold"
                     android:textSize="20sp"
                     android:textColor="@color/black"
@@ -93,7 +93,7 @@
 
                 <!-- RecyclerView -->
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerViewServices"
+                    android:id="@+id/recyclerViewFAQs"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:padding="10dp"
