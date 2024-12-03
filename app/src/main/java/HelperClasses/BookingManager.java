@@ -11,7 +11,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
 import com.example.prototype.R;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -70,28 +75,39 @@ public class BookingManager {
         });
     }
 
-    public Date handleCalendarDateSelection(CalendarView calendarView, Context context) {
-        calendarView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
-            Calendar selectedCalendar = Calendar.getInstance();
-            selectedCalendar.set(year, month, dayOfMonth);
+    public Date handleCalendarDateSelection(MaterialCalendarView calendarView, Context context) {
+        // Set the OnDateChangedListener for MaterialCalendarView
+        calendarView.setOnDateChangedListener(new OnDateSelectedListener() {
+            @Override
+            public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
+                selectedDate = null;
+                // Create a Calendar instance with the selected date
+                Calendar selectedCalendar = Calendar.getInstance();
+                selectedCalendar.set(date.getYear(), date.getMonth() - 1, date.getDay()); // Month is 0-based
 
-            Calendar today = Calendar.getInstance();
-            int selectedDayOfWeek = selectedCalendar.get(Calendar.DAY_OF_WEEK);
+                // Get today's date to compare
+                Calendar today = Calendar.getInstance();
 
-            if (selectedCalendar.before(today)) {
-                Toast.makeText(context, "Please select a future date.", Toast.LENGTH_SHORT).show();
-                return;
+                // Check if the selected date is in the past
+                if (selectedCalendar.before(today)) {
+                    Toast.makeText(context, "Please select a future date.", Toast.LENGTH_SHORT).show();
+                    return; // Exit if the date is in the past
+                }
+
+                // Check if the selected date is a weekend (Saturday or Sunday)
+                int selectedDayOfWeek = selectedCalendar.get(Calendar.DAY_OF_WEEK);
+                if (selectedDayOfWeek == Calendar.SATURDAY || selectedDayOfWeek == Calendar.SUNDAY) {
+                    Toast.makeText(context, "Weekends are not available, please choose a weekday.", Toast.LENGTH_SHORT).show();
+                    return; // Exit if the date is a weekend
+                }
+
+                // Update the selectedDate only if it's valid
+                selectedDate = selectedCalendar.getTime();
+                Toast.makeText(context, "Date selected: " + selectedDate, Toast.LENGTH_SHORT).show();
             }
-
-            if (selectedDayOfWeek == Calendar.SATURDAY || selectedDayOfWeek == Calendar.SUNDAY) {
-                Toast.makeText(context, "Weekends are not available, please choose a weekday.", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            selectedDate = selectedCalendar.getTime();
-            Toast.makeText(context, "Date selected: " + selectedDate, Toast.LENGTH_SHORT).show();
         });
-        return selectedDate;
+
+        return selectedDate; // Return the selected date (or null if no date is selected yet)
     }
 
 

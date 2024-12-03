@@ -53,7 +53,7 @@ public class AppointmentsAdapter extends RecyclerView.Adapter<AppointmentsAdapte
         if ("Pending".equalsIgnoreCase(status)) {
             holder.tvStatus.setBackgroundColor(Color.YELLOW);
         } else if ("Approved".equalsIgnoreCase(status)) {
-            holder.tvStatus.setBackgroundColor(Color.GREEN);
+            holder.tvStatus.setBackgroundColor(Color.parseColor("#4BB543"));
         } else if ("Cancelled".equalsIgnoreCase(status)) {
             holder.tvStatus.setBackgroundColor(Color.RED);
         } else {

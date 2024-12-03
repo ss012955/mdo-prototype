@@ -34,6 +34,8 @@ import Singleton.allAppointments;
 public class AppointmentsManager {
     private Context context;
     private HashSet<CalendarDay> appointmentsDays = new HashSet<>();
+    private HashSet<CalendarDay> approvedDays = new HashSet<>();
+    private HashSet<CalendarDay> pendingDays = new HashSet<>();
     CalendarDay calendarDay;
 
     public AppointmentsManager() {
@@ -114,16 +116,28 @@ public class AppointmentsManager {
                                             int day = Integer.parseInt(dateParts[2]);
                                             calendarDay = CalendarDay.from(year, month, day);
 
-                                            AppointmentDaysClass appointmentDaysClass = new AppointmentDaysClass(calendarDay.toString());
+                                            AppointmentDaysClass appointmentDaysClass = new AppointmentDaysClass(calendarDay.toString(), status);
                                             appointmentDaysClasses.add(appointmentDaysClass);
-                                            appointmentsDays.add(calendarDay);
+                                            if(status.equals("Approved")){
+                                                approvedDays.add(calendarDay);
+                                            }
+                                            else if(status.equals("Pending")){
+                                                pendingDays.add(calendarDay);
+                                            }
+
+
                                         }
+
+                                        MaterialCalendarView calendarView = ((Activity) context).findViewById(R.id.calendarView);
+                                        Set<CalendarDay> combinedDates = new HashSet<>(approvedDays);
+                                        calendarView.addDecorator(new EventDecoratorApproved(combinedDates));
+
+                                        Set<CalendarDay> combinedPendingDates = new HashSet<>(pendingDays);
+                                        calendarView.addDecorator(new EventDecoratorPending(combinedPendingDates));
+
                                     }
                                     Log.d("AppointmentsDebug", "Applying decorator with dates: " + appointmentsDays);
-                                    MaterialCalendarView calendarView = ((Activity) context).findViewById(R.id.calendarView);
-                                    calendarView.addDecorator(new EventDecorator(new HashSet<>(appointmentsDays)));
-                                    Set<CalendarDay> combinedDates = new HashSet<>(appointmentsDays);
-                                    calendarView.addDecorator(new EventDecorator(combinedDates));
+
                                     // Notify the callback
                                     callback.onAppointmentsFetched(appointmentsList, appointmentDaysClasses);
                                     // Notify the adapter to update the RecyclerView

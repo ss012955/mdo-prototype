@@ -26,6 +26,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 
 import HelperClasses.BookingManager;
 
@@ -37,7 +38,7 @@ public class BookingActivityDate extends BaseActivity {
     String chosenTimeSlot;
     String service, serviceType;
     ProgressBar progressBar;
-    CalendarView calendarView;
+    MaterialCalendarView calendarView;
     private ImageView chatImageView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

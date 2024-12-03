@@ -64,7 +64,7 @@
                 app:mcv_headerTextAppearance="@style/MonthTextAppearance"
                 app:mcv_weekDayTextAppearance="@style/WeekDayTextAppearance"
                 app:mcv_dateTextAppearance="@style/DateTextAppearance"
-                app:mcv_selectionColor="@color/UMAKYELLOW"
+                app:mcv_selectionColor="#D3D3D3"
                 app:mcv_leftArrow="@drawable/arrow_back"
                 app:mcv_rightArrow="@drawable/arrow_forward"
                 />
@@ -75,7 +75,7 @@
                 android:layout_height="wrap_content"
                 android:text="Click to start booking"
                 android:textSize="16sp"
-                android:layout_marginVertical="10dp"
+                android:layout_marginVertical="5dp"
                 android:backgroundTint="@color/white"
                 android:textColor="@color/black" />
         </LinearLayout>
