@@ -84,7 +84,14 @@ public class Trivia extends BaseActivity implements ItemClickListener {
         for (int i = 0; i < icons.length; i++) {
             tabLayout.addTab(tabLayout.newTab().setIcon(icons[i]));
         }
-
+        tabLayout.selectTab(null);
+        // Reset the tab icons to their unselected state
+        for (int i = 0; i < tabLayout.getTabCount(); i++) {
+            TabLayout.Tab tab = tabLayout.getTabAt(i);
+            if (tab != null) {
+                tab.setIcon(icons[i]); // Reset to the original icon (unselected)
+            }
+        }
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -97,7 +104,6 @@ public class Trivia extends BaseActivity implements ItemClickListener {
             @Override
             public void onTabReselected(TabLayout.Tab tab) {}
         });
-        createNotificationChannel();
 
     }
 
@@ -112,8 +118,6 @@ public class Trivia extends BaseActivity implements ItemClickListener {
     private void fetchTrivia() {
         String url = "https://umakmdo-91b845374d5b.herokuapp.com/trivia.php?type=all";  // Your server URL
 
-        SharedPreferences sharedPreferences = getSharedPreferences("TriviaPrefs", Context.MODE_PRIVATE);
-        String lastFetchedTrivia = sharedPreferences.getString("lastFetchedTrivia", "");
 
         // Make a GET request to fetch trivia data
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, response -> {
@@ -127,15 +131,7 @@ public class Trivia extends BaseActivity implements ItemClickListener {
                     String text = triviaObject.getString("details");
                     triviaList.add(0, new TriviaItem(title, text));
 
-                    if (!jsonArray.equals(lastFetchedTrivia)) {
-                        // New trivia, show the notification
-                        showNewTriviaNotification(title, text);
 
-                        // Save the new trivia in SharedPreferences
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putString("lastFetchedTrivia", response); // Store the new trivia
-                        editor.apply();
-                    }
                 }
                 triviaAdapter.notifyDataSetChanged();
             } catch (JSONException e) {
@@ -152,42 +148,7 @@ public class Trivia extends BaseActivity implements ItemClickListener {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
     }
-    private void createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(
-                    "TRIVIA_CHANNEL",
-                    "Trivia Channel",
-                    NotificationManager.IMPORTANCE_HIGH
-            );
-            channel.setDescription("Channel for Trivia notifications");
-            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.createNotificationChannel(channel);
-        }
-    }
 
-    private void showNewTriviaNotification(String title, String text) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            boolean hasPermission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS)
-                    == PackageManager.PERMISSION_GRANTED;
-            if (!hasPermission) {
-                // Prompt the user for permission
-                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, 1);
-                return;
-            }
-        }
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "TRIVIA_CHANNEL")
-                .setSmallIcon(R.drawable.ic_notification)
-                .setContentTitle("New Trivia Added")
-                .setContentText(title + "\n" + text)
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setDefaults(NotificationCompat.DEFAULT_ALL)
-                .setAutoCancel(true);
-        runOnUiThread(() -> {
-            NotificationManagerCompat.from(this).notify(1, builder.build());
-        });
-
-    }
 
     @Override
     public void onClick(View v, int position) {

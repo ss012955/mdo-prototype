@@ -69,12 +69,7 @@ public class Announcements extends BaseActivity implements ItemClickListener {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         announcementsAdapter = new AnnouncementsAdapter(announcementsList);
         recyclerView.setAdapter(announcementsAdapter);
-        chatImageView = findViewById(R.id.chat);
 
-        // Set click listener for the chat image
-        chatImageView.setOnClickListener(v -> {
-
-        });
 
         prefs = getApplicationContext().getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
         userEmail = prefs.getString("user_email", null);
@@ -90,7 +85,14 @@ public class Announcements extends BaseActivity implements ItemClickListener {
         for (int i = 0; i < icons.length; i++) {
             tabLayout.addTab(tabLayout.newTab().setIcon(icons[i]));
         }
-
+        tabLayout.selectTab(null);
+        // Reset the tab icons to their unselected state
+        for (int i = 0; i < tabLayout.getTabCount(); i++) {
+            TabLayout.Tab tab = tabLayout.getTabAt(i);
+            if (tab != null) {
+                tab.setIcon(icons[i]); // Reset to the original icon (unselected)
+            }
+        }
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -103,10 +105,6 @@ public class Announcements extends BaseActivity implements ItemClickListener {
             @Override
             public void onTabReselected(TabLayout.Tab tab) {}
         });
-
-        createNotificationChannel();
-
-
     }
 
     @Override
@@ -118,9 +116,6 @@ public class Announcements extends BaseActivity implements ItemClickListener {
 
     private void fetchAnnouncements() {
         String url = "https://umakmdo-91b845374d5b.herokuapp.com/Admin/announcements.php?type=all";
-
-        SharedPreferences sharedPreferences = getSharedPreferences("AnnouncementsPrefs", Context.MODE_PRIVATE);
-        String lastFetchedAnnouncements = sharedPreferences.getString("lastFetchedAnnouncements", "");
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, response -> {
             try {
@@ -135,15 +130,7 @@ public class Announcements extends BaseActivity implements ItemClickListener {
 
                     announcementsList.add(0, new AnnouncementsItems(title, text, imageUrl));
 
-                    // Check if the new announcement is different from the last fetched
-                    if (!response.equals(lastFetchedAnnouncements)) {
-                        showNewAnnouncementNotification(title, text);
 
-                        // Save the new response in SharedPreferences
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putString("lastFetchedAnnouncements", response);
-                        editor.apply();
-                    }
                 }
 
                 announcementsAdapter.notifyDataSetChanged();
@@ -160,41 +147,7 @@ public class Announcements extends BaseActivity implements ItemClickListener {
         requestQueue.add(stringRequest);
     }
 
-    private void createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(
-                    "ANNOUNCEMENTS_CHANNEL",
-                    "Announcements Channel",
-                    NotificationManager.IMPORTANCE_HIGH
-            );
-            channel.setDescription("Channel for Announcements notifications");
-            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.createNotificationChannel(channel);
-        }
-    }
-    private void showNewAnnouncementNotification(String title, String text) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            boolean hasPermission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS)
-                    == PackageManager.PERMISSION_GRANTED;
-            if (!hasPermission) {
-                // Request permission if not granted
-                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, 1);
-                return;
-            }
-        }
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "ANNOUNCEMENTS_CHANNEL")
-                .setSmallIcon(R.drawable.ic_notification)
-                .setContentTitle("New Announcement")
-                .setContentText(title + "\n" + text)
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setDefaults(NotificationCompat.DEFAULT_ALL)
-                .setAutoCancel(true);
-
-        runOnUiThread(() -> {
-            NotificationManagerCompat.from(this).notify(1, builder.build());
-        });
-    }
 
     @Override
     public void onClick(View v, int position) {
@@ -204,4 +157,3 @@ public class Announcements extends BaseActivity implements ItemClickListener {
 
 
 }
-
