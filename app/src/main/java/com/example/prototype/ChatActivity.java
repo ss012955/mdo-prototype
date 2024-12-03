@@ -7,6 +7,7 @@ import android.os.Bundle;
 import Adapters.ChatAdapter;
 import Singleton.Message;
 
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -48,6 +49,8 @@ public class ChatActivity extends BaseActivity {
     List<Message> messages = new ArrayList<>();
     private static final String ADMIN_EMAIL = "admin2@example.com";
     String userEmail;
+    Button viewService;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +64,13 @@ public class ChatActivity extends BaseActivity {
         SharedPreferences prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
         userEmail = prefs.getString("user_email", "No email found");
         String token = prefs.getString("id_token", null);
+
+        viewService = findViewById(R.id.btn_view_services);
+        viewService.setOnClickListener(v -> {
+
+            Intent chatIntent = new Intent(this, viewServicesActivity.class);
+            startActivity(chatIntent);
+        });
 
 
         tabLayout = findViewById(R.id.tablayout);
