@@ -57,6 +57,12 @@ public class fProfile extends Fragment implements Profile_CustomAdapter.OnEditBu
             dashboardManager.showLogoutValidator(getActivity(), fProfile.this);
         });
 
+        settings.setOnClickListener(v ->{
+            Intent intent = new Intent(getContext(), SettingsActivity.class);
+            startActivity(intent);
+        });
+
+
         chatImageView.setOnClickListener(v -> {
 
             Intent intent = new Intent(getContext(), ChatActivity.class);
