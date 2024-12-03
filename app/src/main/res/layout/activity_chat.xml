@@ -146,6 +146,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:backgroundTint="@color/UMAKLIGHTBLUE"
+                android:layout_margin="10dp"
                 android:text="View Services"
                 android:textColor="@android:color/white" />
 
@@ -155,6 +156,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:backgroundTint="@color/UMAKLIGHTBLUE"
+                android:layout_margin="10dp"
                 android:text="View FAQs"
                 android:textColor="@android:color/white" />
         </LinearLayout>
