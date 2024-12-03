@@ -2,19 +2,16 @@ package HelperClasses;
 
 import android.app.Activity;
 import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
-import android.widget.TextView;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.Volley;
+import com.example.prototype.R;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -27,22 +24,26 @@ import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import Singleton.allAppointments;
 
 public class AppointmentsManager {
     private Context context;
+    private HashSet<CalendarDay> appointmentsDays = new HashSet<>();
+    CalendarDay calendarDay;
 
     public AppointmentsManager() {
     }
 
     public AppointmentsManager(Context context) {
-        this.context = context;
+
     }
 
-    public void fetchAppointments(String url, String userEmail, List<AppointmentsClass> appointmentsList,
+    public void fetchAppointments(String url, String userEmail, List<AppointmentsClass> appointmentsList,List<AppointmentDaysClass> appointmentDaysClasses,
                                   RecyclerView.Adapter adapter, Context context, AppointmentsCallback callback) {
         // Build the full URL with query parameter
         String fullUrl = url + "?user_email=" + userEmail;
@@ -82,7 +83,7 @@ public class AppointmentsManager {
                             public void run() {
                                 try {
                                     appointmentsList.clear();  // Clear existing data
-
+                                    appointmentDaysClasses.clear();
                                     // Loop through the JSON array and parse each appointment
                                     for (int i = 0; i < responseArray.length(); i++) {
                                         JSONObject booking = responseArray.getJSONObject(i);
@@ -105,18 +106,30 @@ public class AppointmentsManager {
                                         int numberOfAppointments = appointmentsList.size();
                                         String appointmentText = "You have " + numberOfAppointments + " appointments.";
 
+                                        if (rawDate != null) {
+                                            // Parse the date into a CalendarDay object
+                                            String[] dateParts = rawDate.split("-"); // Assuming "YYYY-MM-DD" format
+                                            int year = Integer.parseInt(dateParts[0]);
+                                            int month = Integer.parseInt(dateParts[1]) ; // CalendarDay uses 0-based months
+                                            int day = Integer.parseInt(dateParts[2]);
+                                            calendarDay = CalendarDay.from(year, month, day);
 
-
-
+                                            AppointmentDaysClass appointmentDaysClass = new AppointmentDaysClass(calendarDay.toString());
+                                            appointmentDaysClasses.add(appointmentDaysClass);
+                                            appointmentsDays.add(calendarDay);
+                                        }
                                     }
-
+                                    Log.d("AppointmentsDebug", "Applying decorator with dates: " + appointmentsDays);
+                                    MaterialCalendarView calendarView = ((Activity) context).findViewById(R.id.calendarView);
+                                    calendarView.addDecorator(new EventDecorator(new HashSet<>(appointmentsDays)));
+                                    Set<CalendarDay> combinedDates = new HashSet<>(appointmentsDays);
+                                    calendarView.addDecorator(new EventDecorator(combinedDates));
                                     // Notify the callback
-                                    callback.onAppointmentsFetched(appointmentsList);
-
+                                    callback.onAppointmentsFetched(appointmentsList, appointmentDaysClasses);
                                     // Notify the adapter to update the RecyclerView
                                     adapter.notifyDataSetChanged();
                                 } catch (Exception e) {
-                                    Toast.makeText(context, "Error parsing data: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                                    Log.d("context", "Error parsing data: " + e.getMessage());
                                 }
                             }
                         });
@@ -134,6 +147,7 @@ public class AppointmentsManager {
                     ((Activity) context).runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+
                             Toast.makeText(context, "Error fetching data: " + e.getMessage(), Toast.LENGTH_LONG).show();
                         }
                     });
@@ -145,7 +159,6 @@ public class AppointmentsManager {
             }
         }).start();  // Start the network operation in a new thread
     }
-
 
 
     private String formatDateTime(String rawDate, String rawTime) {
@@ -175,7 +188,8 @@ public class AppointmentsManager {
     }
 
     public interface AppointmentsCallback {
-        void onAppointmentsFetched(List<AppointmentsClass> fetchedList);
+        void onAppointmentsFetched(List<AppointmentsClass> fetchedList, List<AppointmentDaysClass> fetchedDays);
+        void onError(String errorMessage);
     }
 
 
@@ -211,7 +225,6 @@ public class AppointmentsManager {
 
                     // Parse the response (assuming it's just a number)
                     final int numberOfAppointments = Integer.parseInt(response.toString());
-
                     // Store the result in the AppointmentData singleton
                     allAppointments.getInstance().setNumberOfAppointments(numberOfAppointments);
                     new Handler(Looper.getMainLooper()).post(new Runnable() {
@@ -228,10 +241,12 @@ public class AppointmentsManager {
             }
         }).start();
     }
+    // Callback interface for dashboard data
 
     // Listener interface for fetching appointments
     public interface AppointmentsFetchListener {
         void onAppointmentsFetched(int numberOfAppointments);
     }
+
 
 }

@@ -102,15 +102,20 @@
                     style="@style/CustomCalendarViewStyle" />
 
                 <!-- Calendar -->
-                <CalendarView
+                <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/calendarView"
                     android:layout_width="match_parent"
-                    android:layout_height="305dp"
-                    android:layout_marginHorizontal="16dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="16dp"
-                    android:background="@drawable/rounded_edge"
-                    android:backgroundTint="@color/navy_blue" />
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_height="wrap_content"
+                    app:mcv_showOtherDates="none"
+                    app:mcv_headerTextAppearance="@style/MonthTextAppearance"
+                    app:mcv_weekDayTextAppearance="@style/WeekDayTextAppearance"
+                    app:mcv_dateTextAppearance="@style/DateTextAppearance"
+                    app:mcv_selectionColor="@color/UMAKYELLOW"
+                    app:mcv_leftArrow="@drawable/arrow_back"
+                    app:mcv_rightArrow="@drawable/arrow_forward"
+                    />
 
                 <!-- RecyclerView -->
                 <androidx.recyclerview.widget.RecyclerView

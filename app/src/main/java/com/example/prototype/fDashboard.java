@@ -15,13 +15,11 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import Adapters.DashboardAdapter;
-import Adapters.TriviaDashboardAdapter;
 import HelperClasses.AnnouncementManager;
 import HelperClasses.AnnouncementsItems;
 import HelperClasses.AppointmentsManager;
@@ -37,7 +35,6 @@ public class fDashboard extends Fragment implements ItemClickListener {
     private List<DashboardContent> contentList;
     private SharedPreferences prefs;
     private ImageView chatImageView;
-
     public fDashboard() {
         // Required empty public constructor
     }
@@ -83,6 +80,7 @@ public class fDashboard extends Fragment implements ItemClickListener {
                 adapter.notifyDataSetChanged(); // Update the RecyclerView
             }
         });
+
         return view;
 
     }
@@ -165,5 +163,9 @@ public class fDashboard extends Fragment implements ItemClickListener {
         put("Announcements", Announcements.class);
         put("Trivia", Trivia.class);
     }};
+    public DashboardAdapter getAdapter() {
+        return adapter;
+    }
+
 
 }
