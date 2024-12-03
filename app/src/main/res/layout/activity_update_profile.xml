@@ -57,7 +57,7 @@
         android:layout_height="0dp"
         android:background="@color/white"
         android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/tablayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -284,6 +284,15 @@
     </LinearLayout>
 
 
-
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tablayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/UMAKBLUE"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:tabIconTint="@color/tab_layout_selector"
+        app:tabIndicatorColor="@color/UMAKYELLOW" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
