@@ -1,5 +1,7 @@
 package Adapters;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.prototype.History;
+import com.example.prototype.Notes;
 import com.example.prototype.R;
 
 import java.util.List;
@@ -18,9 +22,10 @@ import HelperClasses.Note;
 public class notesJournalAdapter extends RecyclerView.Adapter<notesJournalAdapter.NotesViewHolder> {
 
     private final List<Note> notesList;
-
-    public notesJournalAdapter(List<Note> notesList) {
+    private Context context;
+    public notesJournalAdapter(Context context, List<Note> notesList) {
         this.notesList = notesList;
+        this.context = context;
     }
 
     @NonNull
@@ -34,7 +39,11 @@ public class notesJournalAdapter extends RecyclerView.Adapter<notesJournalAdapte
     public void onBindViewHolder(@NonNull NotesViewHolder holder, int position) {
         Note note = notesList.get(position);
         holder.titleTextView.setText(note.getTitle());
-        holder.contentTextView.setText(note.getDetails());
+        holder.itemView.setOnClickListener(v -> {
+            // When an item is clicked, start the Trivia activity
+            Intent intent = new Intent(context, Notes.class);
+            context.startActivity(intent); // Start the Trivia activity
+        });
     }
 
     @Override
@@ -49,8 +58,7 @@ public class notesJournalAdapter extends RecyclerView.Adapter<notesJournalAdapte
         public NotesViewHolder(@NonNull View itemView) {
             super(itemView);
             historyRecyclerView = itemView.findViewById(R.id.notesRecyclerView);
-            titleTextView = itemView.findViewById(R.id.notesTitleTextView); // ID should match XML
-            contentTextView = itemView.findViewById(R.id.notesDetailsTextView); // ID should match XML
+            titleTextView = itemView.findViewById(R.id.notesTitleTextView); // ID should match XML// ID should match XML
         }
 
     }
