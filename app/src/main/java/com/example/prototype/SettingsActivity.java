@@ -13,11 +13,14 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import com.google.android.material.tabs.TabLayout;
+import android.widget.TextView;
 
 
 public class SettingsActivity extends AppCompatActivity {
     TabLayout tabLayout;
     private ImageView chatImageView;
+    TextView terms;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +35,7 @@ public class SettingsActivity extends AppCompatActivity {
         LinearLayout reminderOptions = findViewById(R.id.reminderOptions);
         chatImageView = findViewById(R.id.chat);
         tabLayout = findViewById(R.id.tablayout);
+        terms = findViewById(R.id.tvTermsAndPrivacy);
 
 
 
@@ -45,6 +49,11 @@ public class SettingsActivity extends AppCompatActivity {
                     reminderOptions.setVisibility(LinearLayout.GONE);
                 }
             }
+        });
+
+        terms.setOnClickListener(v ->{
+            Intent intent = new Intent(this, termsActivity.class);
+            startActivity(intent);
         });
 
         chatImageView.setOnClickListener(v -> {
