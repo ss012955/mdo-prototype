@@ -128,7 +128,6 @@
                 app:mcv_selectionColor="#D3D3D3"
                 app:mcv_leftArrow="@drawable/arrow_back"
                 app:mcv_rightArrow="@drawable/arrow_forward"
-                android:layout_marginVertical="10dp"
                 />
 
             <Button

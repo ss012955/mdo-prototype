@@ -26,7 +26,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.android.material.tabs.TabLayout;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -39,6 +38,8 @@ import java.util.Map;
 import HelperClasses.ProfileClass;
 import HelperClasses.ProfileDatabaseHelper;
 import HelperClasses.UpdateProfileManager;
+import com.google.android.material.tabs.TabLayout;
+
 
 public class UpdateProfile extends AppCompatActivity implements Profile_CustomAdapter.OnEditButtonClickListener {
     private SharedPreferences prefs;
@@ -53,6 +54,7 @@ public class UpdateProfile extends AppCompatActivity implements Profile_CustomAd
     Button buttonSave;
     UpdateProfileManager updateProfileManager;
     TabLayout tabLayout;
+
 
 
     @Override
@@ -74,6 +76,7 @@ public class UpdateProfile extends AppCompatActivity implements Profile_CustomAd
             Toast.makeText(UpdateProfile.this, message, Toast.LENGTH_SHORT).show();
         };
         showToast.run(); // Display the toast message
+        tabLayout = findViewById(R.id.tablayout);
 
         // Initialize RecyclerView
         profile_recycler = findViewById(R.id.profile_recyclerview);
@@ -81,7 +84,6 @@ public class UpdateProfile extends AppCompatActivity implements Profile_CustomAd
         etFirstname = findViewById(R.id.etFirstName);
         etLastname = findViewById(R.id.etLastName);
         etPassword = findViewById(R.id.etPassword);
-        tabLayout = findViewById(R.id.tablayout);
         etConfirmPassword = findViewById(R.id.etConfirmPassword);
         eyePassword= findViewById(R.id.eyePassword);
         eyeConfirmPassword= findViewById(R.id.eyeConfirmPassword);
@@ -131,7 +133,9 @@ public class UpdateProfile extends AppCompatActivity implements Profile_CustomAd
                     etPassword, etConfirmPassword);
         });
 
+
         tabLayouter();
+
     }
     public void onEditButtonClick(int position) {
 
@@ -169,9 +173,13 @@ public class UpdateProfile extends AppCompatActivity implements Profile_CustomAd
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {}
 
+            //Local uploading of il
             @Override
             public void onTabReselected(TabLayout.Tab tab) {}
         });
     }
+
+
+    //Local uploading of il
 
 }

@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.prototype.History;
+import com.example.prototype.Notes;
 import com.example.prototype.R;
 
 import java.util.List;
@@ -40,7 +41,7 @@ public class notesJournalAdapter extends RecyclerView.Adapter<notesJournalAdapte
         holder.titleTextView.setText(note.getTitle());
         holder.itemView.setOnClickListener(v -> {
             // When an item is clicked, start the Trivia activity
-            Intent intent = new Intent(context, History.class);
+            Intent intent = new Intent(context, Notes.class);
             context.startActivity(intent); // Start the Trivia activity
         });
     }

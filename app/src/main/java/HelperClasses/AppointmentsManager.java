@@ -128,12 +128,12 @@ public class AppointmentsManager {
 
                                         }
 
-                                            MaterialCalendarView calendarView = ((Activity) context).findViewById(R.id.calendarView);
-                                            Set<CalendarDay> combinedDates = new HashSet<>(approvedDays);
-                                            calendarView.addDecorator(new EventDecoratorApproved(combinedDates));
+                                        MaterialCalendarView calendarView = ((Activity) context).findViewById(R.id.calendarView);
+                                        Set<CalendarDay> combinedDates = new HashSet<>(approvedDays);
+                                        calendarView.addDecorator(new EventDecoratorApproved(combinedDates));
 
-                                            Set<CalendarDay> combinedPendingDates = new HashSet<>(pendingDays);
-                                            calendarView.addDecorator(new EventDecoratorPending(combinedPendingDates));
+                                        Set<CalendarDay> combinedPendingDates = new HashSet<>(pendingDays);
+                                        calendarView.addDecorator(new EventDecoratorPending(combinedPendingDates));
 
                                     }
                                     Log.d("AppointmentsDebug", "Applying decorator with dates: " + appointmentsDays);

@@ -126,4 +126,3 @@ public class TriviaManager {
         void onError(String errorMessage);
     }
 }
-

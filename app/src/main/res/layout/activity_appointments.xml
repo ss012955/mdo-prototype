@@ -114,7 +114,6 @@
                     app:mcv_dateTextAppearance="@style/DateTextAppearance"
                     app:mcv_selectionColor="#D3D3D3"
                     app:mcv_leftArrow="@drawable/arrow_back"
-                    android:layout_marginBottom="10dp"
                     app:mcv_rightArrow="@drawable/arrow_forward"
                     app:mcv_selectionMode="none"
                     />

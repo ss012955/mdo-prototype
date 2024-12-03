@@ -31,8 +31,6 @@ public class addnotes extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        setContentView(R.layout.activity_addnotes);
-
         EditText titleInput = findViewById(R.id.journal_title);
         EditText dateTimeInput = findViewById(R.id.journal_date_time);
         EditText symptomsInput = findViewById(R.id.input_symptoms);

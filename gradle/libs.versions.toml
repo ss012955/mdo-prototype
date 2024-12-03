@@ -10,6 +10,7 @@ constraintlayout = "2.1.4"
 viewpager2 = "1.1.0"
 picasso = "2.71828"
 volley = "1.2.1"
+firebaseDatabase = "21.0.0"
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
@@ -21,6 +22,7 @@ constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayo
 viewpager2 = { module = "androidx.viewpager2:viewpager2", version.ref = "viewpager2" }
 picasso = { module = "com.squareup.picasso:picasso", version = "2.71828" }
 volley = { group = "com.android.volley", name = "volley", version.ref = "volley" }
+firebase-database = { group = "com.google.firebase", name = "firebase-database", version.ref = "firebaseDatabase" }
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 

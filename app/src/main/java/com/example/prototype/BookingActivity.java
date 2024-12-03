@@ -65,6 +65,15 @@ public class BookingActivity extends BaseActivity implements ItemClickListener {
             }
         }
 
+        tabLayout.selectTab(null);
+        // Reset the tab icons to their unselected state
+        for (int i = 0; i < tabLayout.getTabCount(); i++) {
+            TabLayout.Tab tab = tabLayout.getTabAt(i);
+            if (tab != null) {
+                tab.setIcon(icons[i]); // Reset to the original icon (unselected)
+            }
+        }
+
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {

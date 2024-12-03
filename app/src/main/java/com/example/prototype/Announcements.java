@@ -157,4 +157,3 @@ public class Announcements extends BaseActivity implements ItemClickListener {
 
 
 }
-

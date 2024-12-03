@@ -27,19 +27,17 @@ import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-
+import HelperClasses.EventDecoratorPending;
+import HelperClasses.EventDecoratorApproved;
 import HelperClasses.AnnouncementManager;
 import HelperClasses.AnnouncementsItems;
 import HelperClasses.AppointmentDaysClass;
 import HelperClasses.AppointmentsClass;
 import HelperClasses.AppointmentsManager;
-import HelperClasses.EventDecoratorPending;
 import HelperClasses.ItemClickListener;
 import HelperClasses.TriviaItem;
 import HelperClasses.TriviaManager;
 import Singleton.allAppointments;
-import HelperClasses.EventDecoratorApproved;
 
 public class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -173,7 +171,7 @@ public class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
 
     // Define ViewHolder for Appointments
-     static class AppointmentsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    static class AppointmentsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         MaterialCalendarView calendarView;
         Button btnStartBooking;
         TextView tvNumberofAppointments;
@@ -193,10 +191,10 @@ public class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         void bind(DashboardContent content){
             int numberOfAppointments = allAppointments.getInstance().getNumberOfAppointments();
-           String appointmentText = "You have " + numberOfAppointments + " appointment";
+            String appointmentText = "You have " + numberOfAppointments + " appointment";
             if (numberOfAppointments != 1) {
                 appointmentText += "s"; // Add "s" if more than 1 appointment
-           }
+            }
             tvNumberofAppointments.setText(appointmentText + ".");
 
             btnStartBooking.setOnClickListener(v -> {
@@ -226,13 +224,13 @@ public class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     for (AppointmentDaysClass day : fetchedDays) {
                         // Assuming AppointmentDaysClass has getYear(), getMonth(), and getDay() methods
                         CalendarDay calendarDay = CalendarDay.from(day.getYear(), day.getMonth() - 1, day.getDay());
-                       fetched.add(calendarDay);
+                        fetched.add(calendarDay);
                     }
                 }
-               @Override
-               public void onError(String errorMessage) {
-                   Toast.makeText(context, "Error fetching appointments: " + errorMessage, Toast.LENGTH_LONG).show();
-               }
+                @Override
+                public void onError(String errorMessage) {
+                    Toast.makeText(context, "Error fetching appointments: " + errorMessage, Toast.LENGTH_LONG).show();
+                }
 
             });
         }

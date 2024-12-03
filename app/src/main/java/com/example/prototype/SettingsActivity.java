@@ -1,25 +1,26 @@
 package com.example.prototype;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Switch;
-import android.widget.TextView;
+import android.content.Intent;
+import android.widget.ImageView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-
 import com.google.android.material.tabs.TabLayout;
+import android.widget.TextView;
+
 
 public class SettingsActivity extends AppCompatActivity {
     TabLayout tabLayout;
     private ImageView chatImageView;
     TextView terms;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,8 +34,11 @@ public class SettingsActivity extends AppCompatActivity {
         Switch switchAppointmentReminder = findViewById(R.id.switchAppointmentReminder);
         LinearLayout reminderOptions = findViewById(R.id.reminderOptions);
         chatImageView = findViewById(R.id.chat);
-        terms = findViewById(R.id.tvTermsAndPrivacy);
         tabLayout = findViewById(R.id.tablayout);
+        terms = findViewById(R.id.tvTermsAndPrivacy);
+
+
+
         // Toggle visibility of reminder options
         switchAppointmentReminder.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -46,13 +50,14 @@ public class SettingsActivity extends AppCompatActivity {
                 }
             }
         });
-        chatImageView.setOnClickListener(v -> {
 
-            Intent intent = new Intent(this, ChatActivity.class);
-            startActivity(intent);
-        });
         terms.setOnClickListener(v ->{
             Intent intent = new Intent(this, termsActivity.class);
+            startActivity(intent);
+        });
+
+        chatImageView.setOnClickListener(v -> {
+            Intent intent = new Intent(this, ChatActivity.class);
             startActivity(intent);
         });
         int[] icons = {R.drawable.home, R.drawable.user_journal, R.drawable.profile};
@@ -75,9 +80,9 @@ public class SettingsActivity extends AppCompatActivity {
             }
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {}
-
             @Override
             public void onTabReselected(TabLayout.Tab tab) {}
         });
+
     }
 }

@@ -23,5 +23,6 @@
             android:textStyle="bold"
             android:textColor="@color/black" />
 
+
     </LinearLayout>
 </androidx.cardview.widget.CardView>

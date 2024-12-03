@@ -29,6 +29,10 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+
+    buildFeatures{
+        dataBinding = true;
+    }
 }
 
 dependencies {
@@ -38,6 +42,7 @@ dependencies {
     implementation(libs.activity)
     implementation(libs.constraintlayout)
     implementation(libs.volley)
+    implementation(libs.firebase.database)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
@@ -52,9 +57,12 @@ dependencies {
     implementation("com.google.firebase:firebase-storage:20.0.0")
     implementation("com.github.bumptech.glide:glide:4.15.1")
     annotationProcessor("com.github.bumptech.glide:compiler:4.15.1")
+    implementation ("com.google.firebase:firebase-database:20.3.0")
+    implementation ("com.google.firebase:firebase-auth:21.1.0")
     implementation("androidx.work:work-runtime:2.8.1")
-    implementation("com.github.prolificinteractive:material-calendarview:2.0.1")
     implementation("com.jakewharton.threetenabp:threetenabp:1.3.1")
+    implementation("com.github.prolificinteractive:material-calendarview:2.0.1")
+
 
 }
 

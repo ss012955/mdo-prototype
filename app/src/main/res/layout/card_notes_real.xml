@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="16dp"
-       android:background="@color/UMAKLIGHTBLUE">
+        android:background="@color/UMAKLIGHTBLUE">
 
         <TextView
             android:id="@+id/journal_title"

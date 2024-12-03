@@ -130,7 +130,7 @@ public class Notes extends AppCompatActivity {
 
 
 
-       notesAdapter.updateNotesList(notesList);
+        notesAdapter.updateNotesList(notesList);
     }
 
 }
