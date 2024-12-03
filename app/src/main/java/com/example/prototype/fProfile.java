@@ -62,6 +62,11 @@ public class fProfile extends Fragment implements Profile_CustomAdapter.OnEditBu
             startActivity(intent);
         });
 
+        emergency_details.setOnClickListener(v ->{
+            Intent intent = new Intent(getContext(), contactActivity.class);
+            startActivity(intent);
+        });
+
 
         chatImageView.setOnClickListener(v -> {
 
