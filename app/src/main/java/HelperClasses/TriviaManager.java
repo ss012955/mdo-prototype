@@ -117,7 +117,7 @@ public class TriviaManager {
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
                 .setAutoCancel(true);
 
-        NotificationManagerCompat.from(context).notify(1, builder.build());
+        NotificationManagerCompat.from(context).notify(2002, builder.build());
     }
 
     // Define a callback interface
