@@ -191,7 +191,7 @@ public class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         void bind(DashboardContent content){
             int numberOfAppointments = allAppointments.getInstance().getNumberOfAppointments();
-            String appointmentText = "You have " + numberOfAppointments + " appointment";
+            String appointmentText = "You have " + numberOfAppointments + " upcoming appointment";
             if (numberOfAppointments != 1) {
                 appointmentText += "s"; // Add "s" if more than 1 appointment
             }

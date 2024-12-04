@@ -123,6 +123,12 @@ public class AppointmentsManager {
                                             }
                                             else if(status.equals("Pending")){
                                                 pendingDays.add(calendarDay);
+                                            }else if(status.equals("Cancelled")){
+                                                appointmentsDays.add(calendarDay);
+                                            } else if ( status.equals("No Show") ) {
+                                                appointmentsDays.add(calendarDay);
+                                            } else if (status.equals("Completed")) {
+                                                appointmentsDays.add(calendarDay);
                                             }
 
 

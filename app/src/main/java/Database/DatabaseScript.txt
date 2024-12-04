@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS Bookings (
     booking_date DATE NOT NULL, -- Date in the format MM/dd/yyyy
     booking_time TIME NOT NULL, -- Time in the format hh:mm AM/PM
     remarks TEXT, -- Optional remarks
-    status ENUM('Pending', 'Approved', 'Cancelled') DEFAULT 'Pending', -- Status column with default value 'Pending'
+    status ENUM('Pending', 'Approved', 'Completed', 'No Show') DEFAULT 'Pending', -- Status column with default value 'Pending'
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Timestamp for booking creation
     FOREIGN KEY (umak_email) REFERENCES Users(umak_email) -- Establish relationship with Users table
 );

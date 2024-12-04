@@ -17,8 +17,11 @@ import com.example.prototype.Notes;
 import com.example.prototype.R;
 import com.example.prototype.Trivia;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import HelperClasses.HistoryItem;
+import HelperClasses.HistoryManager;
 import HelperClasses.ItemClickListener;
 
 public class journalAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -28,13 +31,17 @@ public class journalAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     private final List<contentJournal> contentList;
     private final Context context;
+    private static String userEmail;
     public static ItemClickListener clickListener;
+
+
     public void setClickListener(ItemClickListener myListener){
         this.clickListener = myListener;
     }
-    public journalAdapter(Context context, List<contentJournal> contentList, ItemClickListener clickListener) {
+    public journalAdapter(Context context, List<contentJournal> contentList, String userEmail, ItemClickListener clickListener) {
         this.context = context;
         this.contentList = contentList;
+        this.userEmail = userEmail;
         journalAdapter.clickListener = clickListener;
     }
 
@@ -116,37 +123,56 @@ public class journalAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
-    public static class HistoryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        RecyclerView historyRecyclerView;
-        TextView titleTextView;
+    // Define ViewHolder for History
+    static class HistoryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        RecyclerView recyclerViewHistory;
+        historyJournalAdapter historyRecyclerViewAdapter;
 
-        public HistoryViewHolder(@NonNull View itemView) {
+        HistoryViewHolder(View itemView) {
             super(itemView);
-            historyRecyclerView = itemView.findViewById(R.id.historyRecyclerView);
-            titleTextView = itemView.findViewById(R.id.appointmentTitleTextView);
+            recyclerViewHistory = itemView.findViewById(R.id.historyRecyclerView);
             itemView.setOnClickListener(this);
         }
 
-        // bind() method to populate the History data
-        public void bind(contentJournal content, Context context) {
-            if (titleTextView != null) {
-                titleTextView.setText(content.getTitle());
-            } else {
-                Log.e("HistoryViewHolder", "titleTextView is null");
-            }
+        void bind(contentJournal content, Context context) {
+            List<HistoryItem> historyItems = new ArrayList<>();
 
+            // Fetch history from HistoryManager
+            HistoryManager.fetchHistoryWithTitleAndDate("https://umakmdo-91b845374d5b.herokuapp.com/fetch_booking_completed.php", userEmail, historyItems, historyRecyclerViewAdapter, context, new HistoryManager.HistoryCallback() {
+                @Override
+                public void onSuccess(List<HistoryItem> fetchedHistoryItems) {
+                    // Store the latest three history items
+                    int limit = Math.min(fetchedHistoryItems.size(), 3); // Limit to 3 items
+                    for (int i = 0; i < limit; i++) {
+                        historyItems.add(fetchedHistoryItems.get(i));
+                    }
 
-            if (historyRecyclerView != null) {
-                historyJournalAdapter historyAdapter = new historyJournalAdapter(context,content.getHistoryList());
-                historyRecyclerView.setLayoutManager(new LinearLayoutManager(itemView.getContext()));
-                historyRecyclerView.setAdapter(historyAdapter);
-            } else {
-                Log.e("HistoryViewHolder", "historyRecyclerView is null");
-            }
+                    // Ensure recyclerViewHistory is not null
+                    if (recyclerViewHistory != null) {
+                        // Post the update to the main thread
+                        recyclerViewHistory.post(() -> {
+                            // Set up RecyclerView with the custom adapter
+                            historyRecyclerViewAdapter = new historyJournalAdapter(context, historyItems);
+                            recyclerViewHistory.setLayoutManager(new LinearLayoutManager(context));
+                            recyclerViewHistory.setAdapter(historyRecyclerViewAdapter);
+                            historyRecyclerViewAdapter.notifyDataSetChanged();  // Notify the adapter on the main thread
+                        });
+                    } else {
+                        Log.e("HistoryViewHolder", "recyclerViewHistory is null");
+                    }
+                }
+
+                @Override
+                public void onError(String errorMessage) {
+                    // Handle error (if needed)
+                    Log.e("HistoryViewHolder", "Error fetching history: " + errorMessage);
+                }
+            });
         }
+
         @Override
         public void onClick(View v) {
-            Intent intent = new Intent(itemView.getContext(), History.class);
+            Intent intent = new Intent(itemView.getContext(), History.class); // Navigate to History activity
             itemView.getContext().startActivity(intent);
         }
     }
