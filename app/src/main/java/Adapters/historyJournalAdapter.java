@@ -2,6 +2,7 @@ package Adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +20,7 @@ import java.util.List;
 
 import HelperClasses.HistoryItem;
 
-public class historyJournalAdapter extends RecyclerView.Adapter<historyJournalAdapter.HistoryViewHolder> {
+public class historyJournalAdapter extends RecyclerView.Adapter<historyJournalAdapter.ViewHolderHistory> {
 
     private final List<HistoryItem> historyList;
     private Context context;
@@ -30,15 +31,15 @@ public class historyJournalAdapter extends RecyclerView.Adapter<historyJournalAd
 
     @NonNull
     @Override
-    public HistoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public historyJournalAdapter.ViewHolderHistory onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_history_item, parent, false);
-        return new HistoryViewHolder(view);
+        return new ViewHolderHistory(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull HistoryViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull historyJournalAdapter.ViewHolderHistory holder, int position) {
         HistoryItem historyItem = historyList.get(position);
-        holder.titleTextView.setText(historyItem.getTitle());
+        holder.bind(historyItem);
         holder.itemView.setOnClickListener(v -> {
             // When an item is clicked, start the Trivia activity
             Intent intent = new Intent(context, History.class);
@@ -51,15 +52,22 @@ public class historyJournalAdapter extends RecyclerView.Adapter<historyJournalAd
         return historyList != null ? historyList.size() : 0;
     }
 
-    public static class HistoryViewHolder extends RecyclerView.ViewHolder {
-        RecyclerView historyRecyclerView;
-        TextView titleTextView, contentTextView;
+    public static class ViewHolderHistory extends RecyclerView.ViewHolder {
+        TextView appointmentTitleTextView;
 
-        public HistoryViewHolder(@NonNull View itemView) {
+        public ViewHolderHistory(@NonNull View itemView) {
             super(itemView);
-            historyRecyclerView = itemView.findViewById(R.id.historyRecyclerView);
-            titleTextView = itemView.findViewById(R.id.appointmentTitleTextView); // ID should match XML// ID should match XML
+            appointmentTitleTextView = itemView.findViewById(R.id.appointmentTitleTextView);  // Ensure this matches the ID in your card_history_item.xml
         }
 
+        public void bind(HistoryItem historyItem) {
+            // Set the title from the historyItem object
+            if (appointmentTitleTextView != null) {
+                String formattedTitle = historyItem.getTitle() + "(" + historyItem.getDetails() + ")" ;
+                appointmentTitleTextView.setText(formattedTitle);
+            } else {
+                Log.e("HistoryViewHolder", "appointmentTitleTextView is null");
+            }
+        }
     }
 }

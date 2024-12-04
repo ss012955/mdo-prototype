@@ -120,13 +120,20 @@ public class Appointments extends BaseActivity implements ItemClickListener {
             manager.fetchAppointments(url, userEmail, appointmentsList, appointmentsDays, adapter, this, new AppointmentsManager.AppointmentsCallback() {
                 @Override
                 public void onAppointmentsFetched(List<AppointmentsClass> fetchedList, List<AppointmentDaysClass> appointmentsDays) {
-                    if (fetchedList.isEmpty() && appointmentsDays.isEmpty()) {
+                    List<AppointmentsClass> filteredAppointments = new ArrayList<>();
+                    for (AppointmentsClass appointment : fetchedList) {
+                        if ("pending".equalsIgnoreCase(appointment.getStatus()) || "approved".equalsIgnoreCase(appointment.getStatus())) {
+                            filteredAppointments.add(appointment);
+                        }
+                    }
+                    // If there are no appointments, display the default message
+                    if (filteredAppointments.isEmpty()) {
                         DefaultAdapter defaultAdapter = new DefaultAdapter("You have no appointments");
                         recyclerView.setAdapter(defaultAdapter);
                     } else {
-                        Log.d("AppointmentsDebug", "Applying decorator with dates: " + appointmentsDays);
-                        // Use the normal adapter if appointments exist
-                        recyclerView.setAdapter(adapter);
+                        appointmentsList.clear();
+                        appointmentsList.addAll(filteredAppointments);
+                        adapter.notifyDataSetChanged();
                     }
                 }
                 @Override

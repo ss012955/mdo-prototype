@@ -1,6 +1,8 @@
 package com.example.prototype;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -24,6 +26,7 @@ import Adapters.DashboardAdapter;
 import Adapters.journalAdapter;
 import Adapters.contentJournal;
 import HelperClasses.HistoryItem;
+import HelperClasses.HistoryManager;
 import HelperClasses.ItemClickListener;
 import HelperClasses.Note;
 import HelperClasses.NotesDatabaseHelper;
@@ -34,10 +37,16 @@ public class fJournal extends Fragment implements ItemClickListener {
     private ImageView chatImageView;
     private List<contentJournal> contentList;
     private journalAdapter adapter;
+    private SharedPreferences prefs;
+    private String userEmail;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_f_journal, container, false);
+
+        prefs = requireContext().getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
+        userEmail = prefs.getString("user_email", null);
+        Toast.makeText(requireContext(), userEmail, Toast.LENGTH_LONG).show();
 
         recyclerView = view.findViewById(R.id.recyclerView);
         chatImageView = view.findViewById(R.id.chat);
@@ -50,16 +59,13 @@ public class fJournal extends Fragment implements ItemClickListener {
         loadLatestNotes();
         // Create sample History items
         List<HistoryItem> sampleHistory = new ArrayList<>();
-        sampleHistory.add(new HistoryItem("History Entry 1", "Details of the first history entry."));
-        sampleHistory.add(new HistoryItem("History Entry 2", "Details of the second history entry."));
-        sampleHistory.add(new HistoryItem("History Entry 3", "Details of the third history entry."));
 
 
         // Add sample content for History section
         contentList.add(new contentJournal("history", "This section contains user history.", "history", null, sampleHistory));
 
         // Set up RecyclerView with journalAdapter
-        journalAdapter adapter = new journalAdapter(getContext(), contentList, this);
+        adapter = new journalAdapter(getContext(), contentList, userEmail, this);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
 
