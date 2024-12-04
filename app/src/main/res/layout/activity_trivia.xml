@@ -9,40 +9,37 @@
     android:background="@color/UMAKBLUE"
     tools:context=".Trivia">
 
-    <!-- UMAK Logo -->
     <ImageView
         android:id="@+id/logoumak"
         android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="7dp"
-        android:layout_marginTop="6dp"
+        android:layout_height="38dp"
         android:src="@drawable/umaklogo"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="7dp"
+        android:layout_marginTop="6dp"/>
 
-    <!-- Chat Icon -->
     <ImageView
         android:id="@+id/chat"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginEnd="7dp"
-        android:layout_marginTop="6dp"
         android:src="@drawable/chat"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginRight="7dp"
+        android:layout_marginTop="6dp"/>
 
-    <!-- Title -->
     <TextView
         android:id="@+id/txtviewHomeTitle"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_marginTop="6dp"
         android:fontFamily="@font/metropolis_bold"
         android:padding="7dp"
         android:text="Dashboard"
         android:textAlignment="center"
-        android:textColor="@color/white"
         android:textSize="30sp"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -84,7 +81,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:layout_marginStart="13dp"
-                    android:text="Trivia"
+                    android:text="TRIVIA"
                     android:fontFamily="@font/metropolis_bold"
                     android:textSize="20sp"
                     android:textColor="@color/black"

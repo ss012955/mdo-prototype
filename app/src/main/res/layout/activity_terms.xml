@@ -13,36 +13,34 @@
     <ImageView
         android:id="@+id/logoumak"
         android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="7dp"
-        android:layout_marginTop="6dp"
+        android:layout_height="38dp"
         android:src="@drawable/umaklogo"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="7dp"
+        android:layout_marginTop="6dp"/>
 
-    <!-- Chat Icon -->
     <ImageView
         android:id="@+id/chat"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginEnd="7dp"
-        android:layout_marginTop="6dp"
         android:src="@drawable/chat"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginRight="7dp"
+        android:layout_marginTop="6dp"/>
 
-    <!-- Title -->
     <TextView
         android:id="@+id/txtviewHomeTitle"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_marginTop="6dp"
         android:fontFamily="@font/metropolis_bold"
-        android:padding="7dp"
-        android:text="Terms and Conditions"
+        android:padding="12dp"
+        android:text="Terms and Condition"
+        android:textAllCaps="true"
         android:textAlignment="center"
+        android:textSize="23sp"
         android:textColor="@color/white"
-        android:textSize="25sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
