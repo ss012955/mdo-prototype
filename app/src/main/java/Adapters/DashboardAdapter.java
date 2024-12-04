@@ -208,7 +208,7 @@ public class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         }
         private void fetchAppointments() {
-            String url = "https://umakmdo-91b845374d5b.herokuapp.com/fetch_bookings.php";
+            String url = "http://192.168.100.4/MDOapp-main/fetch_bookings.php";
 
             // Retrieve SharedPreferences locally
             SharedPreferences prefs = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE);

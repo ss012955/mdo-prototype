@@ -64,8 +64,8 @@ public class Appointments extends BaseActivity implements ItemClickListener {
             startActivity(intent);
         });
 
-        prefs = getApplicationContext().getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
-        userEmail = prefs.getString("user_email", null);
+       // prefs = getApplicationContext().getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
+       // userEmail = prefs.getString("user_email", null);
 
         tabLayout = findViewById(R.id.tablayout);
         int[] icons = {R.drawable.home, R.drawable.user_journal, R.drawable.profile};
@@ -112,21 +112,32 @@ public class Appointments extends BaseActivity implements ItemClickListener {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
 
-        if (userEmail != null) {
-            String url = "https://umakmdo-91b845374d5b.herokuapp.com/fetch_bookings.php";
+        if (userEmail == null) {
+            String url = "http://192.168.100.4/MDOapp-main/fetch_bookings.php";
+            userEmail = "john.doe@umak.edu.ph";
             AppointmentsManager manager = new AppointmentsManager(this);
 
             // Pass a callback to handle the appointment list after it is fetched
             manager.fetchAppointments(url, userEmail, appointmentsList, appointmentsDays, adapter, this, new AppointmentsManager.AppointmentsCallback() {
                 @Override
                 public void onAppointmentsFetched(List<AppointmentsClass> fetchedList, List<AppointmentDaysClass> appointmentsDays) {
-                    if (fetchedList.isEmpty() && appointmentsDays.isEmpty()) {
+                    // Filter the appointments to show only 'pending' and 'approved' statuses
+                    List<AppointmentsClass> filteredAppointments = new ArrayList<>();
+                    for (AppointmentsClass appointment : fetchedList) {
+                        if ("pending".equalsIgnoreCase(appointment.getStatus()) || "approved".equalsIgnoreCase(appointment.getStatus())) {
+                            filteredAppointments.add(appointment);
+                        }
+                    }
+
+                    // If there are no appointments, display the default message
+                    if (filteredAppointments.isEmpty()) {
                         DefaultAdapter defaultAdapter = new DefaultAdapter("You have no appointments");
                         recyclerView.setAdapter(defaultAdapter);
                     } else {
-                        Log.d("AppointmentsDebug", "Applying decorator with dates: " + appointmentsDays);
-                        // Use the normal adapter if appointments exist
-                        recyclerView.setAdapter(adapter);
+                        // Otherwise, use the filtered list
+                        appointmentsList.clear();
+                        appointmentsList.addAll(filteredAppointments);
+                        adapter.notifyDataSetChanged();
                     }
                 }
                 @Override

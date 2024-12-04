@@ -47,7 +47,8 @@ public class AppointmentsManager {
 
     public void fetchAppointments(String url, String userEmail, List<AppointmentsClass> appointmentsList,List<AppointmentDaysClass> appointmentDaysClasses,
                                   RecyclerView.Adapter adapter, Context context, AppointmentsCallback callback) {
-        // Build the full URL with query parameter
+        url = "http://192.168.100.4/MDOapp-main/fetch_bookings.php";
+        userEmail = "john.doe@umak.edu.ph";
         String fullUrl = url + "?user_email=" + userEmail;
 
         new Thread(new Runnable() {
@@ -123,6 +124,12 @@ public class AppointmentsManager {
                                             }
                                             else if(status.equals("Pending")){
                                                 pendingDays.add(calendarDay);
+                                            }else if(status.equals("Cancelled")){
+                                                appointmentsDays.add(calendarDay);
+                                            } else if ( status.equals("No Show") ) {
+                                                appointmentsDays.add(calendarDay);
+                                            } else if (status.equals("Completed")) {
+                                                appointmentsDays.add(calendarDay);
                                             }
 
 

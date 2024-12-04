@@ -3,7 +3,9 @@ package com.example.prototype;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,6 +17,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.tabs.TabLayout;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +36,7 @@ import HelperClasses.HistoryItem;
 public class History extends AppCompatActivity {
     private RecyclerView recyclerView;
     private ImageView chatImageView;
-    private List<HistoryItem> historyList;
+    private List<HistoryItem> historyList = new ArrayList<>();
     private historyAdapter historyAdapter;
     TabLayout tabLayout;
     @Override
@@ -41,18 +50,12 @@ public class History extends AppCompatActivity {
             return insets;
         });
         chatImageView = findViewById(R.id.chat);
+
         recyclerView = findViewById(R.id.recyclerViewHistory);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        // Populate sample history items
-        historyList = new ArrayList<>();
-        historyList.add(new HistoryItem("History Entry 1", "Details of the first history entry."));
-        historyList.add(new HistoryItem("History Entry 2", "Details of the second history entry."));
-        historyList.add(new HistoryItem("History Entry 3", "Details of the third history entry."));
-
-        // Set adapter with history list
         historyAdapter = new historyAdapter(historyList);
         recyclerView.setAdapter(historyAdapter);
+
         chatImageView = findViewById(R.id.chat);
         chatImageView.setOnClickListener(v -> {
 
@@ -85,5 +88,69 @@ public class History extends AppCompatActivity {
             @Override
             public void onTabReselected(TabLayout.Tab tab) {}
         });
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        fetchHistory();
+    }
+
+    private void fetchHistory() {
+        new Thread(() -> {
+            try {
+                // Corrected URL assignment with fullUrl
+                String url = "http://192.168.100.4/MDOapp-main/Admin/fetch_booking_completed.php";
+                String userEmail = "john.doe@umak.edu.ph";
+                String fullUrl = url + "?user_email=" + userEmail; // Concatenate user_email parameter
+
+                // Open connection using fullUrl instead of url
+                HttpURLConnection connection = (HttpURLConnection) new URL(fullUrl).openConnection();
+                connection.setRequestMethod("GET");
+
+                // Read the response from the input stream
+                InputStreamReader reader = new InputStreamReader(connection.getInputStream());
+                BufferedReader bufferedReader = new BufferedReader(reader);
+                StringBuilder response = new StringBuilder();
+                String line;
+                while ((line = bufferedReader.readLine()) != null) {
+                    response.append(line);
+                }
+                bufferedReader.close();
+
+                // Parse the JSON response
+                JSONArray jsonArray = new JSONArray(response.toString());
+                historyList.clear();
+
+                // Loop through the results and extract the required data
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject booking = jsonArray.getJSONObject(i);
+
+                    // Extract all fields from JSON
+                    int id = booking.getInt("booking_id");
+                    String serviceType = booking.getString("service_type");
+                    String bookingDate = booking.getString("booking_date");
+                    String bookingTime = booking.getString("booking_time");
+                    String remarks = booking.getString("remarks");
+                    String status = booking.getString("status");
+
+                    // Combine details into a single string for display
+                    String details = "Service: " + serviceType + "\n" +
+                            "Date: " + bookingDate + "\n" +
+                            "Time: " + bookingTime + "\n" +
+                            "Remarks: " + remarks + "\n" +
+                            "Status: " + status;
+
+                    // Add to the history list
+                    historyList.add(new HistoryItem(serviceType, details));
+                }
+
+                // Update the UI with the new data
+                runOnUiThread(() -> historyAdapter.notifyDataSetChanged());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 }

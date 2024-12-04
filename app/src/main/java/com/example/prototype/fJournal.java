@@ -50,9 +50,7 @@ public class fJournal extends Fragment implements ItemClickListener {
         loadLatestNotes();
         // Create sample History items
         List<HistoryItem> sampleHistory = new ArrayList<>();
-        sampleHistory.add(new HistoryItem("History Entry 1", "Details of the first history entry."));
-        sampleHistory.add(new HistoryItem("History Entry 2", "Details of the second history entry."));
-        sampleHistory.add(new HistoryItem("History Entry 3", "Details of the third history entry."));
+
 
 
         // Add sample content for History section
