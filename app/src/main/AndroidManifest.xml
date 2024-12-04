@@ -27,9 +27,6 @@
             android:name=".History"
             android:exported="false" />
         <activity
-            android:name=".userjournal"
-            android:exported="false" />
-        <activity
             android:name=".feedbackActivity"
             android:exported="false" />
         <activity

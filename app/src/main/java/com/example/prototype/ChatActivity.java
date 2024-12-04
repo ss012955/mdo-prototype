@@ -79,13 +79,16 @@ public class ChatActivity extends BaseActivity {
         View messageInputArea = findViewById(R.id.message_input_area);
         ViewCompat.setOnApplyWindowInsetsListener(messageInputArea, (v, insets) -> {
             Insets imeInsets = insets.getInsets(WindowInsetsCompat.Type.ime());
-            // Ensure padding matches the keyboard height when visible
-            v.setPadding(
-                    v.getPaddingLeft(),
-                    v.getPaddingTop(),
-                    v.getPaddingRight(),
-                    imeInsets.bottom // This adjusts for the keyboard height
-            );
+            int bottomPadding = imeInsets.bottom - 40;
+
+            // Only apply bottom padding when keyboard is visible
+            if (bottomPadding > 0) {
+                v.setPadding(v.getPaddingLeft(), v.getPaddingTop(), v.getPaddingRight(), bottomPadding);
+            } else {
+                // Reset padding when keyboard is hidden
+                v.setPadding(v.getPaddingLeft(), v.getPaddingTop(), v.getPaddingRight(), 0);
+            }
+
             return WindowInsetsCompat.CONSUMED;
         });
 
