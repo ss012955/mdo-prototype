@@ -101,6 +101,7 @@
         <!-- Floating Action Button -->
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/add_note_button"
+            android:background="@color/gray"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_margin="16dp"
