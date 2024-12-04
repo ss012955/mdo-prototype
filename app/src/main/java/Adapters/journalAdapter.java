@@ -2,11 +2,14 @@ package Adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,12 +20,21 @@ import com.example.prototype.Notes;
 import com.example.prototype.R;
 import com.example.prototype.Trivia;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 import HelperClasses.HistoryItem;
 import HelperClasses.HistoryManager;
 import HelperClasses.ItemClickListener;
+import HelperClasses.Note;
 
 public class journalAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -33,6 +45,8 @@ public class journalAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private final Context context;
     private static String userEmail;
     public static ItemClickListener clickListener;
+    public static String noteId, title, symptoms, mood, medicine;
+    public static List<Note> notesList;
 
 
     public void setClickListener(ItemClickListener myListener){
@@ -91,37 +105,115 @@ public class journalAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public static class NotesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         RecyclerView notesRecyclerView;
         TextView titleTextView;
+        List<String> notesTitles = new ArrayList<>(); // List to store notes titles
 
         public NotesViewHolder(@NonNull View itemView) {
             super(itemView);
             notesRecyclerView = itemView.findViewById(R.id.notesRecyclerView);
             titleTextView = itemView.findViewById(R.id.notesTitleTextView);
-
             itemView.setOnClickListener(this);
         }
 
         // bind() method to populate the Notes data
         public void bind(contentJournal content, Context context) {
-            if (titleTextView != null) {
-                titleTextView.setText(content.getTitle());
-            } else {
-                Log.e("HistoryViewHolder", "titleTextView is null");
-            }
+            // Fetch the notes list if not already available
+            List<Note> notesItem = content.getNotesList(); // Assuming notes are passed here
 
-            if (notesRecyclerView != null) {
-                notesJournalAdapter historyAdapter = new notesJournalAdapter(context,content.getNotesList());
-                notesRecyclerView.setLayoutManager(new LinearLayoutManager(itemView.getContext()));
-                notesRecyclerView.setAdapter(historyAdapter);
-            } else {
-                Log.e("HistoryViewHolder", "historyRecyclerView is null");
-            }
+            // Fetch the notes titles and update the adapter once titles are fetched
+            loadNotesTitles(notesItem, context, () -> {
+                // Bind title text
+                if (titleTextView != null) {
+                    titleTextView.setText(content.getTitle());
+                } else {
+                    Log.e("NotesViewHolder", "titleTextView is null");
+                }
+
+                // Bind RecyclerView for notes list
+                if (notesRecyclerView != null) {
+                    notesJournalAdapter notesAdapter = new notesJournalAdapter(context, notesItem);
+                    notesRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+                    notesRecyclerView.setAdapter(notesAdapter);
+                    notesAdapter.notifyDataSetChanged(); // Notify the adapter with the updated data
+                } else {
+                    Log.e("NotesViewHolder", "notesRecyclerView is null");
+                }
+            });
         }
+
+        // Fetch the notes titles
+        private void loadNotesTitles(List<Note> notesItem, Context context, Runnable callback) {
+            String url = "https://umakmdo-91b845374d5b.herokuapp.com/fetch_notes.php"; // URL to your PHP script
+            String fullUrl = url + "?umak_email=" + userEmail;
+
+            // Start a background thread to handle the network operation
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        // Create the URL object
+                        URL urlObj = new URL(fullUrl);
+
+                        // Set up the connection
+                        HttpURLConnection connection = (HttpURLConnection) urlObj.openConnection();
+                        connection.setRequestMethod("GET");
+                        connection.setConnectTimeout(5000); // Timeout 5 seconds
+                        connection.setReadTimeout(5000); // Timeout 5 seconds
+
+                        // Read the response
+                        InputStream inputStream = connection.getInputStream();
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                        StringBuilder response = new StringBuilder();
+                        String line;
+                        while ((line = reader.readLine()) != null) {
+                            response.append(line);
+                        }
+                        reader.close();
+                        connection.disconnect();
+
+                        // Parse the response JSON
+                        JSONObject jsonResponse = new JSONObject(response.toString());
+                        boolean success = jsonResponse.getBoolean("success");
+
+                        if (success) {
+                            JSONArray notesArray = jsonResponse.getJSONArray("notes");
+                            notesItem.clear(); // Clear the existing list before adding new notes titles
+
+                            // Loop through the notes array and fetch titles
+                            for (int i = 0; i < notesArray.length(); i++) {
+                                JSONObject noteObj = notesArray.getJSONObject(i);
+                                String title = noteObj.getString("title");
+
+                                // Add the title to the list
+                                notesItem.add(new Note(title)); // Assuming Note class has a constructor that takes a title
+                            }
+
+                            // Once the titles are fetched, post to the main thread to update the UI
+                            new Handler(Looper.getMainLooper()).post(callback);
+
+                        } else {
+                            // Handle error or empty notes list if success is false
+                            new Handler(Looper.getMainLooper()).post(() -> {
+                                Toast.makeText(context, "No notes found!", Toast.LENGTH_SHORT).show();
+                            });
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        new Handler(Looper.getMainLooper()).post(() -> {
+                            Toast.makeText(context, "Failed to fetch notes.", Toast.LENGTH_LONG).show();
+                        });
+                    }
+                }
+            }).start();
+        }
+
         @Override
         public void onClick(View v) {
             Intent intent = new Intent(itemView.getContext(), Notes.class);
             itemView.getContext().startActivity(intent);
         }
     }
+
 
     // Define ViewHolder for History
     static class HistoryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -175,5 +267,7 @@ public class journalAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             Intent intent = new Intent(itemView.getContext(), History.class); // Navigate to History activity
             itemView.getContext().startActivity(intent);
         }
+
+
     }
 }
