@@ -1,81 +1,70 @@
 package HelperClasses;
 
-import static android.app.DownloadManager.COLUMN_ID;
+import android.os.AsyncTask;
+import android.util.Log;
 
-import android.content.ContentValues;
-import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
+import java.io.BufferedWriter;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
-import java.util.ArrayList;
-import java.util.List;
+public class NotesDatabaseHelper {
 
-public class NotesDatabaseHelper extends SQLiteOpenHelper {
-    private static final String DATABASE_NAME = "notes.db";
-    private static final int DATABASE_VERSION = 1;
+    // URL of the PHP script
+    private static final String INSERT_NOTE_URL = "https://umakmdo-91b845374d5b.herokuapp.com/insert_notes.php"; // Replace with your actual PHP endpoint
 
-    // Database table and column names
-    private static final String TABLE_NOTES = "notes";
-    private static final String COLUMN_TITLE = "title";
-    private static final String COLUMN_DATE_TIME = "date_time";
-    private static final String COLUMN_SYMPTOMS = "symptoms";
-    private static final String COLUMN_MOOD = "mood";
-    private static final String COLUMN_MEDICINE = "medicine";
+    // ExecutorService for running background tasks
+    private final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
-    public NotesDatabaseHelper(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
-    }
+    /**
+     * Inserts a note into the database by calling the PHP script.
+     *
+     * @param email     The user's email (umak_email).
+     * @param title     The title of the note.
+     * @param symptoms  The symptoms described in the note.
+     * @param mood      The mood associated with the note.
+     * @param medicine  The medicine mentioned in the note.
+     * @param datetime  The creation date and time in "YYYY-MM-DD HH:mm:ss" format.
+     */
+    public void insertNote(String email, String title, String symptoms, String mood, String medicine, String datetime) {
+        executorService.execute(() -> {
+            try {
+                // Establish a connection to the server
+                URL url = new URL(INSERT_NOTE_URL);
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("POST");
+                conn.setDoOutput(true);
 
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-        String createTable = "CREATE TABLE " + TABLE_NOTES + " ("
-                + COLUMN_TITLE + " TEXT, "
-                + COLUMN_DATE_TIME + " TEXT, "
-                + COLUMN_SYMPTOMS + " TEXT, "
-                + COLUMN_MOOD + " TEXT, "
-                + COLUMN_MEDICINE + " TEXT)";
-        db.execSQL(createTable);
-    }
+                // Write the POST data
+                OutputStream outputStream = conn.getOutputStream();
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
+                String postData = URLEncoder.encode("umak_email", "UTF-8") + "=" + URLEncoder.encode(email, "UTF-8") + "&" +
+                        URLEncoder.encode("title", "UTF-8") + "=" + URLEncoder.encode(title, "UTF-8") + "&" +
+                        URLEncoder.encode("symptoms", "UTF-8") + "=" + URLEncoder.encode(symptoms, "UTF-8") + "&" +
+                        URLEncoder.encode("mood", "UTF-8") + "=" + URLEncoder.encode(mood, "UTF-8") + "&" +
+                        URLEncoder.encode("medicine", "UTF-8") + "=" + URLEncoder.encode(medicine, "UTF-8") + "&" +
+                        URLEncoder.encode("created_at", "UTF-8") + "=" + URLEncoder.encode(datetime, "UTF-8");
 
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NOTES);
-        onCreate(db);
-    }
-    public List<Note> getLatestNotes(int limit) {
-        List<Note> notesList = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT * FROM notes ORDER BY date_time DESC LIMIT ?";
-        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(limit)});
+                writer.write(postData);
+                writer.flush();
+                writer.close();
+                outputStream.close();
 
-        while (cursor.moveToNext()) {
-            notesList.add(new Note(
-                    cursor.getString(cursor.getColumnIndexOrThrow("title")),
-                    cursor.getString(cursor.getColumnIndexOrThrow("date_time")),
-                    cursor.getString(cursor.getColumnIndexOrThrow("symptoms")),
-                    cursor.getString(cursor.getColumnIndexOrThrow("mood")),
-                    cursor.getString(cursor.getColumnIndexOrThrow("medicine"))
-            ));
-        }
-        cursor.close();
-        return notesList;
-    }
+                // Get the server response
+                int responseCode = conn.getResponseCode();
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    Log.d("NotesDatabaseHelper", "Note inserted successfully!");
+                } else {
+                    Log.e("NotesDatabaseHelper", "Error: Server responded with code " + responseCode);
+                }
 
-    public void addNote(String title, String dateTime, String symptoms, String mood, String medicine) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(COLUMN_TITLE, title);
-        values.put(COLUMN_DATE_TIME, dateTime);
-        values.put(COLUMN_SYMPTOMS, symptoms);
-        values.put(COLUMN_MOOD, mood);
-        values.put(COLUMN_MEDICINE, medicine);
-        db.insert(TABLE_NOTES, null, values);
-        db.close();
-    }
-
-    public Cursor getAllNotes() {
-        SQLiteDatabase db = this.getReadableDatabase();
-        return db.rawQuery("SELECT * FROM " + TABLE_NOTES, null);
+            } catch (Exception e) {
+                Log.e("NotesDatabaseHelper", "Error inserting note: " + e.getMessage());
+            }
+        });
     }
 }
