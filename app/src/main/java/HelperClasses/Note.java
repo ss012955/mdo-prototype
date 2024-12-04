@@ -18,6 +18,9 @@ public class Note {
         this.medicine = medicine;
 
     }
+    public Note(String title) {
+        this.title = title;
+    }
 
     public String getId() {
         return noteId; // Return the note ID
