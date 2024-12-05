@@ -79,12 +79,8 @@ public class fJournal extends Fragment implements ItemClickListener {
 
     }
     private void loadLatestNotes() {
-        // Fetch the latest 3 notes from your database (You can modify the query to get the most recent notes)
-        NotesDatabaseHelper dbHelper = new NotesDatabaseHelper(getContext());
-        List<Note> latestNotes = dbHelper.getLatestNotes(3); // Fetch the latest 3 notes
-
         // Add the notes section to contentList
-        List<Note> notesList = new ArrayList<>(latestNotes);
+        List<Note> notesList = new ArrayList<>();
         contentList.add(new contentJournal("notes", "This section contains user notes.", "notes", notesList, null));
     }
     @Override

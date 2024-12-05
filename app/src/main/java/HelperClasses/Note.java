@@ -6,14 +6,24 @@ public class Note {
     private String symptoms;
     private String mood;
     private String medicine;
+    private String noteId; // Add a field for the ID
 
     // Constructor
-    public Note(String title, String dateTime, String symptoms, String mood, String medicine) {
+    public Note(String noteId, String title, String dateTime, String symptoms, String mood, String medicine) {
+        this.noteId = noteId; // Initialize the ID
         this.title = title;
         this.dateTime = dateTime;
         this.symptoms = symptoms;
         this.mood = mood;
         this.medicine = medicine;
+
+    }
+    public Note(String title) {
+        this.title = title;
+    }
+
+    public String getId() {
+        return noteId; // Return the note ID
     }
 
     // Getters
