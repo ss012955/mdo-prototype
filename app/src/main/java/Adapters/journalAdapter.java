@@ -105,19 +105,32 @@ public class journalAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public static class NotesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         RecyclerView notesRecyclerView;
         TextView titleTextView;
-        List<String> notesTitles = new ArrayList<>(); // List to store notes titles
+        List<Note> notesItem = new ArrayList<>(); // List to store notes items
+        notesJournalAdapter notesAdapter;
+        private Handler handler;
+        private Runnable notesRunnable;
 
         public NotesViewHolder(@NonNull View itemView) {
             super(itemView);
             notesRecyclerView = itemView.findViewById(R.id.notesRecyclerView);
             titleTextView = itemView.findViewById(R.id.notesTitleTextView);
             itemView.setOnClickListener(this);
+
+            // Set up a Handler for periodic polling
+            handler = new Handler(Looper.getMainLooper());
+            notesRunnable = new Runnable() {
+                @Override
+                public void run() {
+                    loadNotesTitles(notesItem, itemView.getContext(), null); // Fetch and update notes
+                    handler.postDelayed(this, 5000); // Poll every 5 seconds
+                }
+            };
         }
 
         // bind() method to populate the Notes data
         public void bind(contentJournal content, Context context) {
             // Fetch the notes list if not already available
-            List<Note> notesItem = content.getNotesList(); // Assuming notes are passed here
+            notesItem = content.getNotesList(); // Assuming notes are passed here
 
             // Fetch the notes titles and update the adapter once titles are fetched
             loadNotesTitles(notesItem, context, () -> {
@@ -212,10 +225,18 @@ public class journalAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             Intent intent = new Intent(itemView.getContext(), Notes.class);
             itemView.getContext().startActivity(intent);
         }
+
+        // Start polling when the ViewHolder is bound
+        public void startPolling() {
+            handler.post(notesRunnable);
+        }
+
+        // Stop polling when the ViewHolder is no longer needed
+        public void stopPolling() {
+            handler.removeCallbacks(notesRunnable);
+        }
     }
-
-
-    // Define ViewHolder for History
+  // Define ViewHolder for History
     static class HistoryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         RecyclerView recyclerViewHistory;
         historyJournalAdapter historyRecyclerViewAdapter;
