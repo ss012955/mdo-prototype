@@ -50,8 +50,9 @@
     <!-- White Background Container -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="625dp"
+        android:layout_height="0dp"
         android:background="@color/white"
+        app:layout_constraintBottom_toTopOf="@id/tablayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/txtviewHomeTitle">
