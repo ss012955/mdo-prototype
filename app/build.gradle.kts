@@ -48,6 +48,7 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
     implementation(libs.picasso)
     implementation(libs.viewpager2)
+    implementation ("com.airbnb.android:lottie:6.0.0")
     implementation("com.google.firebase:firebase-auth:21.0.7")
     implementation("com.google.firebase:firebase-firestore:24.0.0")
     implementation(platform("com.google.firebase:firebase-bom:33.5.1"))
