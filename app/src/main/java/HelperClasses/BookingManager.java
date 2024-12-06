@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CalendarView;
@@ -12,24 +13,34 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 
+import com.android.volley.Request;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.prototype.R;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class BookingManager {
 
     private String selectedTimeSlot;
     private Date selectedDate;
-    public void showTimeSlotDialog(Context context, OnTimeSlotSelectedListener listener) {
+
+    public void showTimeSlotDialog(Context context, OnTimeSlotSelectedListener listener, String selectedDate) {
         // Inflate the dialog layout
         View dialogView = View.inflate(context, R.layout.dialog_time, null);
 
-        // Initialize time slots
         TextView[] timeSlots = {
                 dialogView.findViewById(R.id.timeSlot1),
                 dialogView.findViewById(R.id.timeSlot2),
@@ -44,7 +55,26 @@ public class BookingManager {
         Button confirmButton = dialogView.findViewById(R.id.confirm_button);
         final String[] selectedTime = {""};
 
-        // Add click listeners to time slots
+        // Convert the time slots to 24-hour format (HH:mm) and check availability
+        for (TextView timeSlot : timeSlots) {
+            String time = timeSlot.getText().toString();
+
+            // Convert the time slot to SQL compatible time format (HH:mm)
+            String sqlTime = convertToSqlTimeFormat(time);
+
+            // Pass the TextView and SQL formatted time to the availability checker
+            checkTimeSlotAvailability(context, selectedDate, sqlTime, isAvailable -> {
+                if (!isAvailable) {
+                    timeSlot.setTextColor(ContextCompat.getColor(context, R.color.red));
+                    timeSlot.setClickable(false);
+                } else {
+                    timeSlot.setBackgroundResource(android.R.color.transparent);
+                    timeSlot.setClickable(true);
+                }
+            });
+        }
+
+        // Slot click listener
         View.OnClickListener slotClickListener = view -> {
             for (TextView slot : timeSlots) {
                 slot.setBackgroundResource(android.R.color.transparent); // Reset background
@@ -75,6 +105,101 @@ public class BookingManager {
         });
     }
 
+    private void checkTimeSlotAvailability(Context context, String date, String time, OnAvailabilityCheckListener listener) {
+        String url = "http://192.168.100.4/MDOapp-main/check_availability.php";
+
+        JSONObject requestBody = new JSONObject();
+        try {
+            requestBody.put("booking_date", date);
+            requestBody.put("booking_time", time); // Send time in SQL compatible format
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, requestBody,
+                response -> {
+                    try {
+                        String status = response.getString("status");
+                        Log.d("BookingManager", "Time slot: " + time + " | Status: " + status);
+                        listener.onCheckComplete("available".equals(status));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        listener.onCheckComplete(false);
+                    }
+                },
+                error -> {
+                    error.printStackTrace();
+                    listener.onCheckComplete(false);
+                });
+
+        Volley.newRequestQueue(context).add(request);
+    }
+
+    // Convert AM/PM time to SQL-compatible HH:mm format
+    private String convertToSqlTimeFormat(String time) {
+        // Call the method to handle time slot conversion (e.g., 8:00-9:00 AM -> 08:00)
+        String newTime = convertTimeSlot(time);
+
+        // Parse the time string into a Date object using SimpleDateFormat
+        SimpleDateFormat inputFormat = new SimpleDateFormat("h:mm a", Locale.getDefault());
+        Date parsedTime;
+        try {
+            parsedTime = inputFormat.parse(newTime); // Parse the converted time (e.g., "8:00 AM")
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return ""; // If parsing fails, return an empty string
+        }
+
+        // Format the time back to the 24-hour format (HH:mm)
+        SimpleDateFormat sqlFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
+        return sqlFormat.format(parsedTime); // Returns time in 24-hour format, e.g., "16:00"
+    }
+
+    private String convertTimeSlot(String time) {
+        String newTime = time; // Default to original time
+
+        // Check and convert specific time slots to a time without a range
+        switch (time) {
+            case "8:00-9:00 AM":
+                newTime = "8:00 AM";
+                break;
+            case "9:00-10:00 AM":
+                newTime = "9:00 AM";
+                break;
+            case "10:00-11:00 AM":
+                newTime = "10:00 AM";
+                break;
+            case "11:00-12:00 PM":
+                newTime = "11:00 AM";
+                break;
+            case "1:00-2:00 PM":
+                newTime = "1:00 PM";
+                break;
+            case "2:00-3:00 PM":
+                newTime = "2:00 PM";
+                break;
+            case "3:00-4:00 PM":
+                newTime = "3:00 PM";
+                break;
+            case "4:00-5:00 PM":
+                newTime = "4:00 PM";
+                break;
+            default:
+                // If the time doesn't match a specific slot, leave it unchanged
+                Log.w("BookingInsert", "Unexpected time format: " + time);
+                break;
+        }
+
+        return newTime;
+    }
+
+    public interface OnAvailabilityCheckListener {
+        void onCheckComplete(boolean isAvailable);
+    }
+
+
+
+    // Method for handling date selection
     public Date handleCalendarDateSelection(MaterialCalendarView calendarView, Context context) {
         // Set the OnDateChangedListener for MaterialCalendarView
         calendarView.setOnDateChangedListener(new OnDateSelectedListener() {
@@ -103,13 +228,13 @@ public class BookingManager {
 
                 // Update the selectedDate only if it's valid
                 selectedDate = selectedCalendar.getTime();
-                Toast.makeText(context, "Date selected: " + selectedDate, Toast.LENGTH_SHORT).show();
+
+                // Log and parse the date in yyyy-mm-dd format
             }
         });
 
         return selectedDate; // Return the selected date (or null if no date is selected yet)
     }
-
 
     public String getSelectedTimeSlot() {
         return selectedTimeSlot;
@@ -144,7 +269,6 @@ public class BookingManager {
             }
         }, 15);
     }
-
 
     public void animateProgressBar(ProgressBar progressBar, int progress) {
         ObjectAnimator animation = ObjectAnimator.ofInt(progressBar, "progress", progressBar.getProgress(), progress);
