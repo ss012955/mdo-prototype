@@ -9,14 +9,15 @@ public class AppointmentsClass {
     private String service;
     private String dateTime;
     private String remarks;
-
-    public AppointmentsClass(String bookingID, String status, String appointNumber, String service, String dateTime, String remarks) {
+    private String createdAt;
+    public AppointmentsClass(String bookingID, String status, String appointNumber, String service, String dateTime, String remarks, String createdAt) {
         this.bookingID = bookingID;
         this.status = status;
         this.appointNumber = appointNumber;
         this.service = service;
         this.dateTime = dateTime;
         this.remarks = remarks;
+        this.createdAt = createdAt;
     }
 
     public String getBookingID() {
@@ -65,5 +66,14 @@ public class AppointmentsClass {
 
     public void setRemarks(String remarks) {
         this.remarks = remarks;
+    }
+    // Getter for createdAt
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    // Setter for createdAt
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
     }
 }

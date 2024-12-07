@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.icu.util.Calendar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -196,9 +197,37 @@ public class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 appointmentText += "s"; // Add "s" if more than 1 appointment
             }
             tvNumberofAppointments.setText(appointmentText + ".");
-
             btnStartBooking.setOnClickListener(v -> {
-                // Start the BookingActivity
+                // Get the current date
+                Calendar calendar = Calendar.getInstance();
+                int currentYear = calendar.get(Calendar.YEAR);
+                int currentMonth = calendar.get(Calendar.MONTH) + 1; // Months are zero-based
+                int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
+
+                // Extract the day, month, and year from the createdAt date
+                for (AppointmentDaysClass appointment : appointmentsDays) {
+                    try {
+                        // Extract only the date part (ignore time if present)
+                        String createdAtDate = appointment.getCreatedAt().split(" ")[0]; // Extracts the date (yyyy-MM-dd)
+                        String[] createdAtParts = createdAtDate.split("-"); // Split the date (yyyy-MM-dd)
+                        int appointmentYear = Integer.parseInt(createdAtParts[0]);
+                        int appointmentMonth = Integer.parseInt(createdAtParts[1]);
+                        int appointmentDay = Integer.parseInt(createdAtParts[2]);
+
+
+
+                        // Compare the current date with the createdAt date
+                        if (currentYear == appointmentYear && currentMonth == appointmentMonth && currentDay == appointmentDay) {
+                            Toast.makeText(context, "You already booked today, come back tomorrow!", Toast.LENGTH_SHORT).show();
+                            return; // Exit the click handler to prevent proceeding to BookingActivity
+                        }
+                    } catch (Exception e) {
+                        Log.e("AppointmentsDebug", "Error parsing createdAt: " + appointment.getCreatedAt(), e);
+                    }
+                }
+
+                // Proceed to the BookingActivity if no match
+                Log.d("AppointmentsDebug", "No matching date found. Proceeding to BookingActivity.");
                 Intent intent = new Intent(itemView.getContext(), BookingActivity.class);
                 itemView.getContext().startActivity(intent);
             });
@@ -220,7 +249,6 @@ public class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 public void onAppointmentsFetched(List<AppointmentsClass> fetchedAppointments, List<AppointmentDaysClass> fetchedDays) {
                     appointmentsList.clear();
                     appointmentsList.addAll(fetchedAppointments);
-                    appointmentsDays.clear();
                     for (AppointmentDaysClass day : fetchedDays) {
                         // Assuming AppointmentDaysClass has getYear(), getMonth(), and getDay() methods
                         CalendarDay calendarDay = CalendarDay.from(day.getYear(), day.getMonth() - 1, day.getDay());

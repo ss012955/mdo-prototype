@@ -3,10 +3,11 @@ package HelperClasses;
 public class AppointmentDaysClass {
     private String dateTime;
     private String status;
-
-    public AppointmentDaysClass(String dateTime, String status) {
+    private String createdAt;
+    public AppointmentDaysClass(String dateTime, String status, String createdAt) {
         this.dateTime = dateTime;
         this.status = status;
+        this.createdAt = createdAt;
     }
 
     public String getDateTime() {
@@ -35,5 +36,8 @@ public class AppointmentDaysClass {
 
     public int getDay() {
         return Integer.parseInt(dateTime.split("-")[2]);
+    }
+    public String getCreatedAt() {
+        return createdAt;
     }
 }

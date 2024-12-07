@@ -79,7 +79,6 @@ public class AppointmentsManager {
 
                         // Parse JSON response
                         JSONArray responseArray = new JSONArray(response.toString());
-
                         // Update the UI with fetched data
                         ((Activity) context).runOnUiThread(new Runnable() {
                             @Override
@@ -97,13 +96,13 @@ public class AppointmentsManager {
                                         String rawTime = booking.getString("booking_time");
                                         String remarks = booking.getString("remarks");
                                         String status = booking.getString("status");
-
+                                        String created_at = booking.getString("created_at");
                                         // Format the date and time
                                         String formattedDateTime = formatDateTime(rawDate, rawTime);
 
                                         String appointNumber = "Appointment " + (i + 1); // Incremented appointment number
                                         // Create and add the appointment to the list
-                                        AppointmentsClass appointment = new AppointmentsClass(bookingID, status, appointNumber, service, formattedDateTime, remarks);
+                                        AppointmentsClass appointment = new AppointmentsClass(bookingID, status, appointNumber, service, formattedDateTime, remarks, created_at);
                                         appointmentsList.add(appointment);
 
                                         int numberOfAppointments = appointmentsList.size();
@@ -117,7 +116,7 @@ public class AppointmentsManager {
                                             int day = Integer.parseInt(dateParts[2]);
                                             calendarDay = CalendarDay.from(year, month, day);
 
-                                            AppointmentDaysClass appointmentDaysClass = new AppointmentDaysClass(calendarDay.toString(), status);
+                                            AppointmentDaysClass appointmentDaysClass = new AppointmentDaysClass(calendarDay.toString(), status, created_at);
                                             appointmentDaysClasses.add(appointmentDaysClass);
                                             if(status.equals("Approved")){
                                                 approvedDays.add(calendarDay);
@@ -143,7 +142,6 @@ public class AppointmentsManager {
                                         calendarView.addDecorator(new EventDecoratorPending(combinedPendingDates));
 
                                     }
-                                    Log.d("AppointmentsDebug", "Applying decorator with dates: " + appointmentsDays);
 
                                     // Notify the callback
                                     callback.onAppointmentsFetched(appointmentsList, appointmentDaysClasses);

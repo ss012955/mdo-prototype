@@ -41,7 +41,6 @@ public class TriviaManager {
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, response -> {
             try {
-                Log.d("Trivia Response", response);
                 JSONArray jsonArray = new JSONArray(response);
                 List<TriviaItem> triviaItems = new ArrayList<>();
 

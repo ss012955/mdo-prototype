@@ -5,6 +5,7 @@ import static HelperClasses.SignupManager.context;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -97,10 +98,36 @@ public class Appointments extends BaseActivity implements ItemClickListener {
 
         recyclerView = findViewById(R.id.recyclerView);
         button = findViewById(R.id.btnStartBooking);
-        button.setOnClickListener(v->{
+        button.setOnClickListener(v -> {
+            // Get the current date
+            Calendar calendar = Calendar.getInstance();
+            int currentYear = calendar.get(Calendar.YEAR);
+            int currentMonth = calendar.get(Calendar.MONTH) + 1; // Months are zero-based
+            int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
+
+            // Extract the day, month, and year from the createdAt date
+            for (AppointmentsClass appointment : appointmentsList) {
+                try {
+                    // Extract only the date part (ignore time if present)
+                    String createdAtDate = appointment.getCreatedAt().split(" ")[0]; // Extracts the date (yyyy-MM-dd)
+                    String[] createdAtParts = createdAtDate.split("-"); // Split the date (yyyy-MM-dd)
+                    int appointmentYear = Integer.parseInt(createdAtParts[0]);
+                    int appointmentMonth = Integer.parseInt(createdAtParts[1]);
+                    int appointmentDay = Integer.parseInt(createdAtParts[2]);
+
+                    // Compare the current date with the createdAt date
+                    if (currentYear == appointmentYear && currentMonth == appointmentMonth && currentDay == appointmentDay) {
+                        Toast.makeText(this, "You already booked today, come back tomorrow!", Toast.LENGTH_SHORT).show();
+                        return; // Exit the click handler to prevent proceeding to BookingActivity
+                    }
+                } catch (Exception e) {
+                    Log.e("AppointmentsDebug", "Error parsing createdAt: " + appointment.getCreatedAt(), e);
+                }
+            }
+            // Proceed to the BookingActivity if no match
+            Log.d("AppointmentsDebug", "No matching date found. Proceeding to BookingActivity.");
             Intent intent = new Intent(this, BookingActivity.class);
-            startActivity(intent);
-            finish();
+            this.startActivity(intent);
         });
 
         appointmentsList = new ArrayList<>();
