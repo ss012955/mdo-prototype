@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:layout_marginStart="13dp"
-            android:text="Announcements"
+            android:text="ANNOUNCEMENTS"
             android:fontFamily="@font/metropolis_bold"
             android:textSize="20sp"
             android:textColor="@color/black"

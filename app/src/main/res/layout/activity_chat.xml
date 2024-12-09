@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -10,40 +9,40 @@
     tools:context=".ChatActivity"
     android:fitsSystemWindows="true">
 
-    <!-- UMAK Logo -->
+    <!-- Logo -->
     <ImageView
         android:id="@+id/logoumak"
         android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="7dp"
-        android:layout_marginTop="6dp"
+        android:layout_height="38dp"
         android:src="@drawable/umaklogo"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="7dp"
+        android:layout_marginTop="6dp"/>
 
     <!-- Chat Icon -->
     <ImageView
         android:id="@+id/chat"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginEnd="7dp"
-        android:layout_marginTop="6dp"
-        android:src="@drawable/chat_yellow"
+        android:src="@drawable/chat"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginRight="7dp"
+        android:layout_marginTop="6dp"/>
 
     <!-- Title -->
     <TextView
         android:id="@+id/txtviewHomeTitle"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_marginTop="6dp"
         android:fontFamily="@font/metropolis_bold"
         android:padding="7dp"
         android:text="Chat"
+        android:textAllCaps="true"
         android:textAlignment="center"
-        android:textColor="@color/white"
         android:textSize="30sp"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -59,50 +58,57 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- Buttons for FAQ and Services -->
-        <LinearLayout
-            android:id="@+id/linearLayout4"
-            android:layout_width="0dp"
+        <!-- Buttons for FAQ and Services inside NestedScrollView -->
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/scroll"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            android:fillViewport="true"
             app:layout_constraintTop_toTopOf="parent">
 
-            <Button
-                android:id="@+id/btn_view_services"
-                android:layout_width="0dp"
+            <LinearLayout
+                android:id="@+id/linearLayout4"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:layout_weight="1"
-                android:backgroundTint="@color/UMAKLIGHTBLUE"
-                android:text="View Services"
-                android:textColor="@android:color/white" />
+                android:orientation="horizontal"
+                android:padding="8dp"
+                android:background="@android:color/transparent">
 
-            <Button
-                android:id="@+id/btn_faq"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:layout_weight="1"
-                android:backgroundTint="@color/UMAKLIGHTBLUE"
-                android:text="View FAQs"
-                android:textColor="@android:color/white" />
-        </LinearLayout>
+                <Button
+                    android:id="@+id/btn_view_services"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/UMAKLIGHTBLUE"
+                    android:text="View Services"
+                    android:textColor="@android:color/white" />
+
+                <Button
+                    android:id="@+id/btn_faq"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/UMAKLIGHTBLUE"
+                    android:text="View FAQs"
+                    android:textColor="@android:color/white" />
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
 
         <!-- Chat Messages -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view_messages"
             android:layout_width="match_parent"
-            android:layout_height="502dp"
+            android:layout_height="0dp"
             android:clipToPadding="false"
             android:padding="16dp"
             android:scrollbars="vertical"
+            app:layout_constraintTop_toBottomOf="@id/scroll"
             app:layout_constraintBottom_toTopOf="@id/message_input_area"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout4" />
+            app:layout_constraintStart_toStartOf="parent" />
 
         <!-- Input Area -->
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -111,8 +117,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            >
+            app:layout_constraintEnd_toEndOf="parent">
 
             <!-- Divider Line -->
             <View
@@ -126,11 +131,13 @@
 
             <!-- Input Message -->
             <EditText
+               android:layout_marginLeft="10dp"
                 android:id="@+id/input_message"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:hint="Type your message..."
-                android:padding="8dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
                 android:background="@android:color/transparent"
                 android:drawableStart="@drawable/edit"
                 android:drawablePadding="8dp"
@@ -142,6 +149,7 @@
 
             <!-- Send Button -->
             <ImageButton
+               android:layout_marginEnd="10dp"
                 android:id="@+id/btn_send_message"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

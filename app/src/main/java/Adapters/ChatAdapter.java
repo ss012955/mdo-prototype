@@ -1,5 +1,6 @@
 package Adapters;
 
+import android.graphics.Color;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.prototype.R;
@@ -40,6 +42,19 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
     public void onBindViewHolder(@NonNull ChatViewHolder holder, int position) {
         Message message = messages.get(position);
         holder.bind(message);
+        // Check if the message sender is the admin
+        if (message.getSenderEmail().equals("admin2@example.com")) {
+            // Change the background color for admin messages
+            holder.chatLinear.setBackgroundResource(R.drawable.roundedchat_admin);
+            holder.messageTextView.setTextColor(Color.BLACK);
+        } else {
+            // Default background for user messages
+            holder.chatLinear.setBackgroundResource(R.drawable.rounded_chat);
+            holder.messageTextView.setTextColor(Color.WHITE);
+        }
+
+        // Set the message text
+        holder.messageTextView.setText(message.getMessage());
     }
 
     @Override
