@@ -20,6 +20,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.tabs.TabLayout;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 
 import java.sql.Time;
 import java.text.SimpleDateFormat;
@@ -79,6 +80,14 @@ public class BookingActivityDate extends BaseActivity {
         for (int i = 0; i < icons.length; i++) {
             tabLayout.addTab(tabLayout.newTab().setIcon(icons[i]));
         }
+        tabLayout.selectTab(null);
+        // Reset the tab icons to their unselected state
+        for (int i = 0; i < tabLayout.getTabCount(); i++) {
+            TabLayout.Tab tab = tabLayout.getTabAt(i);
+            if (tab != null) {
+                tab.setIcon(icons[i]); // Reset to the original icon (unselected)
+            }
+        }
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -103,35 +112,46 @@ public class BookingActivityDate extends BaseActivity {
 
         buttomTime = findViewById(R.id.buttomTime);
 
+        chosenDate = bookingManager.handleCalendarDateSelection(calendarView, this);
         // Handle time slot selection
         buttomTime.setOnClickListener(v -> {
+            chosenDate = bookingManager.getSelectedDate();
+            // Make sure selectedDate is available, if not show an error message
+            if (chosenDate == null) {
+                Toast.makeText(this, "Please select a date first.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            // Pass the selected date to the dialog
+            String formattedDate = new SimpleDateFormat("yyyy-MM-dd").format(chosenDate);
+
             bookingManager.showTimeSlotDialog(this, timeSlot -> {
                 chosenTimeSlot = timeSlot; // Save selected time slot
                 Toast.makeText(this, "Time selected: " + chosenTimeSlot, Toast.LENGTH_SHORT).show();
                 buttomTime.setText(chosenTimeSlot);
-
-            });
+            }, formattedDate); // Pass the formatted date as the third argument
         });
-
         // Handle calendar date selection
-        chosenDate = bookingManager.handleCalendarDateSelection(calendarView, this);
+
 
         findViewById(R.id.buttonNext).setOnClickListener(v -> {
             chosenDate = bookingManager.getSelectedDate();
             chosenTimeSlot = bookingManager.getSelectedTimeSlot();
-            if (chosenDate == null || chosenTimeSlot == null) {
-                Toast.makeText(this, "Please select a date and time first.", Toast.LENGTH_SHORT).show();
+
+            if (chosenDate == null) {
+                Toast.makeText(this, "Please select a date first.", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+            if (chosenTimeSlot == null) {
+                Toast.makeText(this, "Please select a time slot first.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
             String formattedDate = dateFormat.format(chosenDate);
-            // Convert chosen time to HH:MM AM/PM format
+
+            // Use the selected time as is (already a string)
             String formattedTime = chosenTimeSlot;
-
-            // Show the selected date and time in the desired format
-            //Toast.makeText(this, "Date: " + formattedDate + " Time: " + formattedTime, Toast.LENGTH_SHORT).show();
-
 
             // Pass the data to the next activity
             Intent intentTime = new Intent(this, BookingValidate.class);
@@ -139,9 +159,6 @@ public class BookingActivityDate extends BaseActivity {
             intentTime.putExtra("CHOSEN_TIME", formattedTime);
             intentTime.putExtra("Service", service);
             intentTime.putExtra("ServiceType", serviceType);
-
-
-
             intentTime.putExtra("bookingID", bookingID);
             intentTime.putExtra("ServiceResched", serviceR);
             intentTime.putExtra("RemarksResched", remarksR);
