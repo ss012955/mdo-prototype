@@ -3,6 +3,7 @@ package HelperClasses;
 import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
@@ -28,8 +29,10 @@ import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class BookingManager {
@@ -219,10 +222,18 @@ public class BookingManager {
                     return; // Exit if the date is in the past
                 }
 
+
                 if (selectedCalendar.equals(today)) {
                     Toast.makeText(context, "Please select a future date.", Toast.LENGTH_SHORT).show();
                     return; // Exit if the date is in the past
                 }
+
+                SharedPreferences prefs = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
+                String userEmail = prefs.getString("user_email", "No email found");
+
+                // Fetch the user's bookings and check if there is a booking on the selected date
+                fetchBookingsForUser(userEmail, selectedCalendar, context);
+
 
                 // Check if the selected date is a weekend (Saturday or Sunday)
                 int selectedDayOfWeek = selectedCalendar.get(Calendar.DAY_OF_WEEK);
@@ -240,6 +251,79 @@ public class BookingManager {
 
         return selectedDate; // Return the selected date (or null if no date is selected yet)
     }
+
+    // Method to fetch bookings for the user and check if there is a booking on the selected date
+    public void fetchBookingsForUser(String userEmail, Calendar selectedCalendar, Context context) {
+        String url = "https://umakmdo-91b845374d5b.herokuapp.com/fetch_bookings.php";
+
+        // Make the request to fetch the bookings
+        AppointmentsManager manager = new AppointmentsManager(context);
+        manager.fetchAppointments(url, userEmail, new ArrayList<>(), new ArrayList<>(), null, context, new AppointmentsManager.AppointmentsCallback() {
+            @Override
+            public void onAppointmentsFetched(List<AppointmentsClass> fetchedAppointments, List<AppointmentDaysClass> fetchedDays) {
+                // Iterate through the fetched appointments and check if the selected date matches any booking
+                for (AppointmentsClass appointment : fetchedAppointments) {
+                    // Extract the date portion from the dateTime (assuming it's in "yyyy-MM-dd HH:mm:ss" format)
+                    String bookingDateStr = appointment.getDateTime();
+                    try {
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        Date bookingDate = sdf.parse(bookingDateStr);
+
+                        // Compare the selected date with the booking date (ignore time part)
+                        if (bookingDate != null && isSameDay(bookingDate, selectedCalendar.getTime())) {
+                            // Show a toast message if there's already a booking on the selected date
+                            Toast.makeText(context, "You already have a booking on this date. Choose another date or cancel/reschedule your current booking.", Toast.LENGTH_LONG).show();
+                            return;
+                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                Toast.makeText(context, "Error fetching bookings: " + errorMessage, Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    public void fetchBookingsForUser(String userEmail, MaterialCalendarView selectedCalendar, Context context) {
+        String url = "https://umakmdo-91b845374d5b.herokuapp.com/fetch_bookings.php";
+
+        // Make the request to fetch the bookings
+        AppointmentsManager manager = new AppointmentsManager(context);
+        manager.fetchAppointments(url, userEmail, new ArrayList<>(), new ArrayList<>(), null, context, new AppointmentsManager.AppointmentsCallback() {
+            @Override
+            public void onAppointmentsFetched(List<AppointmentsClass> fetchedAppointments, List<AppointmentDaysClass> fetchedDays) {
+                // Iterate through the fetched appointments and check if the selected date matches any booking
+                for (AppointmentsClass appointment : fetchedAppointments) {
+                    // Extract the date portion from the dateTime (assuming it's in "yyyy-MM-dd HH:mm:ss" format)
+                    String bookingDateStr = appointment.getDateTime();
+                    try {
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        Date bookingDate = sdf.parse(bookingDateStr);
+
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                Toast.makeText(context, "Error fetching bookings: " + errorMessage, Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+
+    // Helper method to compare if two dates are the same day
+    private boolean isSameDay(Date date1, Date date2) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        return sdf.format(date1).equals(sdf.format(date2));
+    }
+
 
     public String getSelectedTimeSlot() {
         return selectedTimeSlot;
