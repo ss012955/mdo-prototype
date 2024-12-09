@@ -19,7 +19,7 @@ public class LoginManager implements DefaultLifecycleObserver {
     private final ExecutorService executorService;
     private final Context context;
     private final FirebaseAuth mAuth;
-
+    public  static  NetworkUtils networkUtils;
 
     public LoginManager(Context context) {
         this.context = context;
@@ -35,9 +35,19 @@ public class LoginManager implements DefaultLifecycleObserver {
                         if (task.isSuccessful()) {
                             FirebaseUser user = mAuth.getCurrentUser();
                             if (user != null && user.isEmailVerified()) {
-                                // Email is verified, allow login
-                                ((MainActivity) context).runOnUiThread(() -> {
-                                    callback.onLoginSuccess();
+                                // Perform database login on a background thread
+                                executorService.execute(() -> {
+                                    String loginResponse = networkUtils.performLoginDB(umakEmail, password);
+
+                                    // Switch to the main thread to update UI based on the result
+                                    ((MainActivity) context).runOnUiThread(() -> {
+                                        Toast.makeText(context, loginResponse, Toast.LENGTH_SHORT).show();
+                                        if (loginResponse.equals("Your account is inactive.")) {
+                                            callback.onLoginFailed("Your account is inactive. Please contact administrator.");
+                                        } else {
+                                            callback.onLoginSuccess();
+                                        }
+                                    });
                                 });
                             } else {
                                 // Email not verified
@@ -46,6 +56,7 @@ public class LoginManager implements DefaultLifecycleObserver {
                                 });
                             }
                         } else {
+                            // Authentication failed
                             ((MainActivity) context).runOnUiThread(() -> {
                                 callback.onLoginFailed("Incorrect username or password.");
                             });

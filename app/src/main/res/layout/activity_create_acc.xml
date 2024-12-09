@@ -211,6 +211,7 @@
         android:layout_height="wrap_content"
         android:textColor="@color/green"
         android:text="Sample Text Sample Text"
+        android:textAlignment="center"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/btnSignUp"
         app:layout_constraintEnd_toEndOf="parent"
