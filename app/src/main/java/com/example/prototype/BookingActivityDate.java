@@ -20,7 +20,6 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.tabs.TabLayout;
-import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 
 import java.sql.Time;
 import java.text.SimpleDateFormat;
@@ -88,7 +87,6 @@ public class BookingActivityDate extends BaseActivity {
                 tab.setIcon(icons[i]); // Reset to the original icon (unselected)
             }
         }
-
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -112,7 +110,9 @@ public class BookingActivityDate extends BaseActivity {
 
         buttomTime = findViewById(R.id.buttomTime);
 
+        // Handle time slot selection
         chosenDate = bookingManager.handleCalendarDateSelection(calendarView, this);
+        bookingManager.fetchBookingsForUser(userEmail,calendarView, BookingActivityDate.this);
         // Handle time slot selection
         buttomTime.setOnClickListener(v -> {
             chosenDate = bookingManager.getSelectedDate();
@@ -130,28 +130,24 @@ public class BookingActivityDate extends BaseActivity {
                 buttomTime.setText(chosenTimeSlot);
             }, formattedDate); // Pass the formatted date as the third argument
         });
+
         // Handle calendar date selection
-
-
         findViewById(R.id.buttonNext).setOnClickListener(v -> {
             chosenDate = bookingManager.getSelectedDate();
             chosenTimeSlot = bookingManager.getSelectedTimeSlot();
-
-            if (chosenDate == null) {
-                Toast.makeText(this, "Please select a date first.", Toast.LENGTH_SHORT).show();
+            if (chosenDate == null || chosenTimeSlot == null) {
+                Toast.makeText(this, "Please select a date and time first.", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            if (chosenTimeSlot == null) {
-                Toast.makeText(this, "Please select a time slot first.", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
             String formattedDate = dateFormat.format(chosenDate);
-
-            // Use the selected time as is (already a string)
+            // Convert chosen time to HH:MM AM/PM format
             String formattedTime = chosenTimeSlot;
+
+            // Show the selected date and time in the desired format
+            //Toast.makeText(this, "Date: " + formattedDate + " Time: " + formattedTime, Toast.LENGTH_SHORT).show();
+
 
             // Pass the data to the next activity
             Intent intentTime = new Intent(this, BookingValidate.class);
@@ -159,6 +155,9 @@ public class BookingActivityDate extends BaseActivity {
             intentTime.putExtra("CHOSEN_TIME", formattedTime);
             intentTime.putExtra("Service", service);
             intentTime.putExtra("ServiceType", serviceType);
+
+
+
             intentTime.putExtra("bookingID", bookingID);
             intentTime.putExtra("ServiceResched", serviceR);
             intentTime.putExtra("RemarksResched", remarksR);

@@ -76,12 +76,12 @@ public class ConfirmationActivity extends AppCompatActivity {
             Intent chatIntent = new Intent(this, ChatActivity.class);
             startActivity(chatIntent);
         });
-        AtomicReference<Intent> intent = new AtomicReference<>(getIntent());
-        service = intent.get().getStringExtra("Service");
-        serviceType = intent.get().getStringExtra("ServiceType");
-        chosen_date = intent.get().getStringExtra("ChosenDate"); // Corrected the key name
-        chosen_time = intent.get().getStringExtra("ChosenTime"); // Corrected the key name
-        remarksInput = intent.get().getStringExtra("Remarks");
+        Intent intent = getIntent();
+        service = intent.getStringExtra("Service");
+        serviceType = intent.getStringExtra("ServiceType");
+        chosen_date = intent.getStringExtra("ChosenDate"); // Corrected the key name
+        chosen_time = intent.getStringExtra("ChosenTime"); // Corrected the key name
+        remarksInput = intent.getStringExtra("Remarks");
 
         // Fallback if remarksInput is null or empty
         if (remarksInput == null || remarksInput.isEmpty()) {
@@ -113,8 +113,8 @@ public class ConfirmationActivity extends AppCompatActivity {
 
         buttonClose = findViewById(R.id.buttonClose);
         buttonClose.setOnClickListener(v->{
-            intent.set(new Intent(ConfirmationActivity.this, home.class));
-            startActivity(intent.get());
+            Intent i = new Intent(ConfirmationActivity.this, home.class);
+            startActivity(i);
         });
     }
 

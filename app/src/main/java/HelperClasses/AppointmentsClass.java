@@ -66,4 +66,6 @@ public class AppointmentsClass {
     public void setRemarks(String remarks) {
         this.remarks = remarks;
     }
+
+
 }
