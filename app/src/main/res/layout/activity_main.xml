@@ -105,6 +105,8 @@
         android:layout_height="wrap_content"
         android:text="Incorrect Username or Password"
         android:textColor="@color/red"
+        tools:ignore="HardcodedText"
+        android:textAlignment="center"
         android:visibility="gone"
         android:textSize="17sp"
         app:layout_constraintEnd_toEndOf="parent"
