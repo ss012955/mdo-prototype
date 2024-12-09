@@ -8,11 +8,12 @@
     android:background="@color/UMAKBLUE"
     tools:context=".MainActivity">
 
+
     <ImageView
         android:id="@+id/umakLogo"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="40dp"
         android:contentDescription="@string/logo"
         android:src="@drawable/umaklogo"
         app:layout_constraintEnd_toEndOf="parent"
@@ -24,11 +25,12 @@
         android:id="@+id/textmdo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="Medical and Dental Office"
         android:textColor="@color/white"
+        android:layout_marginTop="10dp"
         android:textSize="17sp"
+        android:text="Medical and Dental Office"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/umakLogo"
         tools:ignore="HardcodedText" />
@@ -37,67 +39,69 @@
         android:id="@+id/txtviewName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
+        android:layout_marginTop="68dp"
         android:fontFamily="@font/metropolis_regular"
         android:text="Enter UMAK Email:"
         android:textColor="@color/white"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/etEmail"
-        app:layout_constraintEnd_toEndOf="@+id/etEmail"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/etEmail"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.232"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/umakLogo"
         tools:ignore="HardcodedText" />
 
     <EditText
         android:id="@+id/etEmail"
         android:layout_width="280dp"
         android:layout_height="48dp"
-        android:layout_marginTop="68dp"
+        android:layout_marginTop="16dp"
         android:autofillHints="name"
         android:background="@drawable/custom_input"
+        android:ems="10"
         android:fontFamily="@font/metropolis_regular"
+        android:hint=""
         android:inputType="text"
-        android:paddingHorizontal="12dp"
-        android:paddingVertical="8dp"
         android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.503"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textmdo" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/txtviewName"
+        app:layout_constraintTop_toBottomOf="@+id/txtviewName"
+        tools:ignore="ContentDescription,LabelFor,SpeakableTextPresentCheck" />
 
     <TextView
         android:id="@+id/txtviewPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="172dp"
         android:fontFamily="@font/metropolis_regular"
         android:text="Enter Password:"
         android:textColor="@color/white"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/etPassword"
-        app:layout_constraintEnd_toEndOf="@+id/etPassword"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/etPassword"
+        app:layout_constraintStart_toStartOf="@+id/etEmail"
+        app:layout_constraintTop_toBottomOf="@+id/etEmail"
         tools:ignore="HardcodedText" />
 
     <EditText
         android:id="@+id/etPassword"
         android:layout_width="280dp"
         android:layout_height="48dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="16dp"
         android:autofillHints="password"
         android:background="@drawable/custom_input"
         android:fontFamily="@font/metropolis_regular"
+        android:hint=""
         android:inputType="textPassword"
-        android:paddingHorizontal="12dp"
-        android:paddingVertical="8dp"
         android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.503"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etEmail" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/txtviewPassword"
+        app:layout_constraintTop_toBottomOf="@+id/txtviewPassword"
+        tools:ignore="ContentDescription,LabelFor,SpeakableTextPresentCheck" />
 
     <TextView
         android:id="@+id/incorrectUNPass"
@@ -105,10 +109,11 @@
         android:layout_height="wrap_content"
         android:text="Incorrect Username or Password"
         android:textColor="@color/red"
-        tools:ignore="HardcodedText"
         android:textAlignment="center"
         android:visibility="gone"
+        tools:ignore="HardcodedText"
         android:textSize="17sp"
+        app:layout_constraintBottom_toTopOf="@+id/btnLogIn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etPassword" />
@@ -125,6 +130,7 @@
         android:textSize="15sp"
         app:backgroundTint="@null"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etPassword"
         tools:ignore="HardcodedText" />
@@ -147,12 +153,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:layout_marginBottom="20dp"
         android:fontFamily="@font/metropolis_regular"
         android:text="Forgot Password"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/createAccount"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="0.0"
         tools:ignore="HardcodedText" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
