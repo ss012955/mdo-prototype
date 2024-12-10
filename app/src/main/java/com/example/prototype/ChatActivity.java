@@ -73,8 +73,6 @@ public class ChatActivity extends BaseActivity {
 
         SharedPreferences prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
         userEmail = prefs.getString("user_email", "No email found");
-        String token = prefs.getString("id_token", null);
-
 
         View messageInputArea = findViewById(R.id.message_input_area);
         ViewCompat.setOnApplyWindowInsetsListener(messageInputArea, (v, insets) -> {
