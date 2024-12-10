@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -27,6 +28,11 @@ import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -34,6 +40,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.CompletableFuture;
 
 public class BookingManager {
 
@@ -208,7 +215,8 @@ public class BookingManager {
         calendarView.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
-                selectedDate = null;
+                selectedDate = null; // Reset the selectedDate to null initially
+
                 // Create a Calendar instance with the selected date
                 Calendar selectedCalendar = Calendar.getInstance();
                 selectedCalendar.set(date.getYear(), date.getMonth() - 1, date.getDay()); // Month is 0-based
@@ -222,18 +230,30 @@ public class BookingManager {
                     return; // Exit if the date is in the past
                 }
 
-
+                // Check if the selected date is today
                 if (selectedCalendar.equals(today)) {
                     Toast.makeText(context, "Please select a future date.", Toast.LENGTH_SHORT).show();
-                    return; // Exit if the date is in the past
+                    return; // Exit if the date is today
                 }
 
+                // Get the user email from SharedPreferences
                 SharedPreferences prefs = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
                 String userEmail = prefs.getString("user_email", "No email found");
 
-                // Fetch the user's bookings and check if there is a booking on the selected date
-                fetchBookingsForUser(userEmail, selectedCalendar, context);
+                // Check if the user already has a booking on the selected date
+                hasBookingOnDate(userEmail, selectedCalendar, context).thenAccept(hasBooking -> {
+                    if (hasBooking) {
+                        // If the user already has a booking, reset selectedDate and prompt for another date
+                        Toast.makeText(context, "You already have a booking on this date. Choose another date or cancel/reschedule your current booking.", Toast.LENGTH_LONG).show();
 
+                        // Reset the selectedDate to null
+                        selectedDate = null;
+                    }
+                }).exceptionally(throwable -> {
+                    // Handle errors when checking bookings
+                    Toast.makeText(context, "Error checking bookings: " + throwable.getMessage(), Toast.LENGTH_LONG).show();
+                    return null;
+                });
 
                 // Check if the selected date is a weekend (Saturday or Sunday)
                 int selectedDayOfWeek = selectedCalendar.get(Calendar.DAY_OF_WEEK);
@@ -242,51 +262,73 @@ public class BookingManager {
                     return; // Exit if the date is a weekend
                 }
 
-                // Update the selectedDate only if it's valid
-                selectedDate = selectedCalendar.getTime();
-
-                // Log and parse the date in yyyy-mm-dd format
+                // Update the selectedDate only if it's valid (i.e., not already booked and not a weekend)
+                if (selectedDate == null) {
+                    selectedDate = selectedCalendar.getTime();
+                }
             }
         });
 
         return selectedDate; // Return the selected date (or null if no date is selected yet)
     }
 
-    // Method to fetch bookings for the user and check if there is a booking on the selected date
-    public void fetchBookingsForUser(String userEmail, Calendar selectedCalendar, Context context) {
-        String url = "https://umakmdo-91b845374d5b.herokuapp.com/fetch_bookings.php";
+    public CompletableFuture<Boolean> hasBookingOnDate(String userEmail, Calendar selectedCalendar, Context context) {
+        // Format the selected date in YYYY-MM-DD
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        String selectedDate = sdf.format(selectedCalendar.getTime()); // Format the selected date
 
-        // Make the request to fetch the bookings
-        AppointmentsManager manager = new AppointmentsManager(context);
-        manager.fetchAppointments(url, userEmail, new ArrayList<>(), new ArrayList<>(), null, context, new AppointmentsManager.AppointmentsCallback() {
-            @Override
-            public void onAppointmentsFetched(List<AppointmentsClass> fetchedAppointments, List<AppointmentDaysClass> fetchedDays) {
-                // Iterate through the fetched appointments and check if the selected date matches any booking
-                for (AppointmentsClass appointment : fetchedAppointments) {
-                    // Extract the date portion from the dateTime (assuming it's in "yyyy-MM-dd HH:mm:ss" format)
-                    String bookingDateStr = appointment.getDateTime();
-                    try {
-                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                        Date bookingDate = sdf.parse(bookingDateStr);
+        // Construct the URL
+        String url = "https://umakmdo-91b845374d5b.herokuapp.com/check_samebooking.php?date=" + selectedDate + "&email=" + userEmail;
 
-                        // Compare the selected date with the booking date (ignore time part)
-                        if (bookingDate != null && isSameDay(bookingDate, selectedCalendar.getTime())) {
-                            // Show a toast message if there's already a booking on the selected date
-                            Toast.makeText(context, "You already have a booking on this date. Choose another date or cancel/reschedule your current booking.", Toast.LENGTH_LONG).show();
-                            return;
-                        }
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
+        // Create a CompletableFuture to handle the result
+        CompletableFuture<Boolean> resultFuture = new CompletableFuture<>();
+
+        // Run the network request asynchronously
+        new Thread(() -> {
+            try {
+                // Create the URL object
+                URL requestUrl = new URL(url);
+
+                // Open the connection
+                HttpURLConnection connection = (HttpURLConnection) requestUrl.openConnection();
+                connection.setRequestMethod("GET");
+                connection.setConnectTimeout(5000); // Set timeout
+                connection.setReadTimeout(5000);
+
+                // Read the response
+                InputStream inputStream = connection.getInputStream();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                StringBuilder response = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    response.append(line);
                 }
-            }
 
-            @Override
-            public void onError(String errorMessage) {
-                Toast.makeText(context, "Error fetching bookings: " + errorMessage, Toast.LENGTH_LONG).show();
+                // Parse the response
+                JSONObject responseJson = new JSONObject(response.toString());
+                boolean bookingFound = responseJson.getBoolean("booking_found");
+
+
+                // Show the Toast in the main thread
+                new Handler(Looper.getMainLooper()).post(() -> {
+                    if (bookingFound) {
+                        resultFuture.complete(bookingFound);
+                    } else {
+                    }
+                });
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                resultFuture.completeExceptionally(e); // Handle any exceptions
             }
-        });
+        }).start();
+
+        return resultFuture; // Return the CompletableFuture
     }
+
+
+
+
 
     public void fetchBookingsForUser(String userEmail, MaterialCalendarView selectedCalendar, Context context) {
         String url = "https://umakmdo-91b845374d5b.herokuapp.com/fetch_bookings.php";
