@@ -3,16 +3,24 @@ package com.example.prototype;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.StrictMode;
+import android.provider.MediaStore;
 import android.text.InputType;
 import android.util.Base64;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -30,18 +38,32 @@ import com.android.volley.toolbox.Volley;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import HelperClasses.ProfileClass;
 import HelperClasses.ProfileDatabaseHelper;
 import HelperClasses.UpdateProfileManager;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.tabs.TabLayout;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 
-public class UpdateProfile extends AppCompatActivity implements Profile_CustomAdapter.OnEditButtonClickListener {
+
+public class UpdateProfile extends BaseActivity implements Profile_CustomAdapter.OnEditButtonClickListener {
     private SharedPreferences prefs;
     private String userEmail;
     private RecyclerView profile_recycler;
@@ -54,8 +76,12 @@ public class UpdateProfile extends AppCompatActivity implements Profile_CustomAd
     Button buttonSave;
     UpdateProfileManager updateProfileManager;
     TabLayout tabLayout;
+    private int selectedPosition = 0; // Add this at the class level
+    boolean profileExists = false;
+    private boolean isImageClickable = true;  // Flag to control image clickability
 
 
+    private ActivityResultLauncher<Intent> imagePickerLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +95,7 @@ public class UpdateProfile extends AppCompatActivity implements Profile_CustomAd
         });
         // Initialize userEmail
         userEmail = getIntent().getStringExtra("user_email");
+        fetchUserProfile(userEmail);
 
         // Show Toast using Lambda
         Runnable showToast = () -> {
@@ -95,8 +122,21 @@ public class UpdateProfile extends AppCompatActivity implements Profile_CustomAd
         profileList = new ArrayList<>();
         profileList.add(new ProfileClass(R.drawable.profile, "Loading...", "Loading...", "Loading..."));
 
+        imagePickerLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                        Uri selectedImageUri = result.getData().getData();
+                        if (selectedImageUri != null) {
+                            // Use the adapter method to update the image
+                            profileCustomAdapter.updateImageAtPosition(selectedImageUri, selectedPosition);
+                        }
+                    }
+                }
+        );
+
         // Set the adapter with the default data
-        profileCustomAdapter = new Profile_CustomAdapter(profileList, UpdateProfile.this);
+        profileCustomAdapter = new Profile_CustomAdapter(profileList, UpdateProfile.this, this, imagePickerLauncher,isImageClickable);
         profile_recycler.setAdapter(profileCustomAdapter);
 
         // Initialize database helper
@@ -131,12 +171,91 @@ public class UpdateProfile extends AppCompatActivity implements Profile_CustomAd
             updateProfileManager.showSaveValidator(this, this, userEmail,
                     etFirstname, etLastname,
                     etPassword, etConfirmPassword);
-        });
 
+            String firstname = etFirstname.getText().toString();
+            String lastname = etLastname.getText().toString();
+            String password = etPassword.getText().toString();
+            String confirmPassword = etConfirmPassword.getText().toString();
+
+            // Ensure that password and confirm password match
+            if (!password.equals(confirmPassword)) {
+                Toast.makeText(UpdateProfile.this, "Passwords do not match", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // Get the selected image URI and convert to Base64 (if image exists)
+            Uri selectedImageUri = profileCustomAdapter.getSelectedImageUri();
+            String imageBase64 = null;
+            if (selectedImageUri != null) {
+                imageBase64 = convertImageToBase64(selectedImageUri);
+            }
+
+            // Determine the operation type: insert or update
+            String operation = profileExists ? "update" : "insert";
+
+            // Call a method to handle the operation (insert or update)
+            handleProfileOperation(operation, userEmail, imageBase64);
+        });
 
         tabLayouter();
 
     }
+    private String convertImageToBase64(Uri imageUri) {
+        try {
+            FileInputStream fileInputStream = (FileInputStream) getContentResolver().openInputStream(imageUri);
+            byte[] byteArray = new byte[fileInputStream.available()];
+            fileInputStream.read(byteArray);
+            return Base64.encodeToString(byteArray, Base64.DEFAULT);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private void handleProfileOperation(String operation, String userEmail, String imageBase64) {
+        String url = "https://umakmdo-91b845374d5b.herokuapp.com/update_userprofileImage.php";  // Replace with your actual API URL
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                response -> {
+                    Log.e("ServerResponse", response); // Log the raw server response
+                    try {
+                        // Try parsing response as JSON
+                        JSONObject jsonResponse = new JSONObject(response);
+                        boolean success = jsonResponse.getBoolean("success");
+                        String message = jsonResponse.getString("message");
+                        Toast.makeText(UpdateProfile.this, message, Toast.LENGTH_SHORT).show();
+                    } catch (JSONException e) {
+                        // Handle the case when the response is a plain string
+                        Log.e("JSONError", "Response is not JSON: " + e.getMessage());
+                        // Assuming the plain string response is the success message
+                        //Toast.makeText(UpdateProfile.this, response, Toast.LENGTH_SHORT).show();
+                    }
+                },
+                error -> {
+                    Log.e("VolleyError", error.toString());
+                    Toast.makeText(UpdateProfile.this, "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("operation", operation);
+                params.put("umak_email", userEmail);
+                params.put("profile_image", imageBase64 != null ? imageBase64 : "");
+                return params;
+            }
+        };
+        requestQueue.add(stringRequest);
+    }
+    // Assuming you have the image URI fetched, here's how you modify the fetchProfileImage call
+
+
+    public void openFileChooser(int position) {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        intent.setType("image/*");
+        imagePickerLauncher.launch(intent);
+    }
+
     public void onEditButtonClick(int position) {
 
     }
@@ -181,5 +300,57 @@ public class UpdateProfile extends AppCompatActivity implements Profile_CustomAd
 
 
     //Local uploading of il
+    private void fetchUserProfile(String userEmail) {
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
+        String urlString = "https://umakmdo-91b845374d5b.herokuapp.com/fetch_userprofile.php";  // Replace with your server URL
+        urlString += "?umak_email=" + userEmail;  // Adding the email as a GET parameter
+
+        try {
+            URL url = new URL(urlString);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");  // Change to GET method
+            connection.setDoInput(true);
+            connection.connect();
+
+            InputStreamReader reader = new InputStreamReader(connection.getInputStream());
+            StringBuilder response = new StringBuilder();
+            int charRead;
+            while ((charRead = reader.read()) != -1) {
+                response.append((char) charRead);
+            }
+
+            // Check if the response is a valid JSON
+            try {
+                JSONObject jsonResponse = new JSONObject(response.toString());
+                if (jsonResponse.getBoolean("exists")) {
+                    profileExists = true; // Profile exists
+                } else {
+                    profileExists = false; // Profile doesn't exist
+                    //Toast.makeText(this, "Profile not found", Toast.LENGTH_SHORT).show();
+                }
+            } catch (JSONException e) {
+                // If it's not a JSON, handle the response as a plain text string
+                String errorMessage = response.toString();
+                Toast.makeText(this, "Error fetching profile: " + errorMessage, Toast.LENGTH_SHORT).show();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Error fetching profile: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        fetchUserProfile(userEmail);
+
+    }
+
+
 
 }

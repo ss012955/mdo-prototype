@@ -1,8 +1,10 @@
 package com.example.prototype;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +12,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,6 +37,9 @@ public class fProfile extends Fragment implements Profile_CustomAdapter.OnEditBu
     public DashboardManager dashboardManager;
     public Intent intent;
     private ImageView chatImageView;
+    private boolean isImageClickable = false;  // Flag to control image clickability
+    private ActivityResultLauncher<Intent> imagePickerLauncher;
+    private int selectedPosition = 0; // Add this at the class level
 
 
     public fProfile() {
@@ -84,9 +92,19 @@ public class fProfile extends Fragment implements Profile_CustomAdapter.OnEditBu
         profileList = new ArrayList<>();
         profileList.add(new ProfileClass(R.drawable.profile, "Loading...", "Loading...", "Loading..."));
 
-        // Set the adapter with the default data
-        profileCustomAdapter = new Profile_CustomAdapter(profileList, fProfile.this);
+        imagePickerLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+                Uri imageUri = result.getData().getData();
+                // Handle the result here (e.g., update the image in the adapter)
+                if (profileCustomAdapter != null) {
+                    profileCustomAdapter.updateImageAtPosition(imageUri, selectedPosition);
+                }
+            }
+        });
+
+        profileCustomAdapter = new Profile_CustomAdapter(profileList, fProfile.this, this, imagePickerLauncher);
         profile_recycler.setAdapter(profileCustomAdapter);
+
 
         prefs = getActivity().getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
         userEmail = prefs.getString("user_email", null);
