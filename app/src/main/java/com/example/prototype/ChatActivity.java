@@ -134,7 +134,7 @@ public class ChatActivity extends BaseActivity {
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 response -> {
                     try {
-                        // Create a new JSONObject from the response
+                        // Create a new JSONArray from the response
                         JSONArray messagesArray = new JSONArray(response);
 
                         // Clear previous messages before adding new ones
@@ -142,6 +142,7 @@ public class ChatActivity extends BaseActivity {
 
                         // Create a SimpleDateFormat to parse the timestamp string
                         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                        dateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Manila")); // Set Manila time zone
 
                         // Loop through each message in the response
                         for (int i = 0; i < messagesArray.length(); i++) {
@@ -153,12 +154,17 @@ public class ChatActivity extends BaseActivity {
                             String receiverEmail = messageObject.getString("receiver_email");
                             String timestampString = messageObject.getString("timestamp");
 
-                            Calendar calendar = Calendar.getInstance();
-                            TimeZone manilaTimeZone = TimeZone.getTimeZone("Asia/Manila");
-                            calendar.setTimeZone(manilaTimeZone);
-
-                            // Get the timestamp in long format (milliseconds since epoch)
-                            long timestamp = calendar.getTimeInMillis();
+                            // Convert timestamp string to long
+                            long timestamp = 0;
+                            try {
+                                Date date = dateFormat.parse(timestampString);
+                                if (date != null) {
+                                    timestamp = date.getTime(); // Convert to Unix timestamp in milliseconds
+                                }
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                                Toast.makeText(ChatActivity.this, "Error parsing timestamp: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
 
                             // Create a new Message object and add it to the list
                             Message newMessage = new Message(messageText, senderEmail, receiverEmail, timestamp);
@@ -252,28 +258,26 @@ public class ChatActivity extends BaseActivity {
             sendMessageToAdmin(messageText);
         });
     }
-
     private void sendMessageToAdmin(String messageText) {
         String url = "https://umakmdo-91b845374d5b.herokuapp.com/send_message.php";
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 response -> {
                     if ("Message sent successfully.".equals(response)) {
+                        // Get the current timestamp in milliseconds based on Manila time
                         Calendar calendar = Calendar.getInstance();
                         TimeZone manilaTimeZone = TimeZone.getTimeZone("Asia/Manila");
                         calendar.setTimeZone(manilaTimeZone);
 
-                        // Get the timestamp in long format (milliseconds since epoch)
-                        long timestamp = calendar.getTimeInMillis();
+                        long timestamp = calendar.getTimeInMillis(); // Unix timestamp in milliseconds
 
-                        // Create new message with Manila timestamp in long format
+                        // Add the message locally with the long timestamp
                         Message newMessage = new Message(messageText, userEmail, ADMIN_EMAIL, timestamp);
-
-
                         messages.add(newMessage);
                         chatAdapter.notifyItemInserted(messages.size() - 1);
                         recyclerView.scrollToPosition(messages.size() - 1);
-                        inputMessage.setText(""); // Clear input here
+                        inputMessage.setText(""); // Clear input field
+
                     } else {
                         Toast.makeText(ChatActivity.this, "Failed to send message", Toast.LENGTH_SHORT).show();
                     }
@@ -283,6 +287,7 @@ public class ChatActivity extends BaseActivity {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
+                // Add parameters to the POST request
                 params.put("sender_email", userEmail);
                 params.put("receiver_email", ADMIN_EMAIL);
                 params.put("message_text", messageText);
@@ -292,5 +297,6 @@ public class ChatActivity extends BaseActivity {
 
         Volley.newRequestQueue(this).add(stringRequest);
     }
+
 
 }
