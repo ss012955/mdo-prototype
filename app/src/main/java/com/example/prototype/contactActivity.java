@@ -33,7 +33,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-public class contactActivity extends AppCompatActivity {
+public class contactActivity extends BaseActivity {
     TabLayout tabLayout;
     private ImageView chatImageView;
     public EditText contactNumber, address, guardianContact, guardianAddress;
@@ -199,7 +199,7 @@ public class contactActivity extends AppCompatActivity {
                     guardianAddress.setText(jsonResponse.getString("guardian_address"));
                 } else {
                     profileExists = false; // Profile doesn't exist
-                    Toast.makeText(this, "Profile not found", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(this, "Profile not found", Toast.LENGTH_SHORT).show();
                 }
             } catch (JSONException e) {
                 // If it's not a JSON, handle the response as a plain text string
