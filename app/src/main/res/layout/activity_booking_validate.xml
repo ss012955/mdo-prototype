@@ -130,11 +130,11 @@
                 android:background="@drawable/rounded_edge"
                 android:backgroundTint="@color/white"
                 android:fontFamily="@font/metropolis_bold"
-                android:padding="16dp"
+                android:padding="14dp"
                 android:text="Date/Time: "
                 android:layout_marginHorizontal="10dp"
                 android:textColor="@color/black"
-                android:textSize="15sp" />
+                android:textSize="14sp" />
 
             <EditText
                 android:id="@+id/remarksText"

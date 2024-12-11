@@ -94,7 +94,7 @@
             android:fontFamily="@font/metropolis_regular"
             android:text="10 Nov, 2024 | 10:00 AM"
             android:textColor="@color/black"
-            android:textSize="15sp"
+            android:textSize="14sp"
             app:layout_constraintStart_toEndOf="@+id/textviewDate"
             app:layout_constraintTop_toTopOf="@+id/textviewDate" />
 
