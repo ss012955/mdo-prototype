@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/dialog_background"
+    android:padding="16dp"
+    android:elevation="8dp"
+    android:layout_gravity="center">
+
+    <!-- Dialog Title -->
+    <TextView
+        android:id="@+id/dialog_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Terms and Privacy"
+        android:textSize="20sp"
+        android:fontFamily="@font/metropolis_bold"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="200dp"
+    android:layout_below="@id/dialog_title"
+    android:layout_marginTop="12dp"
+    android:layout_centerHorizontal="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingEnd="10dp"
+        android:paddingStart="10dp">
+
+        <TextView
+            android:id="@+id/textview_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/metropolis_bold"
+            android:paddingBottom="8dp"
+            android:text="1. Acceptance of Terms\nBy accessing and using the UMak Medical and Dental Office Booking Appointment System (hereafter referred to as “UMak Medical and Dental HealthHub”), you acknowledge that you have read, understood, and agree to be bound by these Terms and Conditions, as well as our Privacy Policy. If you do not agree with these Terms, you should not access or use UMak MDO HealthHub.\n\n2. Eligibility\nUMak MDO HealthHub is intended for the exclusive use of the students, staff, and affiliates of the University of Makati (UMak). Users must be at least 18 years of age or have the necessary permissions if underage. By using UMak MDO HealthHub, you represent that you meet these eligibility criteria."
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/textview_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3. User Responsibilities\n- Accurate Information: Users must provide accurate, current, and complete personal information when registering and booking appointments. It is the user’s responsibility to ensure that this information is kept up-to-date.\n- Appointment Bookings: All appointments made through UMak MDO HealthHub must be for legitimate and authorized purposes, such as medical or dental consultations. Any misuse of UMak MDO HealthHub, such as booking multiple unnecessary appointments, may result in the suspension of access.\n- Login Credentials: You are responsible for maintaining the confidentiality of your account credentials. The UMak Medical and Dental Office (hereafter “the Office”) is not responsible for any unauthorized access to your account. You should promptly notify the Office of any unauthorized use of your account."
+            android:textColor="@color/black"
+            android:fontFamily="@font/metropolis_bold"
+            android:paddingBottom="8dp" />
+
+        <TextView
+            android:id="@+id/textview_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="4. Use of UMak MDO HealthHub\n- Permissible Use: UMak MDO HealthHub is provided solely for the purpose of booking appointments with the Medical and Dental Office at UMak. Any other use, such as data scraping, hacking, or unauthorized access to system resources, is strictly prohibited.\n- Account Creation and Login: Users must create an account to use UMak MDO HealthHub. You agree to keep your login credentials confidential and ensure the security of your account.\n- Service Availability: While the Office will strive to ensure that UMak MDO HealthHub is available at all times, there may be occasional downtimes due to maintenance or unforeseen technical issues. The Office will not be liable for any disruptions in service."
+            android:textColor="@color/black"
+            android:fontFamily="@font/metropolis_bold"
+            android:paddingBottom="8dp" />
+
+        <TextView
+            android:id="@+id/textview_4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="5. Account Termination\nThe Office reserves the right to suspend or terminate your access to UMak MDO HealthHub at any time, without notice, for conduct that violates these Terms and Conditions or is otherwise deemed inappropriate, including but not limited to fraud, system abuse, or providing false information.\n\n6. Modifications to UMak MDO HealthHub and Terms\nThe Office reserves the right to modify or discontinue any aspect of UMak MDO HealthHub at any time, including these Terms and Conditions, without prior notice. Changes will take effect immediately upon posting. Users are encouraged to regularly review these Terms to ensure they remain in compliance."
+            android:textColor="@color/black"
+            android:fontFamily="@font/metropolis_bold"
+            android:paddingBottom="8dp" />
+
+        <TextView
+            android:id="@+id/textview_5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="7. Limitation of Liability\nThe UMak Medical and Dental Office shall not be liable for any direct, indirect, incidental, or consequential damages arising from your use or inability to use UMak MDO HealthHub. The Office is not responsible for any data loss or unauthorized access resulting from the user’s failure to secure their login credentials.\n- UMak MDO HealthHub and its contents are provided. basis without any warranties of any kind, either express or implied.\n\n8. Privacy and Confidentiality\nAll personal information submitted through UMak MDO HealthHub is governed by the Privacy Policy, which forms part of these Terms and Conditions. The Office takes reasonable steps to ensure that user data is protected and used solely for its intended purposes.\n\n9. Third-Party Sharing and Data Disclosure\nUser information may be shared with third parties for the purpose of evaluating and improving the Office’s services and for comprehensive planning. These third parties are required to maintain the confidentiality of the data they receive and are bound by data protection agreements.\n\n10. Governing Law\nThese Terms and Conditions are governed by the laws of the Republic of the Philippines and the University of Makati. Any disputes arising out of the use of this System will be subject to the exclusive jurisdiction of the courts located in Makati City.\n\n11. Contact Information\nFor any questions regarding these Terms and Conditions, please contact the UMak Medical and Dental Office through our official social media channels or via email."
+        android:textColor="@color/black"
+        android:fontFamily="@font/metropolis_bold"
+        android:paddingBottom="8dp" />
+
+        <Button
+            android:id="@+id/btnAccept"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/metropolis_bold"
+            android:text="I accept"
+            android:layout_gravity="center"
+            android:backgroundTint="@color/UMAKLIGHTBLUE"
+            android:textColor="@color/white"
+            android:layout_below="@id/textview_5"
+            android:layout_marginTop="16dp"
+            android:layout_centerHorizontal="true"
+            android:paddingHorizontal="20dp" />
+
+    </LinearLayout>
+</ScrollView>
+
+
+    </RelativeLayout>
