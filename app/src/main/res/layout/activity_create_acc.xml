@@ -50,16 +50,16 @@
         android:id="@+id/etEmail"
         android:layout_width="280dp"
         android:layout_height="30dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="8dp"
         android:autofillHints="emailAddress"
         android:background="@drawable/custom_input"
         android:fontFamily="@font/metropolis_regular"
         android:inputType="textEmailAddress"
         android:textColor="@color/black"
         android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="@+id/textmdo"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/txtviewEmail"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.48"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtviewEmail"
         tools:ignore="ContentDescription,LabelFor,SpeakableTextPresentCheck" />
 
@@ -67,7 +67,7 @@
         android:id="@+id/txtviewUsername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="8dp"
         android:fontFamily="@font/metropolis_regular"
         android:text="Student ID:"
         android:textColor="@color/white"
@@ -81,16 +81,16 @@
         android:id="@+id/etStudentId"
         android:layout_width="280dp"
         android:layout_height="30dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="4dp"
         android:autofillHints="username"
         android:background="@drawable/custom_input"
         android:fontFamily="@font/metropolis_regular"
         android:inputType="text"
         android:textColor="@color/black"
         android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="@+id/etEmail"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/txtviewUsername"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.48"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtviewUsername"
         tools:ignore="ContentDescription,LabelFor,SpeakableTextPresentCheck" />
 
@@ -119,8 +119,8 @@
         android:inputType="text"
         android:textColor="@color/black"
         android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="@+id/etStudentId"
-        app:layout_constraintStart_toStartOf="@+id/txtviewFirstName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtviewFirstName"
         tools:ignore="ContentDescription,LabelFor,SpeakableTextPresentCheck" />
 
@@ -147,8 +147,8 @@
         android:inputType="text"
         android:textColor="@color/black"
         android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="@+id/etFirstName"
-        app:layout_constraintStart_toStartOf="@+id/txtviewLastName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtviewLastName"
         tools:ignore="ContentDescription,LabelFor,SpeakableTextPresentCheck" />
 
@@ -175,8 +175,8 @@
         android:inputType="textPassword"
         android:textColor="@color/black"
         android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="@+id/etLastName"
-        app:layout_constraintStart_toStartOf="@+id/txtviewEntPass"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtviewEntPass"
         tools:ignore="ContentDescription,LabelFor,SpeakableTextPresentCheck" />
 
@@ -203,8 +203,8 @@
         android:inputType="textPassword"
         android:textColor="@color/black"
         android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="@+id/etPassword"
-        app:layout_constraintStart_toStartOf="@+id/confirmPass"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/confirmPass"
         tools:ignore="ContentDescription,LabelFor,SpeakableTextPresentCheck" />
 
