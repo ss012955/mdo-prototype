@@ -15,12 +15,14 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -34,13 +36,13 @@ import HelperClasses.NetworkChangeReceiver;
 import HelperClasses.SignupManager;
 
 public class createAcc extends BaseActivity {
-    TextView txtviewLogIn, createAccValidation;
+    TextView txtviewLogIn, createAccValidation, tvtermsPrivacy;
     EditText etEmail, etStudentId, etFirstName, etLastName, etPassword, etconfirmPass;
     Button signUp;
     Toast toast;
     public SignupManager signupManager;
     private NetworkUtils networkUtils;
-
+    CheckBox checkBoxTerms;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +72,49 @@ public class createAcc extends BaseActivity {
         signupManager = new SignupManager(this);
         getLifecycle().addObserver(signupManager);
         networkUtils = new NetworkUtils();
+
+
+        tvtermsPrivacy = findViewById(R.id.tvtermsPrivacy);
+        checkBoxTerms = findViewById(R.id.checkBoxTerms);
+
+        tvtermsPrivacy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showTermsDialog();
+            }
+        });
+
     }
+
+    private void showTermsDialog() {
+        // Create the custom dialog view from the layout file
+        View dialogView = getLayoutInflater().inflate(R.layout.termsdialog, null);
+
+        // Find Button in dialog layout
+        Button btnAgree = dialogView.findViewById(R.id.btnAccept);
+
+        // Create the dialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(dialogView)
+                .setCancelable(true); // Allow dialog to be dismissed by clicking outside
+
+        // Show the dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        // Set the button click listener to mark the checkbox as checked
+        btnAgree.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Mark the checkbox as checked when the button is clicked
+                checkBoxTerms.setChecked(true);
+
+                // Dismiss the dialog
+                dialog.dismiss();
+            }
+        });
+    }
+
 
     public void LogIn(){
         Intent intent = new Intent(this, MainActivity.class);
@@ -98,6 +142,8 @@ public class createAcc extends BaseActivity {
             showError("Passwords do not match.", Color.RED);
         } else if (!isValidUmakEmail(email)) {
             showError("Use a valid UMAK email.", Color.RED);
+        }else if(!checkBoxTerms.isChecked()){
+            showError("Please read and accept terms and privacy.", Color.RED);
         } else {
             SignupManager.performSignupWithFirebase(this, studentId, email, firstName, lastName, password, new SignupManager.SignUpCallBack() {
                 @Override
