@@ -34,7 +34,7 @@
         android:layout_height="50dp"
         android:fontFamily="@font/metropolis_bold"
         android:padding="7dp"
-        android:text="Profile"
+        android:text="USER PROFILE"
         android:textAllCaps="true"
         android:textAlignment="center"
         android:textSize="30sp"
