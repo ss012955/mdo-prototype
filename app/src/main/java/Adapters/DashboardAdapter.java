@@ -190,20 +190,21 @@ public class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
 
         void bind(DashboardContent content){
-            int numberOfAppointments = allAppointments.getInstance().getNumberOfAppointments();
-            String appointmentText = "You have " + numberOfAppointments + " upcoming appointment";
-            if (numberOfAppointments != 1) {
-                appointmentText += "s"; // Add "s" if more than 1 appointment
-            }
-            tvNumberofAppointments.setText(appointmentText + ".");
+            // Retrieve the user's email from SharedPreferences
+            SharedPreferences prefs = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
+            String userEmail = prefs.getString("user_email", "No email found");
 
+            // Call the new method to fetch and update the number of approved appointments
+            fetchApprovedAppointments(userEmail);
+
+            // Set up the button click listener for the booking activity
             btnStartBooking.setOnClickListener(v -> {
                 // Start the BookingActivity
                 Intent intent = new Intent(itemView.getContext(), BookingActivity.class);
                 itemView.getContext().startActivity(intent);
             });
-            itemView.setOnClickListener(this);
 
+            itemView.setOnClickListener(this);
             fetchAppointments();
 
         }
@@ -234,6 +235,42 @@ public class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
             });
         }
+
+        private void fetchApprovedAppointments(String userEmail) {
+            String url = "https://umakmdo-91b845374d5b.herokuapp.com/fetch_approvedbookings.php";
+
+            AppointmentsManager manager = new AppointmentsManager(context);
+
+            // Fetch appointments with status "Approved"
+            manager.fetchAppointments(url, userEmail, new ArrayList<>(), new ArrayList<>(), null, context, new AppointmentsManager.AppointmentsCallback() {
+                @Override
+                public void onAppointmentsFetched(List<AppointmentsClass> fetchedAppointments, List<AppointmentDaysClass> fetchedDays) {
+                    // Filter appointments that have the "Approved" status
+                    List<AppointmentsClass> approvedAppointments = new ArrayList<>();
+                    for (AppointmentsClass appointment : fetchedAppointments) {
+                        if ("Approved".equals(appointment.getStatus())) {
+                            approvedAppointments.add(appointment);
+                        }
+                    }
+
+                    // Count the number of "Approved" bookings
+                    int numberOfApprovedAppointments = approvedAppointments.size();
+
+                    // Update the text view with the count of approved appointments
+                    String appointmentText = "You have " + numberOfApprovedAppointments + " upcoming appointment";
+                    if (numberOfApprovedAppointments != 1) {
+                        appointmentText += "s"; // Add "s" if more than 1 appointment
+                    }
+                    tvNumberofAppointments.setText(appointmentText + ".");
+                }
+
+                @Override
+                public void onError(String errorMessage) {
+                    Toast.makeText(context, "Error fetching appointments: " + errorMessage, Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+
 
         @Override
         public void onClick(View v) {

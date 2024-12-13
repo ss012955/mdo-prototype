@@ -33,8 +33,7 @@
                 android:layout_marginBottom="4dp"
                 android:fontFamily="@font/metropolis_bold"
                 android:textColor="@android:color/black"
-                android:textSize="10sp"
-                android:visibility="gone" />
+                android:textSize="10sp" />
 
             <!-- Message bubble container -->
             <LinearLayout

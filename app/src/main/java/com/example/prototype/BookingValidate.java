@@ -104,7 +104,7 @@ public class BookingValidate extends AppCompatActivity {
             Date date = inputFormat.parse(chosen_date);
             String formattedDate = outputFormat.format(date);
 
-            String dateText = String.format("%-14s %s / %s", "Date/Time:", formattedDate, chosen_time);
+            String dateText = String.format("%-13s %s / %s", "Date/Time:", formattedDate, chosen_time);
             String serviceText = "";
 
             if (bookingID != null) {

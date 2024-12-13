@@ -35,7 +35,7 @@
         android:layout_height="50dp"
         android:fontFamily="@font/metropolis_bold"
         android:padding="7dp"
-        android:text="Appointments"
+        android:text="DASHBOARD"
         android:textAllCaps="true"
         android:textAlignment="center"
         android:textSize="30sp"

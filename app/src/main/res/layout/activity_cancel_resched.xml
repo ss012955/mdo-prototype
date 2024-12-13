@@ -53,6 +53,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/txtviewHomeTitle">
 
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="22dp"
+            android:fontFamily="@font/metropolis_bold"
+            android:text="Cancel or Reschedle this appointment"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="25sp"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0" />
 
         <LinearLayout
             android:id="@+id/linearLayout3"
@@ -60,9 +76,12 @@
             android:layout_height="230dp"
 
             android:layout_margin="150dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="40dp"
             android:background="@drawable/rounded_layout"
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.482"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -73,7 +92,7 @@
                 android:layout_height="50dp"
                 android:layout_marginStart="11dp"
                 android:layout_marginTop="20dp"
-
+                android:layout_marginEnd="11dp"
                 android:background="@drawable/rounded_edge"
                 android:backgroundTint="@color/white"
                 android:fontFamily="@font/metropolis_bold"
@@ -87,6 +106,7 @@
                 android:layout_width="328dp"
                 android:layout_height="50dp"
                 android:layout_marginStart="11dp"
+                android:layout_marginEnd="11dp"
                 android:layout_marginTop="20dp"
                 android:background="@drawable/rounded_edge"
                 android:backgroundTint="@color/white"
@@ -101,6 +121,7 @@
                 android:layout_width="328dp"
                 android:layout_height="50dp"
                 android:layout_marginStart="11dp"
+                android:layout_marginEnd="11dp"
                 android:layout_marginTop="20dp"
                 android:background="@drawable/rounded_edge"
                 android:backgroundTint="@color/white"
@@ -115,38 +136,41 @@
 
         </LinearLayout>
 
-        <Button
-            android:id="@+id/buttonCancel"
-            android:layout_width="150dp"
-            android:layout_height="55dp"
-            android:layout_gravity="center"
-            android:layout_marginStart="36dp"
-            android:layout_marginTop="60dp"
-            android:backgroundTint="@color/red"
-            android:fontFamily="@font/metropolis_regular"
-            android:text="CANCEL"
-            android:textColor="@color/black"
-            app:cornerRadius="158dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
-
-        <Button
-            android:id="@+id/buttonReschedule"
-            android:layout_width="150dp"
-            android:layout_height="53dp"
-            android:layout_gravity="center"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="60dp"
-            android:backgroundTint="@color/gray"
-            android:fontFamily="@font/metropolis_regular"
-            android:text="RESCHEDULE"
-
-            android:textColor="@color/black"
-            app:cornerRadius="158dp"
+        <LinearLayout
+            android:layout_width="354dp"
+            android:layout_height="49dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.309"
-            app:layout_constraintStart_toEndOf="@+id/buttonCancel"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
+            app:layout_constraintHorizontal_bias="0.64"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
+            app:layout_constraintVertical_bias="0.086">
+
+            <Button
+                android:id="@+id/buttonCancel"
+                android:layout_width="150dp"
+                android:layout_height="55dp"
+                android:backgroundTint="@color/red"
+                android:fontFamily="@font/metropolis_regular"
+                android:text="CANCEL"
+                android:textColor="@color/black"
+                app:cornerRadius="158dp" />
+
+            <Button
+                android:id="@+id/buttonReschedule"
+                android:layout_width="150dp"
+                android:layout_height="53dp"
+                android:layout_marginStart="10dp"
+                android:backgroundTint="@color/gray"
+                android:fontFamily="@font/metropolis_regular"
+                android:text="RESCHEDULE"
+                android:textColor="@color/black"
+                app:cornerRadius="158dp" />
+
+        </LinearLayout>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
     <com.google.android.material.tabs.TabLayout

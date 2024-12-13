@@ -27,6 +27,8 @@ import HelperClasses.NetworkChangeReceiver;
 import HelperClasses.LoginManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -69,15 +71,14 @@ public class NetworkUtils {
         return response.toString();
     }
 
-    public static String performLogin(String umakEmail, String password) {
+    public static String performLoginDB(String umakEmail, String password) {
         StringBuilder response = new StringBuilder();
         try {
             URL url = new URL("https://umakmdo-91b845374d5b.herokuapp.com/login.php");
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
-            // Set timeouts for connecting and reading
-            connection.setConnectTimeout(5000); // 5 seconds
-            connection.setReadTimeout(5000); // 5 seconds
+            connection.setConnectTimeout(5000);
+            connection.setReadTimeout(5000);
             connection.setRequestMethod("POST");
             connection.setDoOutput(true);
 
@@ -89,22 +90,35 @@ public class NetworkUtils {
             os.flush();
             os.close();
 
-            InputStream is = connection.getInputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                response.append(line);
+            int responseCode = connection.getResponseCode();
+            Log.d("Login", "Response Code: " + responseCode);
+
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                InputStream is = connection.getInputStream();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    response.append(line);
+                }
+                reader.close();
+                Log.d("Login", "Response: " + response.toString());
+            } else {
+                Log.e("Login", "Server returned error: " + responseCode);
+                return "Error: Server returned code " + responseCode;
             }
-            reader.close();
         } catch (SocketTimeoutException e) {
-            // Handle timeout
-            return "Error: Server timeout. Please check your connection and try again.";
+            Log.e("Login", "Timeout Exception", e);
+            return "Error: Server timeout.";
         } catch (Exception e) {
-            e.printStackTrace();
-            return "Error: " + e.getMessage();
+            Log.e("Login", "Exception occurred", e);
+            return "Error: " + (e.getMessage() != null ? e.getMessage() : "An unknown error occurred.");
         }
         return response.toString();
     }
+
+
+
+
     public void showNoConnectionDialog(Context context, final Activity activity) {
         baseClass.showOneButtonDialog(context, "No Internet Connection", "Please check your internet connection.", "Retry", v-> {
             Intent intent = new Intent(context, activity.getClass());

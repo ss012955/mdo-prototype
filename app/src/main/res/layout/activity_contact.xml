@@ -122,7 +122,7 @@
                 android:layout_marginEnd="20dp"
                 android:fontFamily="@font/metropolis_regular"
                 android:hint="Enter Contact No."
-                android:inputType="textPassword"
+                android:inputType="number"
                 android:textColor="#000000"
                 android:textSize="15sp" />
 
@@ -163,7 +163,7 @@
                 android:layout_marginEnd="20dp"
                 android:fontFamily="@font/metropolis_regular"
                 android:hint="Enter Address"
-                android:inputType="textPassword"
+                android:inputType="text"
                 android:textColor="#000000"
                 android:textSize="15sp" />
 
@@ -205,7 +205,7 @@
                 android:layout_marginEnd="20dp"
                 android:fontFamily="@font/metropolis_regular"
                 android:hint="Enter Contact No."
-                android:inputType="textPassword"
+                android:inputType="number"
                 android:textColor="#000000"
                 android:textSize="15sp" />
 
@@ -245,7 +245,7 @@
                 android:layout_marginEnd="20dp"
                 android:fontFamily="@font/metropolis_regular"
                 android:hint="Enter Address"
-                android:inputType="textPassword"
+                android:inputType="text"
                 android:textColor="#000000"
                 android:textSize="15sp" />
         </LinearLayout>

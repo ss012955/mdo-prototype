@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.prototype.R;
@@ -89,4 +90,31 @@ public class BaseClass {
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.show();
     }
+
+    public Dialog showProgressDialog(Context context, String message) {
+        // Create the dialog instance
+        Dialog dialog = new Dialog(context);
+
+        // Set the custom layout for the dialog
+        dialog.setContentView(R.layout.progress_dialog);
+
+        // Make the dialog non-cancelable
+        dialog.setCancelable(false);
+
+        // Find the ProgressBar and TextView in the dialog
+        ProgressBar progressBar = dialog.findViewById(R.id.progress_bar);
+        TextView dialogMessage = dialog.findViewById(R.id.progress_message);
+
+        // Set the message text
+        dialogMessage.setText(message);
+
+        // Optionally, you can set progress to 0 at the start (or adjust based on your needs)
+        progressBar.setProgress(0);
+
+        // Show the dialog
+        dialog.show();
+
+        return dialog;
+    }
+
 }

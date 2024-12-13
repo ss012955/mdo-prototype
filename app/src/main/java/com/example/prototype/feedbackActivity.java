@@ -1,9 +1,20 @@
 package com.example.prototype;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,16 +22,33 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.material.tabs.TabLayout;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import HelperClasses.BaseClass;
 
 public class feedbackActivity extends AppCompatActivity {
     TabLayout tabLayout;
     private ImageView chatImageView;
     private List<ImageView> stars;
     private int currentRating = 0;
+    private EditText feedbackInput;
+    private Button sendFeedbackButton;
+    private SharedPreferences prefs;
+    private String userEmail;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +59,8 @@ public class feedbackActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        SharedPreferences prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
+        userEmail = prefs.getString("user_email", "No email found");
 
         // Initialize stars
         stars = new ArrayList<>();
@@ -85,9 +115,138 @@ public class feedbackActivity extends AppCompatActivity {
             @Override
             public void onTabReselected(TabLayout.Tab tab) {}
         });
+        // Initialize views
+        feedbackInput = findViewById(R.id.feedback_input);
+        sendFeedbackButton = findViewById(R.id.send_feedback);
+        // Add click listener for the "Send Feedback" button
+        sendFeedbackButton.setOnClickListener(v -> {
+            String feedback = feedbackInput.getText().toString().trim();
+            if (!feedback.isEmpty()) {
+                fetchLatestCompletedBookingAndSendFeedback(feedback, currentRating, userEmail);
+            } else {
+                Toast.makeText(this, "Please write some feedback!", Toast.LENGTH_SHORT).show();
+            }
+        });
 
 
     }
+    private void fetchLatestCompletedBookingAndSendFeedback(String feedback, int rating, String userEmail) {
+        // Create an AlertDialog with ProgressBar
+        BaseClass baseClass = new BaseClass();
+
+        Dialog progressDialog = baseClass.showProgressDialog(this, "Fetching latest booking...");
+
+        String url = "https://umakmdo-91b845374d5b.herokuapp.com/feedback/fetch_latest_booking.php"; // Update with your actual server URL
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        JSONObject postData = new JSONObject();
+        try {
+            postData.put("user_email", userEmail); // Ensure you're sending the correct email
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                response -> {
+                    progressDialog.dismiss();
+                    try {
+                        Log.d("BookingResponse", response);
+                        JSONObject responseObject = new JSONObject(response);
+                        if (responseObject.getBoolean("success")) {
+                            JSONObject booking = responseObject.getJSONObject("booking");
+                            int bookingId = booking.getInt("booking_id");
+                            String serviceType = booking.getString("service_type");
+                            boolean hasFeedback = booking.getBoolean("has_feedback");
+
+                            if (!hasFeedback) {
+                                sendFeedbackToServer(feedback, rating, userEmail, bookingId, serviceType);
+                            } else {
+                                Toast.makeText(this, "You have already submitted feedback for your latest booking.", Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Toast.makeText(this, responseObject.getString("message"), Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Toast.makeText(this, "Error parsing booking response", Toast.LENGTH_SHORT).show();
+                    }
+                },
+                error -> {
+                    progressDialog.dismiss();
+                    Toast.makeText(this, "Failed to fetch booking: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                }) {
+            @Override
+            public byte[] getBody() {
+                return postData.toString().getBytes();
+            }
+
+            @Override
+            public String getBodyContentType() {
+                return "application/json; charset=utf-8";
+            }
+        };
+
+        requestQueue.add(stringRequest);
+    }
+
+    private void sendFeedbackToServer(String feedback, int rating, String userEmail, int bookingId, String serviceType) {
+        BaseClass baseClass = new BaseClass();
+
+        Dialog progressDialog = baseClass.showProgressDialog(this, "Fetching latest booking...");
+
+
+        String url = "https://umakmdo-91b845374d5b.herokuapp.com/feedback/submit_feedback.php";
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+
+        JSONObject postData = new JSONObject();
+        try {
+            postData.put("feedback", feedback);
+            postData.put("rating", rating);
+            postData.put("user_email", userEmail);
+            postData.put("booking_id", bookingId);
+            postData.put("service_type", serviceType);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                response -> {
+                    progressDialog.dismiss();
+                    try {
+                        JSONObject responseObject = new JSONObject(response);
+                        boolean success = responseObject.getBoolean("success");
+                        String message = responseObject.getString("message");
+                        String createdAt = responseObject.optString("created_at", "N/A");
+
+                        if (success) {
+                            Toast.makeText(this, "Feedback submitted at " + createdAt, Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Toast.makeText(this, "Error parsing response", Toast.LENGTH_SHORT).show();
+                    }
+                },
+                error -> {
+                    progressDialog.dismiss();
+                    Toast.makeText(this, "Failed to submit feedback: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                }) {
+            @Override
+            public byte[] getBody() {
+                return postData.toString().getBytes();
+            }
+
+            @Override
+            public String getBodyContentType() {
+                return "application/json; charset=utf-8";
+            }
+        };
+
+        requestQueue.add(stringRequest);
+    }
+
+
     private void updateRating(int rating) {
         currentRating = rating;
         for (int i = 0; i < stars.size(); i++) {

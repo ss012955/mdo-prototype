@@ -1,7 +1,9 @@
 package HelperClasses;
 
-public class ProfileClass {
+import android.net.Uri;
 
+public class ProfileClass {
+    private Uri profileImageUri;
     private int profile_Image;
     private String studentID, email, name;
 
@@ -11,6 +13,21 @@ public class ProfileClass {
         this.studentID = studentID;
         this.email = email;
         this.name = name;
+    }
+
+    public ProfileClass(Uri profileImageUri, String studentID, String email, String name) {
+        this.profileImageUri = profileImageUri;
+        this.studentID = studentID;
+        this.email = email;
+        this.name = name;
+    }
+
+    public Uri getProfileImageUri() {
+        return profileImageUri;
+    }
+
+    public void setProfile_ImageUri(Uri uri) {
+        this.profileImageUri = uri;
     }
 
     public int getProfile_Image() {
