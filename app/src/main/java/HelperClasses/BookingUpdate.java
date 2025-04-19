@@ -125,38 +125,32 @@ public class BookingUpdate {
     }
 
     private String convertTimeSlot(String time) {
-        String newTime = time; // Default to original time
+        // Array of known time slots and their simplified versions
+        String[][] timeSlots = {
+                {"8:00-9:00 AM", "8:00 AM"},
+                {"9:00-10:00 AM", "9:00 AM"},
+                {"10:00-11:00 AM", "10:00 AM"},
+                {"11:00-12:00 PM", "11:00 AM"},
+                {"1:00-2:00 PM", "1:00 PM"},
+                {"2:00-3:00 PM", "2:00 PM"},
+                {"3:00-4:00 PM", "3:00 PM"},
+                {"4:00-5:00 PM", "4:00 PM"}
+        };
 
-        // Check and convert specific time slots to a time without a range
-        switch (time) {
-            case "8:00-9:00 AM":
-                newTime = "8:00 AM";
-                break;
-            case "9:00-10:00 AM":
-                newTime = "9:00 AM";
-                break;
-            case "10:00-11:00 AM":
-                newTime = "10:00 AM";
-                break;
-            case "11:00-12:00 PM":
-                newTime = "11:00 AM";
-                break;
-            case "1:00-2:00 PM":
-                newTime = "1:00 PM";
-                break;
-            case "2:00-3:00 PM":
-                newTime = "2:00 PM";
-                break;
-            case "3:00-4:00 PM":
-                newTime = "3:00 PM";
-                break;
-            case "4:00-5:00 PM":
-                newTime = "4:00 PM";  // Ensure this conversion is correct
-                break;
-            default:
-                // If the time doesn't match a specific slot, leave it unchanged
-                Log.w("BookingInsert", "Unexpected time format: " + time);
-                break;
+        // Default to original time
+        String newTime = time;
+
+        // Use a loop to find a matching time and break when found
+        for (String[] slot : timeSlots) {
+            if (slot[0].equals(time)) {
+                newTime = slot[1];
+                break; // Exit loop as soon as a match is found
+            }
+        }
+
+        // If no match is found, log a warning
+        if (newTime.equals(time)) {
+            Log.w("BookingInsert", "Unexpected time format: " + time);
         }
 
         return newTime;
