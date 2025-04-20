@@ -138,6 +138,10 @@ public class createAcc extends BaseActivity {
             } else {
                 showError("No internet connection.", Color.RED);
             }
+        } else if (!isValidPassword(password)) {
+            // Show password guidelines dialog if password doesn't meet criteria
+            showPasswordGuidelinesDialog();
+            showError("Password doesn't meet the requirements.", Color.RED);
         } else if (!password.equals(confirmPass)) {
             showError("Passwords do not match.", Color.RED);
         } else if (!isValidUmakEmail(email)) {
@@ -172,6 +176,63 @@ public class createAcc extends BaseActivity {
         createAccValidation.setText(message);
         createAccValidation.setTextColor(color);
         createAccValidation.setVisibility(View.VISIBLE);
+    }
+
+    // Add this as a new method in your createAcc class
+    private boolean isValidPassword(String password) {
+        // Check for minimum length of 6 characters
+        if (password.length() < 6) {
+            return false;
+        }
+
+        // Check for at least one uppercase letter
+        boolean hasUppercase = false;
+        for (char c : password.toCharArray()) {
+            if (Character.isUpperCase(c)) {
+                hasUppercase = true;
+                break;
+            }
+        }
+        if (!hasUppercase) {
+            return false;
+        }
+
+        // Check for at least one digit
+        boolean hasDigit = false;
+        for (char c : password.toCharArray()) {
+            if (Character.isDigit(c)) {
+                hasDigit = true;
+                break;
+            }
+        }
+
+        return hasDigit;
+    }
+
+    // Add this method to show the password guidelines dialog
+    private void showPasswordGuidelinesDialog() {
+        // Create the custom dialog view from the layout file
+        View dialogView = getLayoutInflater().inflate(R.layout.passwordguidedialog, null);
+
+        // Find Button in dialog layout
+        Button btnUnderstand = dialogView.findViewById(R.id.btnAccept);
+
+        // Create the dialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(dialogView)
+                .setCancelable(true); // Allow dialog to be dismissed by clicking outside
+
+        // Show the dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        // Set the button click listener to dismiss the dialog
+        btnUnderstand.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
     }
 
 
