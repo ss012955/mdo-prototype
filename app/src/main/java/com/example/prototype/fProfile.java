@@ -33,7 +33,7 @@ public class fProfile extends Fragment implements Profile_CustomAdapter.OnEditBu
     private String userEmail;
     private ProfileDatabaseHelper profileDatabaseHelper;
     public home dashboard;
-    public TextView emergency_details, settings, send_feedback, logout;
+    public TextView emergency_details, settings, send_feedback, logout, medical_details;
     public DashboardManager dashboardManager;
     public Intent intent;
     private ImageView chatImageView;
@@ -55,6 +55,7 @@ public class fProfile extends Fragment implements Profile_CustomAdapter.OnEditBu
         // Initialize RecyclerView
         profile_recycler = view.findViewById(R.id.profile_recyclerview);
         emergency_details = view.findViewById(R.id.tvEmergencyContactDetails);
+        medical_details = view.findViewById(R.id.tvMedicalInfo);
         settings = view.findViewById(R.id.tvSettings);
         send_feedback = view.findViewById(R.id.tvSendFeedback);
         logout = view.findViewById(R.id.tvLogOut);
@@ -72,6 +73,10 @@ public class fProfile extends Fragment implements Profile_CustomAdapter.OnEditBu
 
         emergency_details.setOnClickListener(v ->{
             Intent intent = new Intent(getContext(), contactActivity.class);
+            startActivity(intent);
+        });
+        medical_details.setOnClickListener(v ->{
+            Intent intent = new Intent(getContext(), MedInfoActivity.class);
             startActivity(intent);
         });
 

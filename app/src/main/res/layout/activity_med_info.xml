@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/UMAKBLUE"
+    tools:context=".MedInfoActivity">
+
+    <ImageView
+        android:id="@+id/logoumak"
+        android:layout_width="40dp"
+        android:layout_height="38dp"
+        android:src="@drawable/umaklogo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="7dp"
+        android:layout_marginTop="6dp"/>
+
+    <ImageView
+        android:id="@+id/chat"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/chat"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginRight="7dp"
+        android:layout_marginTop="6dp"/>
+
+    <TextView
+        android:id="@+id/txtviewHomeTitle"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:fontFamily="@font/metropolis_bold"
+        android:padding="7dp"
+        android:text="MEDICAL INFO"
+        android:textAlignment="center"
+        android:textSize="30sp"
+        android:textColor="@color/white"
+        android:textAllCaps="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/white"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@id/tablayout"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtviewHomeTitle">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_height="3dp"
+            android:background="#618DC2" />
+
+        <!-- First Name -->
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tvNotifications"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingStart="20dp"
+                android:paddingEnd="15dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:textStyle="bold"
+                android:text="Medical Information Details"
+                android:textSize="20sp"
+                android:fontFamily="@font/metropolis_bold"
+                android:textColor="#000000" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_height="3dp"
+            android:background="#618DC2" />
+
+        <!-- All Notifications -->
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <TextView
+                android:id="@+id/tvSex"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingStart="30dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:text="Sex"
+                android:textSize="15sp"
+                android:fontFamily="@font/metropolis_bold"
+                android:textColor="#000000" />
+
+            <Spinner
+                android:id="@+id/spinnerSex"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:id="@+id/etSex"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="20dp"
+                android:fontFamily="@font/metropolis_regular"
+                android:hint="Male"
+                android:textStyle="italic"
+                android:inputType="text"
+                android:textColor="#000000"
+                android:textSize="15sp" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_height="3dp"
+            android:background="#618DC2" />
+
+        <!-- Appointment Reminder -->
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <TextView
+                android:id="@+id/tvBlood"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingStart="30dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:text="Blood Type"
+                android:textSize="15sp"
+                android:fontFamily="@font/metropolis_bold"
+                android:textColor="#000000" />
+
+            <Spinner
+                android:id="@+id/spinnerBlood"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:id="@+id/etBlood"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="20dp"
+                android:fontFamily="@font/metropolis_regular"
+                android:hint="A-"
+                android:textStyle="italic"
+                android:inputType="text"
+                android:textColor="#000000"
+                android:textSize="15sp" />
+
+
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_height="3dp"
+            android:background="#618DC2" />
+
+        <!-- Confirm Password -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="98dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvAllegies"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/metropolis_bold"
+                android:paddingStart="30dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:text="Allergies"
+                android:textColor="#000000"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/etAllergies"
+                android:layout_width="0dp"
+                android:layout_height="84dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="20dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/metropolis_regular"
+                android:hint="Log Allergies."
+                android:textStyle="italic"
+                android:textColor="#000000"
+                android:textSize="15sp"
+                android:inputType="textMultiLine"
+                android:gravity="start|top"
+                android:minLines="3"
+                android:maxLines="5"
+                android:scrollbars="vertical"
+                />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_height="3dp"
+            android:background="#618DC2" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <TextView
+                android:id="@+id/tvMedicalConditions"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingStart="30dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:text="Medical Conditions"
+                android:textSize="15sp"
+                android:fontFamily="@font/metropolis_bold"
+                android:textColor="#000000" />
+
+            <EditText
+                android:id="@+id/etMedicalConditions"
+                android:layout_width="0dp"
+                android:layout_height="86dp"
+                android:layout_marginEnd="20dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/metropolis_regular"
+                android:hint="Log Medical Conditions"
+                android:textStyle="italic"
+                android:textColor="#000000"
+                android:textSize="15sp"
+                android:inputType="textMultiLine"
+                android:gravity="start|top"
+                android:minLines="3"
+                android:maxLines="5"
+                android:scrollbars="vertical"/>
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_height="3dp"
+            android:background="#618DC2" />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <TextView
+                android:id="@+id/tvMedications"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingStart="30dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:text="Medications"
+                android:textSize="15sp"
+                android:fontFamily="@font/metropolis_bold"
+                android:textColor="#000000" />
+
+            <EditText
+                android:id="@+id/etMedications"
+                android:layout_width="0dp"
+                android:layout_height="86dp"
+                android:layout_marginEnd="20dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/metropolis_regular"
+                android:hint="Log Medications"
+                android:textStyle="italic"
+                android:textColor="#000000"
+                android:textSize="15sp"
+                android:inputType="textMultiLine"
+                android:gravity="start|top"
+                android:minLines="3"
+                android:maxLines="5"
+                android:scrollbars="vertical"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_height="3dp"
+            android:background="#618DC2" />
+        <Button
+            android:id="@+id/btnSave"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:backgroundTint="@color/light_blue"
+            android:text="Save"
+            android:textColor="@color/white"
+            />
+
+    </LinearLayout>
+
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tablayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/UMAKBLUE"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:tabIconTint="@color/tab_layout_selector"
+        app:tabIndicatorColor="@color/UMAKYELLOW" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
