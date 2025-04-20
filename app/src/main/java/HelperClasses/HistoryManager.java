@@ -55,7 +55,7 @@ public class HistoryManager {
                             "Remarks: " + remarks + "\n" +
                             "Status: " + status;
                     // Add to the history list
-                    fetchedHistoryItems.add(new HistoryItem(serviceType, details));
+//                    fetchedHistoryItems.add(new HistoryItem(serviceType, details));
                 }
                 // Return the fetched history items via the callback
                 callback.onSuccess(fetchedHistoryItems);
@@ -94,6 +94,7 @@ public class HistoryManager {
                 // Loop through the JSON array and create HistoryItem objects
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject booking = jsonArray.getJSONObject(i);
+                    int bookingId = booking.getInt("booking_id");  // Corrected variable name
                     String serviceType = booking.getString("service_type"); // Title
                     String bookingDate = booking.getString("booking_date"); // Date
                     // Parse the date from the JSON response and format it
@@ -102,7 +103,7 @@ public class HistoryManager {
                     // Combine title and formatted date into a single string for display
                     String details = serviceType + " - " + formattedDate;
                     // Add to the history list
-                    fetchedHistoryItems.add(new HistoryItem(serviceType, formattedDate));
+                    fetchedHistoryItems.add(new HistoryItem(bookingId, serviceType, formattedDate));
                 }
                 // Return the fetched history items via the callback
                 callback.onSuccess(fetchedHistoryItems);

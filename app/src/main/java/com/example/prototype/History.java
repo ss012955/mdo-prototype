@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -36,8 +37,9 @@ import Adapters.contentJournal;
 import Adapters.historyAdapter;
 import Adapters.journalAdapter;
 import HelperClasses.HistoryItem;
+import HelperClasses.ItemClickListener;
 
-public class History extends AppCompatActivity {
+public class History extends BaseActivity implements ItemClickListener {
     private RecyclerView recyclerView;
     private ImageView chatImageView;
     private List<HistoryItem> historyList = new ArrayList<>();
@@ -67,6 +69,7 @@ public class History extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         historyAdapter = new historyAdapter(historyList);
         recyclerView.setAdapter(historyAdapter);
+        historyAdapter.setClickListener(this);
 
         chatImageView = findViewById(R.id.chat);
         chatImageView.setOnClickListener(v -> {
@@ -168,7 +171,7 @@ public class History extends AppCompatActivity {
                             "Status: " + status;
 
                     // Add to the history list
-                    historyList.add(new HistoryItem(serviceType, details));
+                    historyList.add(new HistoryItem(id, serviceType, details));
                 }
 
                 // Update the UI with the new data
@@ -178,4 +181,24 @@ public class History extends AppCompatActivity {
             }
         }).start();
     }
+
+    @Override
+    public void onClick(View v, int position) {
+        if (historyList != null && historyList.size() > position) {
+            HistoryItem clickedHistory = historyList.get(position);
+            Intent viewHistory = new Intent(History.this, ViewHistorySingle.class);
+            viewHistory.putExtra("historyID", clickedHistory.getBookingId());
+            viewHistory.putExtra("historyTitle", clickedHistory.getTitle());
+            viewHistory.putExtra("historyDetails", clickedHistory.getDetails());
+
+
+            startActivity(viewHistory);
+
+
+        } else {
+            Toast.makeText(History.this, "Invalid item clicked." , Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
 }
