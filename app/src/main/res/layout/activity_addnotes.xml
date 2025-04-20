@@ -73,7 +73,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="454dp"
                 android:orientation="vertical"
                 android:padding="20dp">
 
@@ -151,6 +151,64 @@
                     android:textColorHint="@android:color/black"
                     android:textSize="12sp"
                     android:textStyle="italic" />
+
+
+                <EditText
+                    android:id="@+id/tvIllnessSight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:hint="Illness Sight Prediction"
+                    android:textColor="@android:color/black"
+                    android:textColorHint="@android:color/black"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+                <EditText
+                    android:id="@+id/tvDescription"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:hint="Possible illness based on given symptoms"
+                    android:textColor="@android:color/black"
+                    android:textColorHint="@android:color/black"
+                    android:textSize="12sp"
+                    android:textStyle="italic" />
+
+                <EditText
+                    android:id="@+id/tvPrediction"
+                    android:layout_marginTop="25dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:hint="Possible Illness:"
+                    android:textColor="@android:color/black"
+                    android:textColorHint="@android:color/black"
+                    android:textSize="15sp"
+                    />
+
+                <EditText
+                    android:id="@+id/tvAccuracy"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:hint="Confidence:"
+                    android:textColor="@android:color/black"
+                    android:textColorHint="@android:color/black"
+                    android:textSize="15sp"
+                    />
+                <EditText
+                    android:id="@+id/tvRemarks"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:hint="This is just a prediction. Please book an appointment and consult a doctor."
+                    android:textColor="@android:color/black"
+                    android:textColorHint="@android:color/black"
+                    android:textSize="11sp"
+                    android:textStyle="italic"
+                    />
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>
