@@ -97,6 +97,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:hint="Enter First Name"
+                android:enabled="false"
                 android:textSize="15sp"
                 android:fontFamily="@font/metropolis_regular"
                 android:textColor="#000000" />
@@ -146,6 +147,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:hint="Enter Last Name"
+                android:enabled="false"
                 android:textSize="15sp"
                 android:fontFamily="@font/metropolis_regular"
                 android:textColor="#000000" />
