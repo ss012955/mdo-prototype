@@ -109,6 +109,21 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
 
                 // Set the background for the admin's message
                 chatLinear.setBackgroundResource(R.drawable.roundedchat_admin);
+            }else if ("mdo.agent@system.com".equals(message.getSenderEmail())) {
+                // Set the sender's text and make it visible
+                senderTextView.setText("MDO Agent");
+                senderTextView.setVisibility(View.VISIBLE);
+
+                // Align the message bubble and timestamp to the start (left)
+                chatLinear.setGravity(Gravity.START);   // Align the message bubble to the left
+                chatDetails.setGravity(Gravity.START);  // Align the whole chat details to the left
+
+                // Align sender's name and timestamp to the left
+                senderTextView.setGravity(Gravity.START);
+                timestampTextView.setForegroundGravity(Gravity.START);
+
+                // Set the background for the admin's message
+                chatLinear.setBackgroundResource(R.drawable.roundedchat_admin);
 
             } else {
                 chatLinear.setGravity(Gravity.END);   // Align the message bubble to the right

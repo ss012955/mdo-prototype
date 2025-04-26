@@ -26,8 +26,19 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
+
+    // Add this packaging block to resolve the duplicate META-INF/DEPENDENCIES issue
+    packaging {
+        resources {
+            excludes += "META-INF/DEPENDENCIES"
+            excludes += "META-INF/LICENSE"
+            excludes += "META-INF/LICENSE.txt"
+            excludes += "META-INF/NOTICE"
+            excludes += "META-INF/NOTICE.txt"
+        }
     }
 
     buildFeatures{
@@ -66,6 +77,10 @@ dependencies {
     implementation("androidx.activity:activity-ktx:1.7.2")
     implementation ("androidx.activity:activity:1.7.2")
 
+    // External dependencies
+    implementation("com.google.code.gson:gson:2.10")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation("com.google.auth:google-auth-library-oauth2-http:1.18.0")
 
 }
 
