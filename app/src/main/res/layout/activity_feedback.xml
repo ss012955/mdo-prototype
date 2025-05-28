@@ -124,7 +124,25 @@
             app:layout_constraintTop_toBottomOf="@id/star_rating" />
 
         <!-- Feedback Input -->
-        <EditText
+<!--        <EditText-->
+<!--            android:id="@+id/feedback_input"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="16dp"-->
+<!--            android:background="@drawable/rounded_layout"-->
+<!--            android:backgroundTint="@color/gray"-->
+<!--            android:hint="Write your feedback here..."-->
+<!--            android:padding="10dp"-->
+<!--            android:layout_margin="30dp"-->
+<!--            android:textColor="@color/black"-->
+<!--            android:textColorHint="@color/black"-->
+<!--            android:textSize="16sp"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/feedback_prompt" />-->
+
+
+        <AutoCompleteTextView
             android:id="@+id/feedback_input"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -139,7 +157,13 @@
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/feedback_prompt" />
+            app:layout_constraintTop_toBottomOf="@id/feedback_prompt"
+            android:inputType="text"
+            android:drawableRight="@android:drawable/arrow_down_float"
+            android:dropDownHeight="wrap_content"
+            android:completionThreshold="1" />
+
+
 
         <!-- Send Feedback Button -->
         <Button

@@ -9,6 +9,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -32,9 +34,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import HelperClasses.BaseClass;
 
@@ -43,7 +48,7 @@ public class feedbackActivity extends AppCompatActivity {
     private ImageView chatImageView;
     private List<ImageView> stars;
     private int currentRating = 0;
-    private EditText feedbackInput;
+    private AutoCompleteTextView feedbackInput;
     private Button sendFeedbackButton;
     private SharedPreferences prefs;
     private String userEmail;
@@ -119,14 +124,36 @@ public class feedbackActivity extends AppCompatActivity {
         feedbackInput = findViewById(R.id.feedback_input);
         sendFeedbackButton = findViewById(R.id.send_feedback);
         // Add click listener for the "Send Feedback" button
+        String[] options = {"Friendly and professional staff", "Clean and well-maintained facility", "Quick and efficient service", "Doctor was very attentive",
+                "Good experience overall", "Would recommend to others", "Need more dental service availability", "Clinic hours are inconvenient", "Received clear instructions and advice"
+        };
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_dropdown_item_1line,
+                options
+        );
+
+        feedbackInput.setAdapter(adapter);
+        feedbackInput.setOnClickListener(v -> feedbackInput.showDropDown());
+
+
         sendFeedbackButton.setOnClickListener(v -> {
             String feedback = feedbackInput.getText().toString().trim();
-            if (!feedback.isEmpty()) {
-                fetchLatestCompletedBookingAndSendFeedback(feedback, currentRating, userEmail);
-            } else {
+
+            if (feedback.isEmpty()) {
                 Toast.makeText(this, "Please write some feedback!", Toast.LENGTH_SHORT).show();
+                return;
             }
+
+            if (containsBlockedWord(feedback)) {
+                Toast.makeText(this, "Inappropriate language detected. Please revise your feedback.", Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            fetchLatestCompletedBookingAndSendFeedback(feedback, currentRating, userEmail);
         });
+
 
 
     }
@@ -257,4 +284,22 @@ public class feedbackActivity extends AppCompatActivity {
             }
         }
     }
+    private final Set<String> blockedWords = new HashSet<>(Arrays.asList(
+            "nigger", "faggot", "retard", "chink", "kike", "bitch", "asshole",
+            "slut", "whore", "dumbass", "fuck", "shit", "cunt", "nigga" // etc.
+    ));
+
+
+    private boolean containsBlockedWord(String input) {
+        String normalized = input.toLowerCase().replaceAll("[^a-z]", ""); // Remove symbols, spaces
+
+        for (String word : blockedWords) {
+            if (normalized.contains(word)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
 }
