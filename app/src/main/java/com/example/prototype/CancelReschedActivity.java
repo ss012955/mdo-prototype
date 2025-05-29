@@ -84,8 +84,8 @@ public class CancelReschedActivity extends BaseActivity {
 
 
         tvService.setText(String.format("%-15s %s", "Service:", serviceR));
-        tvDate.setText(String.format("%-13s %s", "Date/Time:", dateTime));
-        tvRemarks.setText(String.format("%-15s %s", "Remarks:", remarksR));
+        tvDate.setText(String.format("%-12s %s", "Date/Time:", dateTime));
+        tvRemarks.setText(String.format("%-10s %s", "Remarks:", remarksR));
 
 
         buttonCancel = findViewById(R.id.buttonCancel);
