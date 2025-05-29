@@ -138,6 +138,10 @@ public class ViewHistorySingle extends AppCompatActivity {
                     JSONObject medicalRecords = jsonResponse.getJSONObject("medical_records");
                     StringBuilder medicalInfo = new StringBuilder();
 
+                    medicalInfo.append("Complaint: ")
+                            .append(medicalRecords.optString("complaint", "Not provided"))
+                            .append("\n\n");
+
                     medicalInfo.append("Diagnosis: ")
                             .append(medicalRecords.optString("diagnosis", "Not provided"))
                             .append("\n\n");
