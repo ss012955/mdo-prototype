@@ -51,9 +51,9 @@
     <!-- White Background Container -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="625dp"
+        android:layout_height="0dp"
         android:background="@color/white"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/tablayout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/txtviewHomeTitle">
 
@@ -71,140 +71,146 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-
-            <LinearLayout
+            <!-- ScrollView wrapping the content -->
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="551dp"
-                android:orientation="vertical"
-                android:padding="20dp">
+                android:layout_height="580dp"
+                android:fillViewport="true"
+                android:scrollbars="vertical">
 
-                <!-- Title -->
-                <TextView
-                    android:id="@+id/tvTitle"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="0dp"
-                    android:fontFamily="@font/metropolis_bold"
-                    android:padding="2dp"
-                    android:text="Appointment Details"
-                    android:textAlignment="center"
-                    android:textColor="@color/black"
-                    android:textSize="20sp" />
+                    android:orientation="vertical"
+                    android:padding="20dp"
+                    android:minHeight="600dp">
 
-                <!-- Date and Time -->
+                    <!-- Title -->
+                    <TextView
+                        android:id="@+id/tvTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="0dp"
+                        android:fontFamily="@font/metropolis_bold"
+                        android:padding="2dp"
+                        android:text="Appointment Details"
+                        android:textAlignment="center"
+                        android:textColor="@color/black"
+                        android:textSize="20sp" />
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="10dp"
-                    android:background="@android:color/black" />
-                <!-- Symptoms Input -->
+                    <!-- Date and Time -->
 
-                <TextView
-                    android:id="@+id/tvBookingTitle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="0dp"
-                    android:fontFamily="@font/metropolis_bold"
-                    android:padding="2dp"
-                    android:text="Title"
-                    android:textAlignment="textStart"
-                    android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@android:color/black" />
+                    <!-- Symptoms Input -->
 
-                <!-- Divider -->
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="10dp"
-                    android:background="@android:color/black" />
+                    <TextView
+                        android:id="@+id/tvBookingTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="0dp"
+                        android:fontFamily="@font/metropolis_bold"
+                        android:padding="2dp"
+                        android:text="Title"
+                        android:textAlignment="textStart"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
 
-                <TextView
-                    android:id="@+id/tvDetails"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="0dp"
-                    android:fontFamily="@font/metropolis_bold"
-                    android:padding="2dp"
-                    android:text=" Details"
-                    android:textAlignment="textStart"
-                    android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    <!-- Divider -->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@android:color/black" />
 
-                <!-- Divider -->
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="10dp"
-                    android:background="@android:color/black" />
+                    <TextView
+                        android:id="@+id/tvDetails"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="0dp"
+                        android:fontFamily="@font/metropolis_bold"
+                        android:padding="2dp"
+                        android:text=" Details"
+                        android:textAlignment="textStart"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
 
-                <!-- Medicine Input -->
-                <TextView
-                    android:id="@+id/tvTitleVital"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="0dp"
-                    android:fontFamily="@font/metropolis_bold"
-                    android:padding="2dp"
-                    android:text="Vital Signs"
-                    android:textAlignment="textStart"
-                    android:textColor="@color/black"
-                    android:textSize="16sp"
-                    android:textStyle="italic"/>
+                    <!-- Divider -->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@android:color/black" />
 
-                <TextView
-                    android:id="@+id/tvVital"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="0dp"
-                    android:fontFamily="@font/metropolis_bold"
-                    android:padding="2dp"
-                    android:text="Vital Signs"
-                    android:textAlignment="textStart"
-                    android:textColor="@color/black"
-                    android:textSize="15sp" />
+                    <!-- Medicine Input -->
+                    <!--                <TextView-->
+                    <!--                    android:id="@+id/tvTitleVital"-->
+                    <!--                    android:layout_width="match_parent"-->
+                    <!--                    android:layout_height="wrap_content"-->
+                    <!--                    android:layout_marginTop="0dp"-->
+                    <!--                    android:fontFamily="@font/metropolis_bold"-->
+                    <!--                    android:padding="2dp"-->
+                    <!--                    android:text="Vital Signs"-->
+                    <!--                    android:textAlignment="textStart"-->
+                    <!--                    android:textColor="@color/black"-->
+                    <!--                    android:textSize="16sp"-->
+                    <!--                    android:textStyle="italic"/>-->
 
-                <!-- Divider -->
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="10dp"
-                    android:background="@android:color/black" />
+                    <TextView
+                        android:id="@+id/tvVital"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="0dp"
+                        android:fontFamily="@font/metropolis_bold"
+                        android:padding="2dp"
+                        android:text="Vital Signs"
+                        android:textAlignment="textStart"
+                        android:textColor="@color/black"
+                        android:textSize="15sp" />
 
-                <TextView
-                    android:id="@+id/tvTitleMedical"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="0dp"
-                    android:fontFamily="@font/metropolis_bold"
-                    android:padding="2dp"
-                    android:text="Medical Information"
-                    android:textAlignment="textStart"
-                    android:textColor="@color/black"
-                    android:textSize="16sp"
-                    android:textStyle="italic"/>
+                    <!-- Divider -->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@android:color/black" />
 
+                    <!--                <TextView-->
+                    <!--                    android:id="@+id/tvTitleMedical"-->
+                    <!--                    android:layout_width="match_parent"-->
+                    <!--                    android:layout_height="wrap_content"-->
+                    <!--                    android:layout_marginTop="0dp"-->
+                    <!--                    android:fontFamily="@font/metropolis_bold"-->
+                    <!--                    android:padding="2dp"-->
+                    <!--                    android:text="Medical Information"-->
+                    <!--                    android:textAlignment="textStart"-->
+                    <!--                    android:textColor="@color/black"-->
+                    <!--                    android:textSize="16sp"-->
+                    <!--                    android:textStyle="italic"/>-->
 
-                <TextView
-                    android:id="@+id/tvMedical"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="0dp"
-                    android:fontFamily="@font/metropolis_bold"
-                    android:padding="2dp"
-                    android:text="Medical Records"
-                    android:textAlignment="textStart"
-                    android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    <TextView
+                        android:id="@+id/tvMedical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="0dp"
+                        android:fontFamily="@font/metropolis_bold"
+                        android:padding="2dp"
+                        android:text="Medical Records"
+                        android:textAlignment="textStart"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
 
-                <ProgressBar
-                    android:id="@+id/progress_bar"
-                    style="?android:attr/progressBarStyle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    <ProgressBar
+                        android:id="@+id/progress_bar"
+                        style="?android:attr/progressBarStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
 
-
-            </LinearLayout>
+                </LinearLayout>
+            </ScrollView>
         </androidx.cardview.widget.CardView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
