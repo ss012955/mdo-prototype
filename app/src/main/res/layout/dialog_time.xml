@@ -1,173 +1,187 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="380dp"
-    android:layout_height="295dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="12dp"
+    android:maxWidth="360dp"
+    android:minWidth="280dp"
+    android:maxHeight="450dp"
     android:background="@drawable/dialog_background"
-    android:padding="16dp"
+    android:padding="12dp"
     android:elevation="8dp"
-    android:layout_gravity="center">
+    android:layout_gravity="center"
+    android:orientation="vertical">
 
     <!-- Dialog Title -->
     <LinearLayout
-        android:id="@+id/title_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-     >
+        android:gravity="center"
+        android:layout_marginBottom="8dp">
 
         <TextView
-            android:id="@+id/availableTitle"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="128dp"
-            android:layout_marginTop="5dp"
+            android:layout_weight="1"
+            android:gravity="center"
             android:textColor="#32CD32"
             android:fontFamily="@font/metropolis_bold"
-            android:text="Available"
-            android:textSize="15sp"
+            android:text="Time Slot"
+            android:textSize="14sp"
             android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/unavailableTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:fontFamily="@font/metropolis_bold"
-            android:text="Unavailable"
-            android:textColor="#FF0000"
-            android:textSize="15sp"
-            android:textStyle="bold" />
     </LinearLayout>
 
-    <!-- Time Slots -->
-    <LinearLayout
-        android:id="@+id/slots_layout"
+    <!-- Scrollable Content -->
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/title_layout"
-        android:layout_marginTop="16dp"
-        android:orientation="horizontal"
-        android:paddingBottom="16dp">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scrollbars="vertical">
 
-        <!-- Available Time Slots -->
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/timeSlot1"
-                android:layout_width="wrap_content"
+            <!-- Available Column -->
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:padding="8dp"
-                android:text="8:00-9:00 AM"
-                android:fontFamily="@font/metropolis_bold"
-                android:textColor="#32CD32"
-                android:textSize="18sp" />
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_marginEnd="4dp">
 
-            <TextView
-                android:id="@+id/timeSlot2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:padding="8dp"
-                android:text="9:00-10:00 AM"
-                android:fontFamily="@font/metropolis_bold"
-                android:textColor="#32CD32"
-                android:textSize="18sp" />
+                <TextView
+                    android:id="@+id/timeSlot1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="8dp"
+                    android:layout_marginBottom="4dp"
+                    android:text="8:00-9:00 AM"
+                    android:fontFamily="@font/metropolis_bold"
+                    android:textColor="#32CD32"
+                    android:textSize="12sp"
+                    android:minHeight="36dp" />
 
-            <TextView
-                android:id="@+id/timeSlot3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/metropolis_bold"
-                android:gravity="center"
-                android:padding="8dp"
-                android:text="10:00-11:00 AM"
-                android:textColor="#32CD32"
-                android:textSize="18sp" />
+                <TextView
+                    android:id="@+id/timeSlot2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="8dp"
+                    android:layout_marginBottom="4dp"
+                    android:text="9:00-10:00 AM"
+                    android:fontFamily="@font/metropolis_bold"
+                    android:textColor="#32CD32"
+                    android:textSize="12sp"
+                    android:minHeight="36dp" />
 
-            <TextView
-                android:id="@+id/timeSlot4"
-                android:layout_width="wrap_content"
+                <TextView
+                    android:id="@+id/timeSlot3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="8dp"
+                    android:layout_marginBottom="4dp"
+                    android:text="10:00-11:00 AM"
+                    android:fontFamily="@font/metropolis_bold"
+                    android:textColor="#32CD32"
+                    android:textSize="12sp"
+                    android:minHeight="36dp" />
+
+                <TextView
+                    android:id="@+id/timeSlot4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="8dp"
+                    android:text="11:00-12:00 PM"
+                    android:fontFamily="@font/metropolis_bold"
+                    android:textColor="#32CD32"
+                    android:textSize="12sp"
+                    android:minHeight="36dp" />
+            </LinearLayout>
+
+            <!-- Unavailable Column -->
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:fontFamily="@font/metropolis_bold"
-                android:padding="8dp"
-                android:text="11:00-12:00 PM"
-                android:textColor="#32CD32"
-                android:textSize="18sp" />
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_marginStart="4dp">
+
+                <TextView
+                    android:id="@+id/timeSlot5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="8dp"
+                    android:layout_marginBottom="4dp"
+                    android:text="1:00-2:00 PM"
+                    android:fontFamily="@font/metropolis_bold"
+                    android:textColor="#32CD32"
+                    android:textSize="12sp"
+                    android:minHeight="36dp" />
+
+                <TextView
+                    android:id="@+id/timeSlot6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="8dp"
+                    android:layout_marginBottom="4dp"
+                    android:text="2:00-3:00 PM"
+                    android:fontFamily="@font/metropolis_bold"
+                    android:textColor="#32CD32"
+                    android:textSize="12sp"
+                    android:minHeight="36dp" />
+
+                <TextView
+                    android:id="@+id/timeSlot7"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="8dp"
+                    android:layout_marginBottom="4dp"
+                    android:text="3:00-4:00 PM"
+                    android:fontFamily="@font/metropolis_bold"
+                    android:textColor="#32CD32"
+                    android:textSize="12sp"
+                    android:minHeight="36dp" />
+
+                <TextView
+                    android:id="@+id/timeSlot8"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="8dp"
+                    android:text="4:00-5:00 PM"
+                    android:fontFamily="@font/metropolis_bold"
+                    android:textColor="#32CD32"
+                    android:textSize="12sp"
+                    android:minHeight="36dp" />
+            </LinearLayout>
         </LinearLayout>
-
-        <!-- Unavailable Time Slots -->
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/timeSlot5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:fontFamily="@font/metropolis_bold"
-                android:padding="8dp"
-                android:text="1:00-2:00 PM"
-                android:textColor="#32CD32"
-                android:textSize="18sp" />
-
-            <TextView
-                android:id="@+id/timeSlot6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:padding="8dp"
-                android:text="2:00-3:00 PM"
-                android:fontFamily="@font/metropolis_bold"
-                android:textColor="#32CD32"
-                android:textSize="18sp" />
-
-            <TextView
-                android:id="@+id/timeSlot7"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:padding="8dp"
-                android:text="3:00-4:00 PM"
-                android:textColor="#32CD32"
-                android:fontFamily="@font/metropolis_bold"
-                android:textSize="18sp" />
-
-            <TextView
-                android:id="@+id/timeSlot8"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:padding="8dp"
-                android:text="4:00-5:00 PM"
-                android:fontFamily="@font/metropolis_bold"
-                android:textColor="#32CD32"
-                android:textSize="18sp" />
-        </LinearLayout>
-    </LinearLayout>
+    </ScrollView>
 
     <!-- Confirm Button -->
     <Button
         android:id="@+id/confirm_button"
-        android:layout_width="116dp"
-        android:layout_height="47dp"
-        android:layout_below="@id/slots_layout"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="6dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="12dp"
+        android:minWidth="100dp"
         android:backgroundTint="#FFFF00"
-        android:padding="8dp"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="8dp"
         android:text="CONFIRM"
         android:textAllCaps="true"
         android:textColor="#000000"
+        android:textSize="13sp"
         app:cornerRadius="15dp" />
-</RelativeLayout>
+</LinearLayout>
