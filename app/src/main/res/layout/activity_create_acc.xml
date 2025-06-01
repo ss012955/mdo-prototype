@@ -272,7 +272,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="1dp"
         android:fontFamily="@font/metropolis_regular"
-        android:text="Accept terms and Privacy"
+        android:text="Accept Terms and Privacy"
         android:textColor="@color/white"
         app:layout_constraintBottom_toTopOf="@+id/btnSignUp"
         app:layout_constraintStart_toEndOf="@+id/checkBoxTerms"

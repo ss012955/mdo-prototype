@@ -36,7 +36,7 @@
         android:layout_height="50dp"
         android:fontFamily="@font/metropolis_bold"
         android:padding="12dp"
-        android:text="Terms and Condition"
+        android:text="Terms and Privacy"
         android:textAllCaps="true"
         android:textAlignment="center"
         android:textSize="23sp"
