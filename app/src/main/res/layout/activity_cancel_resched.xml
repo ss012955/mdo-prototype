@@ -109,7 +109,7 @@
                 android:padding="16dp"
                 android:text="Date/Time: "
                 android:textColor="@color/black"
-                android:textSize="12sp" />
+                android:textSize="13sp" />
 
             <TextView
                 android:id="@+id/tvRemarks"
