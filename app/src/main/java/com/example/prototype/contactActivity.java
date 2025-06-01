@@ -193,10 +193,15 @@ public class contactActivity extends BaseActivity {
                 JSONObject jsonResponse = new JSONObject(response.toString());
                 if (jsonResponse.getBoolean("exists")) {
                     profileExists = true; // Profile exists
-                    contactNumber.setText(jsonResponse.getString("contact_number"));
-                    address.setText(jsonResponse.getString("address"));
-                    guardianContact.setText(jsonResponse.getString("guardian_contact_number"));
-                    guardianAddress.setText(jsonResponse.getString("guardian_address"));
+//                    contactNumber.setText(jsonResponse.getString("contact_number"));
+//                    address.setText(jsonResponse.getString("address"));
+//                    guardianContact.setText(jsonResponse.getString("guardian_contact_number"));
+//                    guardianAddress.setText(jsonResponse.getString("guardian_address"));
+                    contactNumber.setHint(getSafeValue(jsonResponse.getString("contact_number"), "contact"));
+                    address.setHint(getSafeValue(jsonResponse.getString("address"), "address"));
+                    guardianContact.setHint(getSafeValue(jsonResponse.getString("guardian_contact_number"), "guardianContact"));
+                    guardianAddress.setHint(getSafeValue(jsonResponse.getString("guardian_address"), "guardianAddress"));
+
                 } else {
                     profileExists = false; // Profile doesn't exist
                     //Toast.makeText(this, "Profile not found", Toast.LENGTH_SHORT).show();
@@ -213,6 +218,18 @@ public class contactActivity extends BaseActivity {
         }
     }
 
+    private String getSafeValue(String value, String fieldName) {
+        if (value == null || value.trim().isEmpty() || value.trim().equalsIgnoreCase("null")) {
+            switch (fieldName) {
+                case "contact": return "No contact number";
+                case "address": return "No address saved";
+                case "guardianContact": return "Guardian contact missing";
+                case "guardianAddress": return "Guardian address not provided";
+                default: return "Not yet set";
+            }
+        }
+        return value;
+    }
 
 
     @Override
