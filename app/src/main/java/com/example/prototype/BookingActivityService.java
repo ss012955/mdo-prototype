@@ -100,23 +100,14 @@ public class BookingActivityService extends BaseActivity implements ItemClickLis
             if (service.equals("Medical")) {
                 title.setText("Medical Services");
                 services.add(new Services("General Consultation"));
-                services.add(new Services("Health Screening"));
-                services.add(new Services("Vaccination Services"));
-                services.add(new Services("Referral to Specialists"));
-                services.add(new Services("Health Education"));
                 services.add(new Services("Physical Examination"));
                 services.add(new Services("Treatment for Minor Illnesses"));
-                services.add(new Services("Laboratory Services"));
-                services.add(new Services("Medical Certificate for OJT"));
             } else if (service.equals("Dental")) {
                 title.setText("Dental Services");
                 services.add(new Services("Dental Consultation"));
                 services.add(new Services("Tooth Extraction"));
                 services.add(new Services("Teeth Cleaning"));
                 services.add(new Services("Dental Fillings"));
-                services.add(new Services("Dental Health Education"));
-                services.add(new Services("Emergency Dental Care"));
-                services.add(new Services("Referrals to Dental Specialists"));
             } else {
                 //Toast.makeText(this, "Unknown service type selected.", Toast.LENGTH_SHORT).show();
             }
