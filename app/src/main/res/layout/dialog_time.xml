@@ -64,7 +64,7 @@
                     android:text="8:00-9:00 AM"
                     android:fontFamily="@font/metropolis_bold"
                     android:textColor="#32CD32"
-                    android:textSize="12sp"
+                    android:textSize="15sp"
                     android:minHeight="36dp" />
 
                 <TextView
@@ -77,7 +77,7 @@
                     android:text="9:00-10:00 AM"
                     android:fontFamily="@font/metropolis_bold"
                     android:textColor="#32CD32"
-                    android:textSize="12sp"
+                    android:textSize="15sp"
                     android:minHeight="36dp" />
 
                 <TextView
@@ -90,7 +90,7 @@
                     android:text="10:00-11:00 AM"
                     android:fontFamily="@font/metropolis_bold"
                     android:textColor="#32CD32"
-                    android:textSize="12sp"
+                    android:textSize="15sp"
                     android:minHeight="36dp" />
 
                 <TextView
@@ -102,7 +102,7 @@
                     android:text="11:00-12:00 PM"
                     android:fontFamily="@font/metropolis_bold"
                     android:textColor="#32CD32"
-                    android:textSize="12sp"
+                    android:textSize="15sp"
                     android:minHeight="36dp" />
             </LinearLayout>
 
@@ -124,7 +124,7 @@
                     android:text="1:00-2:00 PM"
                     android:fontFamily="@font/metropolis_bold"
                     android:textColor="#32CD32"
-                    android:textSize="12sp"
+                    android:textSize="15sp"
                     android:minHeight="36dp" />
 
                 <TextView
@@ -137,7 +137,7 @@
                     android:text="2:00-3:00 PM"
                     android:fontFamily="@font/metropolis_bold"
                     android:textColor="#32CD32"
-                    android:textSize="12sp"
+                    android:textSize="15sp"
                     android:minHeight="36dp" />
 
                 <TextView
@@ -150,7 +150,7 @@
                     android:text="3:00-4:00 PM"
                     android:fontFamily="@font/metropolis_bold"
                     android:textColor="#32CD32"
-                    android:textSize="12sp"
+                    android:textSize="15sp"
                     android:minHeight="36dp" />
 
                 <TextView
@@ -162,7 +162,7 @@
                     android:text="4:00-5:00 PM"
                     android:fontFamily="@font/metropolis_bold"
                     android:textColor="#32CD32"
-                    android:textSize="12sp"
+                    android:textSize="15sp"
                     android:minHeight="36dp" />
             </LinearLayout>
         </LinearLayout>
