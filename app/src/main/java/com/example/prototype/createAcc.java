@@ -43,6 +43,7 @@ public class createAcc extends BaseActivity {
     public SignupManager signupManager;
     private NetworkUtils networkUtils;
     CheckBox checkBoxTerms;
+    private String userRole = "student"; // Default value
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +56,14 @@ public class createAcc extends BaseActivity {
             return insets;
         });
 
+        //ROLE: Student or Faculty
+        // Get the role from intent
+        Intent intent = getIntent();
+        if (intent != null && intent.hasExtra("role")) {
+            userRole = intent.getStringExtra("role");
+        }
+
+
         etEmail = findViewById(R.id.etEmail);
         etStudentId = findViewById(R.id.etStudentId);
         etFirstName = findViewById(R.id.etFirstName);
@@ -65,7 +74,7 @@ public class createAcc extends BaseActivity {
         createAccValidation = findViewById(R.id.createAccValidationText);
         txtviewLogIn = findViewById(R.id.txtviewLogIn); // Ensure this line is added
 
-       txtviewLogIn.setOnClickListener(v->{LogIn();});
+        txtviewLogIn.setOnClickListener(v->{LogIn();});
 
         signUp.setOnClickListener(v-> { attemptSignup();});
 
@@ -149,7 +158,7 @@ public class createAcc extends BaseActivity {
         }else if(!checkBoxTerms.isChecked()){
             showError("Please read and accept terms and privacy.", Color.RED);
         } else {
-            SignupManager.performSignupWithFirebase(this, studentId, email, firstName, lastName, password, new SignupManager.SignUpCallBack() {
+            SignupManager.performSignupWithFirebase(this, studentId, email, firstName, lastName, password, userRole, new SignupManager.SignUpCallBack() {
                 @Override
                 public void onSignupSuccess() {
                     showError("Registration Successful! Please check your email.", Color.GREEN);

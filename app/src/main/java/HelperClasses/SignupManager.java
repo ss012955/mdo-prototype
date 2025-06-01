@@ -28,7 +28,7 @@ public class SignupManager implements DefaultLifecycleObserver {
     }
 
     // Perform Signup with Firebase and XAMPP
-    public static void performSignupWithFirebase(Context context, String studentId, String email, String firstName, String lastName, String password, final SignUpCallBack callback) {
+    public static void performSignupWithFirebase(Context context, String studentId, String email, String firstName, String lastName, String password, String role, final SignUpCallBack callback) {
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -40,7 +40,7 @@ public class SignupManager implements DefaultLifecycleObserver {
                                     .addOnCompleteListener(verificationTask -> {
                                         if (verificationTask.isSuccessful()) {
                                             // Now insert the user data into MySQL with is_verified = false
-                                            insertUserDataToDatabase(studentId, email, firstName, lastName, password, callback);
+                                            insertUserDataToDatabase(studentId, email, firstName, lastName, password, role, callback);
                                         } else {
                                             callback.onSignupFailed("Failed to send verification email.");
                                         }
@@ -53,9 +53,9 @@ public class SignupManager implements DefaultLifecycleObserver {
     }
 
 
-    public static void insertUserDataToDatabase(String studentId, String email, String firstName, String lastName, String password, SignUpCallBack callback) {
+    public static void insertUserDataToDatabase(String studentId, String email, String firstName, String lastName, String password, String role, SignUpCallBack callback) {
         executorService.execute(() -> {
-            String result = NetworkUtils.performSignup(studentId, email, firstName, lastName, password);
+            String result = NetworkUtils.performSignup(studentId, email, firstName, lastName, password ,role);
             ((createAcc) context).runOnUiThread(() -> {
                 if ("Signup successful!".equals(result)) {
                     callback.onSignupSuccess();
