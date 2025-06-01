@@ -63,7 +63,8 @@ public class MainActivity extends BaseActivity {
         loginManager = new LoginManager(this);
         getLifecycle().addObserver(loginManager);
 
-        createAcc.setOnClickListener(v -> startActivity(new Intent(this, createAcc.class).putExtra("isCreate", true)));
+//        createAcc.setOnClickListener(v -> startActivity(new Intent(this, createAcc.class).putExtra("isCreate", true)));
+        createAcc.setOnClickListener(v -> startActivity(new Intent(this, RoleActivity.class)));
         forgotPass.setOnClickListener(v -> startActivity(new Intent(this, forgotPass.class)));
 
         logIn.setOnClickListener(v -> attemptLogin());

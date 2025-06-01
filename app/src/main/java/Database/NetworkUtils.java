@@ -39,7 +39,7 @@ public class NetworkUtils {
     }
     private BaseClass baseClass = new BaseClass();
 
-    public static String performSignup(String studentId, String email, String firstName, String lastName, String password) {
+    public static String performSignup(String studentId, String email, String firstName, String lastName, String password, String role) {
         StringBuilder response = new StringBuilder();
         try {
             URL url = new URL("https://umakmdo-91b845374d5b.herokuapp.com/signup.php");
@@ -50,7 +50,9 @@ public class NetworkUtils {
                     "&umak_email=" + URLEncoder.encode(email, "UTF-8") +
                     "&first_name=" + URLEncoder.encode(firstName, "UTF-8") +
                     "&last_name=" + URLEncoder.encode(lastName, "UTF-8") +
-                    "&password=" + URLEncoder.encode(password, "UTF-8");
+                    "&password=" + URLEncoder.encode(password, "UTF-8")+
+                    "&role=" + URLEncoder.encode(role, "UTF-8");
+
 
             OutputStream os = connection.getOutputStream();
             os.write(postData.getBytes());
