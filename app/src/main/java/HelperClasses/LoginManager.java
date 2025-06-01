@@ -41,7 +41,7 @@ public class LoginManager implements DefaultLifecycleObserver {
 
                                     // Switch to the main thread to update UI based on the result
                                     ((MainActivity) context).runOnUiThread(() -> {
-                                        Toast.makeText(context, loginResponse, Toast.LENGTH_SHORT).show();
+//                                        Toast.makeText(context, loginResponse, Toast.LENGTH_SHORT).show();
                                         if (loginResponse.equals("Your account is inactive.")) {
                                             callback.onLoginFailed("Your account is inactive. Please contact administrator.");
                                         } else {
