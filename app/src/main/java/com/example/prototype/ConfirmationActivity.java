@@ -90,7 +90,7 @@ public class ConfirmationActivity extends AppCompatActivity {
 
         tvService = findViewById(R.id.tvService);
         tvDate = findViewById(R.id.tvDate);
-        tvremarks = findViewById(R.id.tvremarks);
+        tvremarks = findViewById(R.id.tvRemarks);
 
         try {
             // Assuming chosen_date is in "MM/dd/yyyy" format
@@ -101,7 +101,7 @@ public class ConfirmationActivity extends AppCompatActivity {
             String formattedDate = outputFormat.format(date);
 
             String serviceText = String.format("%-14s %s", "Service:", serviceType);
-            String dateText = String.format("%-14s %s / %s", "Date/Time:", formattedDate, chosen_time);
+            String dateText = String.format("%-12s %s / %s", "Date/Time:", formattedDate, chosen_time);
             String remarks = String.format("%-14s %s", "Remarks:", remarksInput);
 
             tvService.setText(serviceText);
