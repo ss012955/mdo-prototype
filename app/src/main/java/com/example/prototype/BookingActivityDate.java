@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CalendarView;
@@ -29,12 +31,14 @@ import java.util.Locale;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 
 import HelperClasses.BookingManager;
+import Singleton.AvailabilityChecker;
 
 public class BookingActivityDate extends BaseActivity {
     BookingManager bookingManager;
     TabLayout tabLayout;
     Button buttomTime, buttonNext;
     Date chosenDate;
+    String selectedTimeSlot;
     String chosenTimeSlot;
     String service, serviceType;
     ProgressBar progressBar;
@@ -116,25 +120,46 @@ public class BookingActivityDate extends BaseActivity {
         // Handle time slot selection
         buttomTime.setOnClickListener(v -> {
             chosenDate = bookingManager.getSelectedDate();
-            // Make sure selectedDate is available, if not show an error message
+            Log.d("BookingDebug", "chosenDate: " + chosenDate);
+            Log.d("DEBUG", "Button clicked, chosenTimeSlot before dialog: " + selectedTimeSlot);
+
             if (chosenDate == null) {
                 Toast.makeText(this, "Please select a date first.", Toast.LENGTH_SHORT).show();
                 return;
             }
-            // Pass the selected date to the dialog
-            String formattedDate = new SimpleDateFormat("yyyy-MM-dd").format(chosenDate);
 
-            bookingManager.showTimeSlotDialog(this, timeSlot -> {
-                chosenTimeSlot = timeSlot; // Save selected time slot
-                Toast.makeText(this, "Time selected: " + chosenTimeSlot, Toast.LENGTH_SHORT).show();
-                buttomTime.setText(chosenTimeSlot);
-            }, formattedDate); // Pass the formatted date as the third argument
+            // Make sure service and serviceType are selected
+            if (service == null || service.isEmpty() || serviceType == null || serviceType.isEmpty()) {
+                Log.d("BookingDebug", "service: " + service + ", serviceType: " + serviceType);
+                Toast.makeText(this, "Please select a service first.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            String formattedDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(chosenDate);
+            Log.d("BookingDebug", "formattedDate: " + formattedDate);
+
+            AvailabilityChecker checker = new AvailabilityChecker();
+            checker.showAvailabilityAwareTimeSlotDialog(this, formattedDate, service, serviceType,
+                    new AvailabilityChecker.TimeSlotSelectionCallback() {
+                        @Override
+                        public void onTimeSlotSelected(String timeSlot) {
+                            selectedTimeSlot = timeSlot;
+                            chosenTimeSlot = convertTimeSlot(timeSlot);
+                            buttomTime.setText(chosenTimeSlot);
+                        }
+
+                        @Override
+                        public void onSelectionCancelled() {
+                            Log.d("BookingDebug", "Time selection cancelled");
+                            Toast.makeText(BookingActivityDate.this,
+                                    "Time selection cancelled", Toast.LENGTH_SHORT).show();
+                        }
+                    });
         });
 
         // Handle calendar date selection
         findViewById(R.id.buttonNext).setOnClickListener(v -> {
             chosenDate = bookingManager.getSelectedDate();
-            chosenTimeSlot = bookingManager.getSelectedTimeSlot();
             if (chosenDate == null || chosenTimeSlot == null) {
                 Toast.makeText(this, "Please select a date and time first.", Toast.LENGTH_SHORT).show();
                 return;
@@ -177,5 +202,43 @@ public class BookingActivityDate extends BaseActivity {
         if (chosenDate != null) {
             //Toast.makeText(this, "Chosen date: " + chosenDate.toString(), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private String convertTimeSlot(String time) {
+        String newTime = time; // Default to original time
+
+        // Check and convert specific time slots to a time without a range
+        switch (time) {
+            case "8-9 AM":
+                newTime = "8:00 AM";
+                break;
+            case "9-10 AM":
+                newTime = "9:00 AM";
+                break;
+            case "10-11 AM":
+                newTime = "10:00 AM";
+                break;
+            case "11-12 PM":
+                newTime = "11:00 AM";
+                break;
+            case "1-2 PM":
+                newTime = "1:00 PM";
+                break;
+            case "2-3 PM":
+                newTime = "2:00 PM";
+                break;
+            case "3-4 PM":
+                newTime = "3:00 PM";
+                break;
+            case "4-5 PM":
+                newTime = "4:00 PM";
+                break;
+            default:
+                // If the time doesn't match a specific slot, leave it unchanged
+                Log.w("BookingInsert", "Unexpected time format: " + time);
+                break;
+        }
+
+        return newTime;
     }
 }
