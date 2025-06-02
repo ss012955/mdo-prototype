@@ -91,7 +91,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         app:passwordToggleEnabled="true"
-        app:passwordToggleDrawable="@drawable/ic_eye"
+        app:passwordToggleDrawable="@drawable/ic_eye_black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
