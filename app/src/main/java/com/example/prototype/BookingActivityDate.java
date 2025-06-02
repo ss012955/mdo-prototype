@@ -128,27 +128,38 @@ public class BookingActivityDate extends BaseActivity {
                 return;
             }
 
+            // Determine which service to use
+            String currentService = service;
+            String currentServiceType = serviceType;
+
             if (serviceR != null && !serviceR.isEmpty()) {
                 // For rescheduling, use the ServiceResched as the main service
-                service = serviceR;
+                currentService = serviceR;
                 // You might need to set a default serviceType or derive it from the service
-                if (serviceType == null || serviceType.isEmpty()) {
-                    serviceType = "default"; // or derive from service
+                if (currentServiceType == null || currentServiceType.isEmpty()) {
+                    currentServiceType = "Medical"; // Set appropriate default
                 }
             }
 
-            if (service != null) {
-                Toast.makeText(this, "Selected Service: " + service, Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, "No service selected.", Toast.LENGTH_SHORT).show();
+            // Validate that we have both service and serviceType
+            if (currentService == null || currentService.isEmpty()) {
+                Toast.makeText(this, "Error: No service selected.", Toast.LENGTH_SHORT).show();
+                return;
             }
 
+            if (currentServiceType == null || currentServiceType.isEmpty()) {
+                Toast.makeText(this, "Error: Service type not specified.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            Toast.makeText(this, "Selected Service: " + currentService, Toast.LENGTH_SHORT).show();
 
             String formattedDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(chosenDate);
             Log.d("BookingDebug", "formattedDate: " + formattedDate);
 
             AvailabilityChecker checker = new AvailabilityChecker();
-            checker.showAvailabilityAwareTimeSlotDialog(this, formattedDate, serviceR, serviceType,
+            // Pass the validated currentService and currentServiceType instead of serviceR
+            checker.showAvailabilityAwareTimeSlotDialog(this, formattedDate, currentService, currentServiceType,
                     new AvailabilityChecker.TimeSlotSelectionCallback() {
                         @Override
                         public void onTimeSlotSelected(String timeSlot) {
