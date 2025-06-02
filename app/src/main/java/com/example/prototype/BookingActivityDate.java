@@ -128,18 +128,27 @@ public class BookingActivityDate extends BaseActivity {
                 return;
             }
 
-            // Make sure service and serviceType are selected
-            if (service == null || service.isEmpty() || serviceType == null || serviceType.isEmpty()) {
-                Log.d("BookingDebug", "service: " + service + ", serviceType: " + serviceType);
-                Toast.makeText(this, "Please select a service first.", Toast.LENGTH_SHORT).show();
-                return;
+            if (serviceR != null && !serviceR.isEmpty()) {
+                // For rescheduling, use the ServiceResched as the main service
+                service = serviceR;
+                // You might need to set a default serviceType or derive it from the service
+                if (serviceType == null || serviceType.isEmpty()) {
+                    serviceType = "default"; // or derive from service
+                }
             }
+
+            if (service != null) {
+                Toast.makeText(this, "Selected Service: " + service, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "No service selected.", Toast.LENGTH_SHORT).show();
+            }
+
 
             String formattedDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(chosenDate);
             Log.d("BookingDebug", "formattedDate: " + formattedDate);
 
             AvailabilityChecker checker = new AvailabilityChecker();
-            checker.showAvailabilityAwareTimeSlotDialog(this, formattedDate, service, serviceType,
+            checker.showAvailabilityAwareTimeSlotDialog(this, formattedDate, serviceR, serviceType,
                     new AvailabilityChecker.TimeSlotSelectionCallback() {
                         @Override
                         public void onTimeSlotSelected(String timeSlot) {
