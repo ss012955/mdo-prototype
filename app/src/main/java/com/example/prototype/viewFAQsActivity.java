@@ -23,7 +23,8 @@ public class viewFAQsActivity extends AppCompatActivity {
     TabLayout tabLayout;
     private RecyclerView recyclerView;
     private FAQsAdapter faqsAdapter;
-    private List<FAQsItem> faqsList =new ArrayList<>();
+    private List<FAQsItem> faqsList = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,13 +57,16 @@ public class viewFAQsActivity extends AppCompatActivity {
                 startActivity(new Intent(viewFAQsActivity.this, home.class)
                         .putExtra("tab_position", tab.getPosition()));
             }
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {}
 
             @Override
-            public void onTabReselected(TabLayout.Tab tab) {}
+            public void onTabUnselected(TabLayout.Tab tab) {
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+            }
         });
-        faqsList =new ArrayList<>();
+        faqsList = new ArrayList<>();
         populateFAQS();
 
         // Set Adapter
@@ -70,11 +74,23 @@ public class viewFAQsActivity extends AppCompatActivity {
         recyclerView.setAdapter(faqsAdapter);
     }
 
-    public void populateFAQS(){
+    public void populateFAQS() {
         faqsList.add(new FAQsItem("What are the clinic hours?", "Clinic hours are 8 AM to 5 PM on weekdays."));
         faqsList.add(new FAQsItem("Do I need an appointment?", "Appointments are recommended but not required."));
-        faqsList.add(new FAQsItem("Are vaccinations available?", "Yes, vaccinations are available upon request."));
         faqsList.add(new FAQsItem("Is emergency care provided?", "Emergency care is not provided. Please visit a hospital."));
-        faqsList.add(new FAQsItem("Do you offer health screening services?", "Yes, we offer a range of health screening services."));
-        faqsList.add(new FAQsItem("Is dental care available?", "Yes, dental care is available, including cleaning and extractions."));}
+        faqsList.add(new FAQsItem("Is dental care available?", "Yes, dental care is available, including cleaning and extractions."));
+
+        // Added medical service FAQs
+        faqsList.add(new FAQsItem("What medical services do you offer?", "Our medical services include: General Consultation, Physical Examination, and Treatment for Minor Illnesses."));
+        faqsList.add(new FAQsItem("How long does a general consultation take?", "A general consultation takes approximately 30 minutes."));
+        faqsList.add(new FAQsItem("How long does a physical examination take?", "A physical examination takes approximately 30 minutes."));
+        faqsList.add(new FAQsItem("How long is treatment for minor illness?", "Treatment for minor illnesses takes about 30 minutes."));
+
+        // Added dental service FAQs
+        faqsList.add(new FAQsItem("What dental services do you offer?", "Our dental services include: Tooth Extraction, Teeth Cleaning, Dental Fillings, and Dental Consultation."));
+        faqsList.add(new FAQsItem("How long does a tooth extraction take?", "Tooth extraction usually takes around 1 hour."));
+        faqsList.add(new FAQsItem("How long does teeth cleaning take?", "Teeth cleaning typically takes 1 hour."));
+        faqsList.add(new FAQsItem("How long do dental fillings take?", "Dental fillings take about 1 hour."));
+        faqsList.add(new FAQsItem("How long does a dental consultation take?", "Dental consultations take approximately 30 minutes."));
+    }
 }

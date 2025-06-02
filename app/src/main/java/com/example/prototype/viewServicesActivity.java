@@ -81,22 +81,13 @@ public class viewServicesActivity extends BaseActivity {
         // Populate the services list
         services = new ArrayList<>();
         services.add(new Services("General Consultation"));
-        services.add(new Services("Health Screening"));
-        services.add(new Services("Vaccination Services"));
-        services.add(new Services("Referral to Specialists"));
-        services.add(new Services("Health Education"));
         services.add(new Services("Physical Examination"));
         services.add(new Services("Treatment for Minor Illnesses"));
-        services.add(new Services("Laboratory Services"));
-        services.add(new Services("Medical Certificate for OJT"));
 
         services.add(new Services("Dental Consultation"));
         services.add(new Services("Tooth Extraction"));
         services.add(new Services("Teeth Cleaning"));
         services.add(new Services("Dental Fillings"));
-        services.add(new Services("Dental Health Education"));
-        services.add(new Services("Emergency Dental Care"));
-        services.add(new Services("Referrals to Dental Specialists"));
         // Check if services are added
         Log.d("View Services", "Number of services: " + services.size());
         viewServiceAdapter = new viewServiceAdapter(services);
